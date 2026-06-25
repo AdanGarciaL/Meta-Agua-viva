@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agua Viva - Portal Superadmin</title>
+    <!-- Google Fonts: Serif (Playfair Display) & Sans-Serif (Outfit) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin-theme">
+    
+    <!-- Admin Web Layout -->
+    <div class="admin-layout">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <div class="brand-logo" style="background-color: #7C3AED; box-shadow: 0 4px 10px rgba(124, 58, 237, 0.3);">
+                    <span>AV</span>
+                </div>
+                <div class="brand-text">
+                    <h3>Agua Viva</h3>
+                    <p>panel admin</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+                <span class="menu-category">GENERAL</span>
+                <ul>
+                    <li>
+                        <a href="admin.html#view-inicio" class="menu-item">
+                            <i class="fa-solid fa-house"></i> Inicio
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin.html#view-miembros" class="menu-item">
+                            <i class="fa-solid fa-users"></i> Miembros
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin.html#view-asistencia" class="menu-item">
+                            <i class="fa-solid fa-qrcode"></i> Tomar asistencia
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin.html#view-eventos" class="menu-item">
+                            <i class="fa-regular fa-calendar"></i> Eventos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="admin.html#view-haciendas" class="menu-item">
+                            <i class="fa-solid fa-campground"></i> Haciendas
+                        </a>
+                    </li>
+                    <!-- Superadmin Tab (Active on this page) -->
+                    <li id="sidebarSuperadminTab">
+                        <a href="superadmin.html" class="menu-item active">
+                            <i class="fa-solid fa-crown text-purple"></i> Superadmin
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Bottom Profile Card & Role Switcher -->
+            <div class="sidebar-profile-wrapper">
+                <div class="sidebar-profile">
+                    <div class="profile-avatar" id="adminProfileAvatar" style="background-color: #7C3AED;">S</div>
+                    <div class="profile-details">
+                        <h4 id="adminProfileName">Superusuario</h4>
+                        <p id="adminProfileRole">Admin Principal</p>
+                    </div>
+                </div>
+                <div class="role-selector-pills mt-2">
+                    <button class="pill-btn" data-role="admin" id="pillRoleAdmin" title="Simular como Coordinador/Admin">Admin</button>
+                    <button class="pill-btn active" data-role="superadmin" id="pillRoleSuper" title="Simular como Superadministrador">Super</button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="admin-main">
+            
+            <!-- VIEW: SUPERADMIN PORTAL -->
+            <section class="admin-view active" id="view-superadmin">
+                <div class="view-header">
+                    <div class="dph-title-row">
+                        <h1 class="font-serif">Portal Superadmin</h1>
+                        <span class="badge badge-admin"><i class="fa-solid fa-crown"></i> Control Total</span>
+                    </div>
+                    <p class="subtitle text-secondary">Autorización de coordinadores, alta de Líderes/AE/AI y privacidad de accesos.</p>
+                </div>
+
+                <div class="view-content">
+                    
+                    <!-- Superadmin mini KPIs -->
+                    <div class="directory-kpis-grid mb-6">
+                        <div class="kpi-card-white border-purple">
+                            <span class="kpi-white-title">Admins Activos</span>
+                            <span class="kpi-white-val" id="lblSuperAdminsCount">4</span>
+                            <span class="kpi-white-desc">Líderes, AE, AI en servicio</span>
+                        </div>
+                        <div class="kpi-card-white border-orange">
+                            <span class="kpi-white-title">Solicitudes Pendientes</span>
+                            <span class="kpi-white-val" id="lblSuperPendingCount">3</span>
+                            <span class="kpi-white-desc">Coordinadores por aprobar</span>
+                        </div>
+                        <div class="kpi-card-white border-blue">
+                            <span class="kpi-white-title">Sedes Registradas</span>
+                            <span class="kpi-white-val">9</span>
+                            <span class="kpi-white-desc">Regiones activas</span>
+                        </div>
+                    </div>
+
+                    <div class="poa-grid">
+                        
+                        <!-- Col 1: Pending Requests -->
+                        <div class="card-admin">
+                            <h3 class="font-serif mb-2"><i class="fa-solid fa-user-clock text-orange"></i> Solicitudes Pendientes</h3>
+                            <p class="card-desc">Autorizaciones de personal administrativo, servidores de apoyo y clasificaciones especiales.</p>
+                            
+                            <!-- Superadmin Pending Tabs -->
+                            <div class="super-tabs" id="superPendingTabs" style="display: flex; gap: 0.5rem; margin-top: 1rem; margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;">
+                                <button type="button" class="btn btn-xs btn-outline active" data-tab="COORDINATORS" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; background-color: var(--admin-purple); color: white;">Coordinadores</button>
+                                <button type="button" class="btn btn-xs btn-outline" data-tab="ROLES" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">Cargos / Clasificación</button>
+                            </div>
+                            
+                            <!-- Tab 1: Coordinators -->
+                            <div class="pending-coordinators-list" id="superPendingList" style="display: flex; flex-direction: column; gap: 0.75rem; max-height: 400px; overflow-y: auto;">
+                                <!-- Dynamic pending list -->
+                            </div>
+                            
+                            <!-- Tab 2: Role/Classifications Requests -->
+                            <div class="pending-roles-list" id="superPendingRolesList" style="display: none; flex-direction: column; gap: 0.75rem; max-height: 400px; overflow-y: auto;">
+                                <!-- Dynamic pending roles list -->
+                            </div>
+                        </div>
+
+                        <!-- Col 2: Active Coordinators list -->
+                        <div class="card-admin">
+                            <h3 class="font-serif mb-2"><i class="fa-solid fa-user-shield text-purple"></i> Administradores Registrados</h3>
+                            <p class="card-desc">Personal con credenciales de edición, permisos y control operativo de grupos.</p>
+                            
+                            <div class="table-responsive">
+                                <table class="custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Coordinador</th>
+                                            <th>Rol Asignado</th>
+                                            <th>Grupo</th>
+                                            <th class="text-right">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="superAdminsTableBody">
+                                        <!-- Dynamic active admins -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Floating Simulator Widget -->
+    <div class="sim-widget" id="simWidget">
+        <button class="sim-trigger-btn" id="simTriggerBtn" title="Panel de Simulación de Roles">
+            <i class="fa-solid fa-gears"></i>
+        </button>
+        <div class="sim-panel" id="simPanel">
+            <h4><i class="fa-solid fa-laptop-code"></i> Control de Simulación</h4>
+            
+            <div class="sim-panel-section">
+                <span class="sim-panel-section-title">Usuario / Rol Activo</span>
+
+                <button class="sim-role-btn" data-email="mariana@email.com" data-role="admin" id="simUserMariana">
+                    <i class="fa-solid fa-user-tie"></i>
+                    <div>
+                        <strong>Mariana C.</strong>
+                        <span style="display:block; font-size:0.65rem; opacity:0.7;">Coordinadora (Satélite)</span>
+                    </div>
+                </button>
+                <button class="sim-role-btn" data-email="superadmin@email.com" data-role="superadmin" id="simUserSuper">
+                    <i class="fa-solid fa-crown"></i>
+                    <div>
+                        <strong>Superusuario</strong>
+                        <span style="display:block; font-size:0.65rem; opacity:0.7;">Superadmin</span>
+                    </div>
+                </button>
+            </div>
+            
+            <div class="sim-panel-section">
+                <span class="sim-panel-section-title">Navegación Rápida</span>
+                <a href="index.html" class="sim-page-link">
+                    <span>📱 Aplicación Móvil</span>
+                    <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i>
+                </a>
+                <a href="admin.html" class="sim-page-link">
+                    <span>💻 Panel Admin</span>
+                    <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i>
+                </a>
+                <a href="superadmin.html" class="sim-page-link">
+                    <span>👑 Portal Superadmin</span>
+                    <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="superadmin.js"></script>
+</body>
+</html>

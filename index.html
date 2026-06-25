@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agua Viva - Asistencia y Logística</title>
+    <!-- Google Fonts: Serif (Playfair Display) & Sans-Serif (Outfit) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-theme">
+    <!-- Background Stars & Glows -->
+    <div class="stars"></div>
+    <div class="cosmic-glow glow-1"></div>
+    <div class="cosmic-glow glow-2"></div>
+    <div class="cosmic-glow glow-jav" id="glowJav"></div>
+
+    <!-- Auth Overlay (Login / Register) -->
+    <div class="auth-overlay" id="authOverlay">
+        <div class="auth-box">
+            <!-- Login View -->
+            <div id="authLoginView">
+                <h1 class="auth-title font-serif">Agua Viva</h1>
+                <p class="auth-subtitle">Iniciar Sesión</p>
+                <form id="authLoginForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="loginEmail">Correo Electrónico</label>
+                        <input type="email" id="loginEmail" class="form-control" placeholder="nombre@correo.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Contraseña</label>
+                        <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" required>
+                    </div>
+                    <div class="auth-footer-actions">
+                        <button type="submit" class="btn-auth-submit">Entrar</button>
+                        <button type="button" class="btn-auth-switch" id="switchToRegisterBtn">¿No tienes cuenta? Regístrate aquí</button>
+                        <button type="button" class="btn-auth-switch" id="loginGuestBtn" style="font-weight: 600; color: var(--color-cyan);">Entrar como Ámbar (Invitado Rápido)</button>
+                        <button type="button" class="btn-auth-switch" id="loginGuestMarianaBtn" style="font-weight: 600; color: #a78bfa; margin-top: 0.25rem;">Entrar como Mariana (Coordinadora)</button>
+                        <button type="button" class="btn-auth-switch" id="loginGuestSuperBtn" style="font-weight: 600; color: #f43f5e; margin-top: 0.25rem;">Entrar como Superadmin</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Register View -->
+            <div id="authRegisterView" style="display: none;">
+                <h1 class="auth-title font-serif">Agua Viva</h1>
+                <p class="auth-subtitle">Crear Cuenta</p>
+                <form id="authRegisterForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="regEmail">Correo Electrónico *</label>
+                        <input type="email" id="regEmail" class="form-control" placeholder="nombre@correo.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPassword">Contraseña *</label>
+                        <input type="password" id="regPassword" class="form-control" placeholder="Mínimo 6 caracteres" required minlength="6">
+                    </div>
+                    <div class="form-group">
+                        <label for="regName">Nombre(s) *</label>
+                        <input type="text" id="regName" class="form-control" placeholder="Ej. Rogelio" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regLastInitial">Inicial del Apellido *</label>
+                        <input type="text" id="regLastInitial" class="form-control" maxlength="1" placeholder="Ej. I" required style="text-transform: uppercase;">
+                    </div>
+                    <div class="form-group">
+                        <label for="regDob">Fecha de Nacimiento (Validación JAV) *</label>
+                        <input type="date" id="regDob" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regRegion">Región *</label>
+                        <select id="regRegion" class="form-control" required>
+                            <option value="">Selecciona Región</option>
+                            <option value="Región 1 CDMX">Región 1 CDMX</option>
+                            <option value="Región 2 Estado de México">Región 2 Estado de México</option>
+                            <option value="Región 3 Querétaro y Guanajuato">Región 3 Querétaro y Guanajuato</option>
+                            <option value="Región 4 Puebla">Región 4 Puebla</option>
+                            <option value="Región 5 Guerrero">Región 5 Guerrero</option>
+                            <option value="Región 6 Yucatán">Región 6 Yucatán</option>
+                            <option value="Región 7 Chicago">Región 7 Chicago</option>
+                            <option value="Región 8 Veracruz">Región 8 Veracruz</option>
+                            <option value="Región 9 Monterrey">Región 9 Monterrey</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="regGroup">Grupo *</label>
+                        <select id="regGroup" class="form-control" required disabled>
+                            <option value="">Primero selecciona una región</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Roll / Clasificación -->
+                    <div class="form-group">
+                        <label for="regRoleClass">Clasificación Básica</label>
+                        <select id="regRoleClass" class="form-control">
+                            <option value="Apoyo">Apoyo</option>
+                            <option value="Oreja">Oreja (Requiere Aprobación)</option>
+                            <option value="Padrino">Padrino (Requiere Aprobación)</option>
+                        </select>
+                    </div>
+
+                    <!-- Server Roles -->
+                    <div class="form-group" id="regServerGroup">
+                        <label for="regServerRole">Cargo de Servidor (Opcional)</label>
+                        <select id="regServerRole" class="form-control">
+                            <option value="Ninguno">Ninguno</option>
+                            <option value="COM">COM (Comité de Orden y Métodos)</option>
+                            <option value="Manager">Manager de Grupo</option>
+                            <option value="Tesorería de Grupo">Tesorería de Grupo</option>
+                            <option value="Preparador de primeros inventarios">Preparador de primeros inventarios</option>
+                            <option value="Coordinador de hacienda">Coordinador de hacienda</option>
+                            <option value="Literatura">Literatura</option>
+                            <option value="RSG">RSG (Representante de Servicios Generales)</option>
+                        </select>
+                    </div>
+
+                    <!-- JAV Server Roles (conditional) -->
+                    <div class="form-group" id="regJavServerGroup" style="display: none;">
+                        <label for="regJavServerRole">Cargo de Servidor JAV (Opcional)</label>
+                        <select id="regJavServerRole" class="form-control">
+                            <option value="Ninguno">Ninguno</option>
+                            <option value="COM JAV">COM JAV</option>
+                            <option value="Preparador JAV">Preparador de primeros inventarios JAV</option>
+                            <option value="Coordinador hacienda JAV">Coordinador de hacienda JAV</option>
+                            <option value="AE JAV">AE JAV (Atracciones Externas JAV)</option>
+                            <option value="AI JAV">AI JAV (Atracciones Internas JAV)</option>
+                        </select>
+                    </div>
+
+                    <!-- Leader Request Checkbox -->
+                    <div class="form-group auth-checkbox-group">
+                        <input type="checkbox" id="regIsLeaderRequest">
+                        <label for="regIsLeaderRequest">Solicitar ser Coordinador (Líder, AE o AI de Grupo)</label>
+                    </div>
+                    <div class="form-group" id="leaderTypeGroup" style="display: none; padding-left: 1.5rem;">
+                        <label for="regLeaderRoleType">Tipo de Coordinador</label>
+                        <select id="regLeaderRoleType" class="form-control">
+                            <option value="LIDER">Líder de Grupo</option>
+                            <option value="AE">AE (Atracciones Externas)</option>
+                            <option value="AI">AI (Atracciones Internas)</option>
+                        </select>
+                    </div>
+
+                    <div class="auth-footer-actions">
+                        <button type="submit" class="btn-auth-submit">Registrarse y Esperar Aprobación</button>
+                        <button type="button" class="btn-auth-switch" id="switchToLoginBtn">¿Ya tienes cuenta? Inicia sesión aquí</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="app-container">
+        
+        <!-- Header -->
+        <header class="app-header">
+            <div class="user-profile">
+                <div class="avatar" id="avatarBtn">Á</div>
+                <div class="user-info">
+                    <span class="greeting">Hola,</span>
+                    <span class="username" id="userNameLabel">Ámbar</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn-theme-toggle" id="javToggleBtn" title="Cambiar a Sección JAV">
+                    <i class="fa-solid fa-rocket"></i> <span class="hide-mobile">Modo JAV</span>
+                </button>
+                <button class="btn-notification" id="notifBtn">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="notif-badge" id="notifBadge"></span>
+                </button>
+                <div class="notif-dropdown" id="notifDropdown">
+                    <div class="notif-header">
+                        <span>Notificaciones</span>
+                        <button type="button" class="notif-clear-btn" id="notifClearBtn">Limpiar</button>
+                    </div>
+                    <div class="notif-body" id="notifBody">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+                <button class="btn-notification" id="logoutBtn" title="Cerrar Sesión" style="margin-left: 0.5rem; color: var(--color-red);">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content Viewport -->
+        <main class="app-viewport" id="appViewport">
+            
+            <!-- SECTION 1: INICIO (Dashboard Miembro) -->
+            <section class="app-section active" id="sec-inicio">
+                <!-- Faro Progress Card -->
+                <div class="card card-level">
+                    <div class="level-header">
+                        <span class="level-subtitle">NIVEL 4 · DE 8</span>
+                        <h2 class="level-title font-serif">Faro</h2>
+                    </div>
+                    <div class="level-progress-wrapper">
+                        <div class="level-xp-text">
+                            <span class="current-xp"><strong>420</strong> XP</span>
+                            <span class="xp-needed">faltan <strong class="color-cyan">230 XP</strong> para Aurora</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" style="width: 64.6%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="card card-stat">
+                        <span class="stat-label">RACHA</span>
+                        <div class="stat-value-container">
+                            <span class="stat-value">28</span>
+                            <i class="fa-solid fa-fire stat-icon color-orange animate-pulse"></i>
+                        </div>
+                        <span class="stat-desc">días seguidos</span>
+                    </div>
+                    <div class="card card-stat">
+                        <span class="stat-label">TIEMPO LIMPIO</span>
+                        <div class="stat-value-container">
+                            <span class="stat-value">95</span>
+                            <i class="fa-solid fa-seedling stat-icon color-green"></i>
+                        </div>
+                        <span class="stat-desc">días acumulados</span>
+                    </div>
+                </div>
+
+                <!-- Scan QR Banner -->
+                <div class="card card-banner-scan" id="bannerScanBtn">
+                    <div class="banner-content">
+                        <div class="banner-icon-bg">
+                            <i class="fa-solid fa-qrcode"></i>
+                        </div>
+                        <div class="banner-text">
+                            <h3>Escanear junta</h3>
+                            <p>Apunta al QR de la sala para registrar asistencia</p>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-chevron-right banner-arrow"></i>
+                </div>
+
+                <!-- Next Meetings List with Calendar tabs -->
+                <div class="meetings-header" style="flex-wrap: wrap; gap: 0.5rem;">
+                    <h3>Calendario</h3>
+                    <div style="display: flex; gap: 0.5rem; align-items: center;">
+                        <div class="calendar-tabs" id="calendarTabs" style="display: flex; gap: 0.35rem;">
+                            <button type="button" class="btn-xs tab-btn active" data-cal="GROUP" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.25rem 0.45rem; color: white; cursor: pointer; font-size: 0.75rem;">Mi Grupo</button>
+                            <button type="button" class="btn-xs tab-btn" data-cal="REGIONAL" style="background: transparent; border: 1px solid transparent; border-radius: 8px; padding: 0.25rem 0.45rem; color: var(--text-secondary); cursor: pointer; font-size: 0.75rem;">Regional</button>
+                            <button type="button" class="btn-xs tab-btn" data-cal="ANNUAL" style="background: transparent; border: 1px solid transparent; border-radius: 8px; padding: 0.25rem 0.45rem; color: var(--text-secondary); cursor: pointer; font-size: 0.75rem;">Anual</button>
+                        </div>
+                        <div style="height: 12px; width: 1px; background: rgba(255,255,255,0.2);"></div>
+                        <div class="view-toggle-buttons" id="calendarViewToggle" style="display: flex; gap: 0.2rem;">
+                            <button type="button" class="btn-xs active" data-view="LIST" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.25rem 0.35rem; color: white; cursor: pointer; font-size: 0.7rem;"><i class="fa-solid fa-list"></i></button>
+                            <button type="button" class="btn-xs" data-view="WEEK" style="background: transparent; border: 1px solid transparent; border-radius: 6px; padding: 0.25rem 0.35rem; color: var(--text-secondary); cursor: pointer; font-size: 0.7rem;"><i class="fa-solid fa-calendar-week"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="meetings-list" id="upcomingMeetingsList">
+                    <!-- Dynamic Meetings injected by JS -->
+                </div>
+                <div id="weeklyCalendarContainer" style="display: none; margin-top: 1rem;">
+                    <div class="weekly-grid-header" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.25rem; text-align: center; font-weight: 600; font-size: 0.65rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.25rem; margin-bottom: 0.25rem; color: var(--text-secondary);">
+                        <div>L</div>
+                        <div>M</div>
+                        <div>M</div>
+                        <div>J</div>
+                        <div>V</div>
+                        <div>S</div>
+                        <div>D</div>
+                    </div>
+                    <div id="weeklyCalendarGrid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.25rem; min-height: 120px;">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 2: SCANNER (QR Registration) -->
+            <section class="app-section" id="sec-scanner">
+                <div class="scanner-container">
+                    <div class="scanner-header">
+                        <h2 class="font-serif">Escanear QR</h2>
+                        <p>El QR aparece al iniciar la junta. Se renueva cada 30 segundos.</p>
+                    </div>
+                    
+                    <div class="qr-target-box">
+                        <div class="qr-corner top-left"></div>
+                        <div class="qr-corner top-right"></div>
+                        <div class="qr-corner bottom-left"></div>
+                        <div class="qr-corner bottom-right"></div>
+                        <div class="qr-laser"></div>
+                        <div class="qr-mock-code">
+                            <i class="fa-solid fa-qrcode fa-5x opacity-40"></i>
+                        </div>
+                    </div>
+
+                    <p class="scanner-instruction font-serif">Apunta al QR de la sala</p>
+
+                    <div class="scanner-footer">
+                        <button class="btn btn-secondary w-full" id="manualCodeBtn">
+                            <i class="fa-solid fa-keyboard"></i> Ingresar código manualmente
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: HISTORIAL (Tu Cielo) -->
+            <section class="app-section" id="sec-historial">
+                <div class="historial-header">
+                    <span class="section-subtitle">TU CIELO</span>
+                    <h2 class="font-serif section-title">Historial</h2>
+                </div>
+
+                <!-- Stats Quick Cards -->
+                <div class="stats-quick-row">
+                    <div class="quick-stat-card">
+                        <span class="qs-val" id="hist-total-juntas">34</span>
+                        <span class="qs-label">Juntas</span>
+                    </div>
+                    <div class="quick-stat-card">
+                        <span class="qs-val" id="hist-total-haciendas">3</span>
+                        <span class="qs-label">Haciendas</span>
+                    </div>
+                    <div class="quick-stat-card">
+                        <span class="qs-val text-green" id="hist-clean-days">142</span>
+                        <span class="qs-label">Días limpio</span>
+                    </div>
+                </div>
+
+                <!-- SVG Trend Chart -->
+                <div class="card chart-card">
+                    <div class="chart-header">
+                        <span>Últimas 12 semanas</span>
+                        <span class="chart-status color-cyan"><i class="fa-solid fa-arrow-trend-up"></i> constante</span>
+                    </div>
+                    <div class="chart-body">
+                        <svg class="trend-chart-svg" viewBox="0 0 300 80">
+                            <!-- SVG Grid lines -->
+                            <line x1="0" y1="20" x2="300" y2="20" stroke="rgba(255,255,255,0.05)" />
+                            <line x1="0" y1="50" x2="300" y2="50" stroke="rgba(255,255,255,0.05)" />
+                            <!-- Sparkline path -->
+                            <path d="M 0,60 Q 25,50 50,65 T 100,55 T 150,45 T 200,50 T 250,38 T 300,42" fill="none" stroke="url(#chartGradient)" stroke-width="3" stroke-linecap="round"/>
+                            <!-- Gradient definition -->
+                            <defs>
+                                <linearGradient id="chartGradient" x1="0" y1="0" x2="1" y2="0">
+                                    <stop offset="0%" stop-color="#7000ff" />
+                                    <stop offset="100%" stop-color="#00d9ff" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Chronological Timeline -->
+                <div class="timeline-title font-serif">Mayo 2026</div>
+                <div class="timeline-list" id="timelineList">
+                    <!-- Dynamic Timeline items by JS -->
+                </div>
+            </section>
+
+            <!-- SECTION 4: HACIENDAS (Retiros y POA Dashboard) -->
+            <section class="app-section" id="sec-haciendas">
+                <div class="section-header-flex">
+                    <div>
+                        <span class="section-subtitle">LOGÍSTICA REGIONAL</span>
+                        <h2 class="font-serif section-title">Haciendas y POA</h2>
+                    </div>
+                    <div class="hacienda-selector-wrapper">
+                        <select id="haciendaSelect" class="styled-select">
+                            <option value="h1">Hacienda Región 4 (Julio 2026)</option>
+                            <option value="h2">Hacienda JAV Región 1 (Agosto 2026)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- User Attendance Declaration Tab -->
+                <div class="card declaration-card" id="userDeclarationCard">
+                    <h3 class="font-serif card-title"><i class="fa-solid fa-clipboard-question color-cyan"></i> Declarar mi Asistencia</h3>
+                    <p class="card-desc">Confirma tus detalles de traslado y turnos para el próximo retiro regional.</p>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="attendingCheck">¿Asistirás a la Hacienda?</label>
+                            <div class="toggle-buttons-group" id="attendanceToggleGroup">
+                                <button type="button" class="btn-toggle active" data-val="true">Sí, asistiré</button>
+                                <button type="button" class="btn-toggle" data-val="false">No iré</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="arrivalShift">Turno de llegada</label>
+                            <select id="arrivalShift" class="form-control">
+                                <option value="PRE_AVANZADA">Pre-avanzada (Jueves)</option>
+                                <option value="AVANZADA">Avanzada (Viernes mañana con escribientes)</option>
+                                <option value="VIERNES_TARDE_NOCHE">Viernes Tarde/Noche</option>
+                                <option value="SABADO_MANANA">Sábado Mañana</option>
+                                <option value="SABADO_TARDE_NOCHE">Sábado Tarde/Noche</option>
+                                <option value="DOMINGO">Domingo</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Movilidad / Transporte</label>
+                            <select id="transportStatus" class="form-control">
+                                <option value="NEEDS_TRANSPORT">Necesito que me lleven (Sin auto)</option>
+                                <option value="PROVIDES_TRANSPORT">Llevo auto propio (Ofrezco lugares)</option>
+                                <option value="NONE">Me traslado por mi cuenta</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="capacityGroup" style="display:none;">
+                            <label for="transportCapacity">Lugares disponibles en auto</label>
+                            <input type="number" id="transportCapacity" class="form-control" min="1" max="10" value="4">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-save-logistics" id="saveLogisticsBtn">
+                        <i class="fa-solid fa-floppy-disk"></i> Guardar Declaración
+                    </button>
+                </div>
+
+                <!-- Admin & Atracciones POA Section (Only shown/accessible to Leader, AE, AI) -->
+                <div class="poa-admin-panel">
+                    <div class="poa-header">
+                        <h3 class="font-serif text-glow-purple"><i class="fa-solid fa-shield-halved"></i> Panel POA (Líderes y Atracciones)</h3>
+                        <span class="badge badge-admin">Acceso Autorizado</span>
+                    </div>
+
+                    <!-- Global Hacienda Stats Summary -->
+                    <div class="poa-stats-row">
+                        <div class="poa-stat-box card">
+                            <span class="psb-val" id="poa-total-escribientes">48</span>
+                            <span class="psb-label">Escribientes</span>
+                        </div>
+                        <div class="poa-stat-box card">
+                            <span class="psb-val" id="poa-total-apoyos">24</span>
+                            <span class="psb-label">Apoyos</span>
+                        </div>
+                        <div class="poa-stat-box card">
+                            <span class="psb-val" id="poa-total-padrinos">12</span>
+                            <span class="psb-label">Padrinos</span>
+                        </div>
+                        <div class="poa-stat-box card">
+                            <span class="psb-val" id="poa-total-orejas">6</span>
+                            <span class="psb-label">Orejas</span>
+                        </div>
+                        <div class="poa-stat-box card">
+                            <span class="psb-val text-cyan" id="poa-transport-ratio">32 / 40</span>
+                            <span class="psb-label">Lugares Transp.</span>
+                        </div>
+                    </div>
+
+                    <!-- Group Status Traffic Lights (Semaforos) -->
+                    <div class="poa-grid">
+                        
+                        <!-- Col 1: Groups & Traffic Light Semaphore List -->
+                        <div class="card poa-groups-card">
+                            <h4 class="card-title font-serif">Semáforo de Carga por Grupo</h4>
+                            <p class="card-desc">Estado de actualización de datos de escribientes y servidores.</p>
+                            <div class="groups-semaphore-list" id="groupsSemaphoreList">
+                                <!-- Loaded dynamically via JS -->
+                            </div>
+                        </div>
+
+                        <!-- Col 2: Escribientes Write-in Manager -->
+                        <div class="card poa-escribientes-card">
+                            <div class="card-header-flex">
+                                <h4 class="card-title font-serif">Gestión de Escribientes</h4>
+                                <button class="btn btn-xs btn-primary" id="openAddEscribienteModal">
+                                    <i class="fa-solid fa-plus"></i> Registrar
+                                </button>
+                            </div>
+                            <p class="card-desc">Registra a quienes vivirán la experiencia de la hacienda.</p>
+                            
+                            <div class="search-box">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="text" id="searchEscribienteInput" placeholder="Buscar escribiente...">
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="custom-table" id="escribientesTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Género</th>
+                                            <th>Grupo</th>
+                                            <th class="text-right">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="escribientesListBody">
+                                        <!-- Dynamic rows by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Change Log / Registro de Cambios -->
+                    <div class="card changelog-card mt-6">
+                        <h4 class="card-title font-serif"><i class="fa-solid fa-clock-rotate-left"></i> Registro de Cambios (Historial de Auditoría)</h4>
+                        <p class="card-desc">Actualizaciones recientes realizadas por los coordinadores y atracciones de la región.</p>
+                        <div class="changelog-list" id="auditChangeLogList">
+                            <!-- Dynamic change logs -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 5: MIEMBROS -->
+            <!-- SECTION 5: LOGROS (Achievements & Roadmap) -->
+            <section class="app-section" id="sec-logros">
+                <!-- Mini Profile Card -->
+                <div class="card logros-profile-card">
+                    <div class="logros-profile-header">
+                        <div class="avatar" style="width: 55px; height: 55px; font-size: 1.4rem;">Á</div>
+                        <div class="logros-profile-info">
+                            <h2 class="font-serif">Ámbar</h2>
+                            <span class="logros-join-date">Miembro desde jun 2025</span>
+                            <div class="logros-badges-row">
+                                <span class="badge-role badge-jav-tag">Nv 4 · Faro</span>
+                                <span class="badge-role badge-oreja"><i class="fa-solid fa-fire"></i> 28d</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="level-progress-wrapper" style="margin-top: 1.25rem;">
+                        <div class="level-xp-text">
+                            <span class="current-xp">Faro &rarr; Aurora</span>
+                            <span class="current-xp"><strong>420</strong> / 650 XP</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" style="width: 64.6%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Camino de Luz Roadmap -->
+                <div class="roadmap-header">
+                    <h3 class="font-serif">Camino de luz</h3>
+                </div>
+                <div class="roadmap-scroll-container">
+                    <div class="roadmap-track">
+                        <div class="roadmap-item completed">
+                            <div class="roadmap-dot"><span class="dot-symbol">•</span></div>
+                            <span class="roadmap-level-name">Nv 1</span>
+                            <span class="roadmap-level-title font-serif">Chispa</span>
+                        </div>
+                        <div class="roadmap-item completed">
+                            <div class="roadmap-dot"><i class="fa-solid fa-diamond"></i></div>
+                            <span class="roadmap-level-name">Nv 2</span>
+                            <span class="roadmap-level-title font-serif">Llama</span>
+                        </div>
+                        <div class="roadmap-item completed">
+                            <div class="roadmap-dot"><i class="fa-solid fa-star-of-david"></i></div>
+                            <span class="roadmap-level-name">Nv 3</span>
+                            <span class="roadmap-level-title font-serif">Brasa</span>
+                        </div>
+                        <div class="roadmap-item active">
+                            <div class="roadmap-dot"><i class="fa-solid fa-lightbulb"></i></div>
+                            <span class="roadmap-level-name">Nv 4</span>
+                            <span class="roadmap-level-title font-serif">Faro</span>
+                        </div>
+                        <div class="roadmap-item locked">
+                            <div class="roadmap-dot"><i class="fa-solid fa-star"></i></div>
+                            <span class="roadmap-level-name">Nv 5</span>
+                            <span class="roadmap-level-title font-serif">Aurora</span>
+                        </div>
+                        <div class="roadmap-item locked">
+                            <div class="roadmap-dot"><i class="fa-solid fa-sun"></i></div>
+                            <span class="roadmap-level-name">Nv 6</span>
+                            <span class="roadmap-level-title font-serif">Sol</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Insignias Grid -->
+                <div class="insignias-header">
+                    <h3 class="font-serif">Insignias</h3>
+                    <span class="insignias-count">5 / 9</span>
+                </div>
+                
+                <div class="insignias-grid">
+                    <div class="badge-card unlocked">
+                        <div class="badge-icon-fire"><i class="fa-solid fa-fire animate-pulse"></i></div>
+                        <span class="badge-name">7 días</span>
+                        <span class="badge-desc">Una semana firme</span>
+                    </div>
+                    <div class="badge-card unlocked">
+                        <div class="badge-icon-fire"><i class="fa-solid fa-fire animate-pulse"></i></div>
+                        <span class="badge-name">30 días</span>
+                        <span class="badge-desc">Un mes completo</span>
+                    </div>
+                    <div class="badge-card locked">
+                        <div class="badge-icon-fire"><i class="fa-solid fa-fire"></i></div>
+                        <span class="badge-name">90 días</span>
+                        <span class="badge-desc">Tres meses</span>
+                    </div>
+                    <div class="badge-card locked">
+                        <div class="badge-icon-fire"><i class="fa-solid fa-fire"></i></div>
+                        <span class="badge-name">1 año</span>
+                        <span class="badge-desc">Vuelta al sol</span>
+                    </div>
+                    <div class="badge-card unlocked-star-blue">
+                        <div class="badge-icon-star"><i class="fa-solid fa-star"></i></div>
+                        <span class="badge-name">Primera junta</span>
+                        <span class="badge-desc">Llegaste</span>
+                    </div>
+                    <div class="badge-card unlocked-star-blue">
+                        <div class="badge-icon-star"><i class="fa-solid fa-star"></i></div>
+                        <span class="badge-name">10 juntas</span>
+                        <span class="badge-desc">Constante</span>
+                    </div>
+                    <div class="badge-card unlocked-star-purple">
+                        <div class="badge-icon-star"><i class="fa-solid fa-trophy"></i></div>
+                        <span class="badge-name">Hacienda</span>
+                        <span class="badge-desc">Viviste la exp</span>
+                    </div>
+                    <div class="badge-card locked-star">
+                        <div class="badge-icon-star"><i class="fa-solid fa-check"></i></div>
+                        <span class="badge-name">Padrino activo</span>
+                        <span class="badge-desc">Acompañado</span>
+                    </div>
+                    <div class="badge-card locked-star">
+                        <div class="badge-icon-star"><i class="fa-solid fa-sun"></i></div>
+                        <span class="badge-name">Madrugador</span>
+                        <span class="badge-desc">Pre-avanzada</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 6: AJUSTES (Profile Edit) -->
+            <section class="app-section" id="sec-settings">
+                <div class="settings-header" style="margin-bottom: 1.5rem;">
+                    <span class="section-subtitle">MI PERFIL</span>
+                    <h2 class="font-serif section-title" style="margin-bottom: 0;">Ajustes</h2>
+                </div>
+
+                <div class="card settings-card">
+                    <form id="settingsProfileForm">
+                        <div class="profile-preview-wrapper" style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem; padding: 1rem 0; border-bottom: 1px solid var(--border-color);">
+                            <div class="avatar" id="settingsAvatarPreview" style="width: 75px; height: 75px; font-size: 2rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff;">Á</div>
+                            <span style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 500;">Vista previa de tu avatar</span>
+                        </div>
+
+                        <div class="form-group mb-4" style="margin-bottom: 1.2rem; display: flex; flex-direction: column; gap: 0.4rem;">
+                            <label for="settingsAlias" style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase;">Alias / Nombre</label>
+                            <input type="text" id="settingsAlias" class="form-control" placeholder="Ej. Ámbar" required style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); border-radius: 10px; padding: 0.75rem 1rem; color: white; font-size: 0.9rem; transition: all 0.3s; width: 100%;">
+                        </div>
+
+                        <div class="form-group mb-4" style="margin-bottom: 1.2rem; display: flex; flex-direction: column; gap: 0.4rem;">
+                            <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase;">Color de Avatar</label>
+                            <div class="color-picker-grid">
+                                <button type="button" class="color-btn" data-color="#be185d" style="background-color: #be185d;"></button>
+                                <button type="button" class="color-btn" data-color="#6d28d9" style="background-color: #6d28d9;"></button>
+                                <button type="button" class="color-btn" data-color="#1d4ed8" style="background-color: #1d4ed8;"></button>
+                                <button type="button" class="color-btn" data-color="#0369a1" style="background-color: #0369a1;"></button>
+                                <button type="button" class="color-btn" data-color="#047857" style="background-color: #047857;"></button>
+                                <button type="button" class="color-btn" data-color="#556b2f" style="background-color: #556b2f;"></button>
+                                <button type="button" class="color-btn" data-color="#c2410c" style="background-color: #c2410c;"></button>
+                                <button type="button" class="color-btn" data-color="#b91c1c" style="background-color: #b91c1c;"></button>
+                                <button type="button" class="color-btn" data-color="#0F172A" style="background-color: #0F172A;"></button>
+                                <button type="button" class="color-btn" data-color="#d946ef" style="background-color: #d946ef;"></button>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-6" style="margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.4rem;">
+                            <label for="settingsAvatarIcon" style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase;">Icono del Avatar</label>
+                            <select id="settingsAvatarIcon" class="form-control" style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); border-radius: 10px; padding: 0.75rem 1rem; color: white; font-size: 0.9rem; transition: all 0.3s; width: 100%;">
+                                <option value="initial">Inicial del Nombre (Letra)</option>
+                                <option value="fa-user-astronaut">Astronauta (JAV)</option>
+                                <option value="fa-rocket">Cohete (Espacio)</option>
+                                <option value="fa-fire">Fuego (Racha)</option>
+                                <option value="fa-heart">Corazón (Hermandad)</option>
+                                <option value="fa-star">Estrella (Luz)</option>
+                                <option value="fa-shield-halved">Escudo (Servicio)</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-full mb-4" style="width:100%; margin-bottom: 1rem; background: linear-gradient(135deg, var(--primary) 0%, #9035ff 100%); border: none; border-radius: 10px; padding: 0.85rem; color: white; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: all 0.3s;">
+                            <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios
+                        </button>
+                        
+                        <button type="button" class="btn btn-secondary w-full" id="settingsLogoutBtn" style="width:100%; color: var(--color-red); border: 1px solid rgba(239, 68, 68, 0.3); background: transparent; border-radius: 10px; padding: 0.85rem; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: all 0.3s;">
+                            <i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión
+                        </button>
+                    </form>
+                </div>
+            </section>
+        </main>
+
+        <!-- Navigation Bottom Bar (Mobile layout, but works as main app navigator) -->
+        <nav class="app-navigation">
+            <button class="nav-item active" data-target="sec-inicio">
+                <i class="fa-solid fa-house"></i>
+                <span>Inicio</span>
+            </button>
+            <button class="nav-item" data-target="sec-scanner">
+                <i class="fa-solid fa-qrcode"></i>
+                <span>Asistencia</span>
+            </button>
+            <button class="nav-item" data-target="sec-historial">
+                <i class="fa-regular fa-calendar-days"></i>
+                <span>Historial</span>
+            </button>
+            <button class="nav-item" data-target="sec-haciendas">
+                <i class="fa-solid fa-campground"></i>
+                <span>Haciendas</span>
+            </button>
+            <button class="nav-item" data-target="sec-logros">
+                <i class="fa-solid fa-trophy"></i>
+                <span>Logros</span>
+            </button>
+            <button class="nav-item" data-target="sec-settings" id="btnNavSettings">
+                <i class="fa-solid fa-gear"></i>
+                <span>Ajustes</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- MODAL: Level Up Celebration (Aurora) -->
+    <div class="modal-overlay" id="levelUpModal">
+        <div class="modal-content level-up-celebration text-center">
+            <span class="level-up-badge-top">▲ SUBISTE DE NIVEL</span>
+            <div class="glowing-aurora-star">
+                <i class="fa-solid fa-star animate-pulse"></i>
+            </div>
+            <span class="level-sub">NIVEL 5</span>
+            <h1 class="level-name font-serif text-glow-cyan">Aurora</h1>
+            <p class="level-congrats">Tu luz ya se ve desde lejos. Otros caminan más confiados porque tú sigues aquí.</p>
+            
+            <div class="insignia-earned-card">
+                <div class="insignia-icon"><i class="fa-solid fa-trophy"></i></div>
+                <div class="insignia-text text-left">
+                    <strong>Insignia Nueva: Aurora Boreal</strong>
+                    <span>Primer miembro en llegar a nivel 5 este mes.</span>
+                </div>
+            </div>
+
+            <button class="btn btn-primary w-full mt-4" id="closeLevelUpBtn">Seguir brillando</button>
+        </div>
+    </div>
+
+    <!-- MODAL: Add Escribiente -->
+    <div class="modal-overlay" id="addEscribienteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="font-serif">Registrar Nuevo Escribiente</h3>
+                <button class="btn-close-modal" id="closeAddEscribienteModal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="addEscribienteForm">
+                <div class="form-group mb-4">
+                    <label for="escName">Nombre(s)</label>
+                    <input type="text" id="escName" class="form-control" placeholder="Ej. Juan Carlos" required>
+                </div>
+                <div class="form-group mb-4">
+                    <label for="escLastInitial">Inicial del Apellido</label>
+                    <input type="text" id="escLastInitial" class="form-control" maxlength="1" placeholder="Ej. G" required style="text-transform: uppercase;">
+                </div>
+                <div class="form-group mb-4">
+                    <label for="escGender">Género</label>
+                    <select id="escGender" class="form-control" required>
+                        <option value="MALE">Hombre</option>
+                        <option value="FEMALE">Mujer</option>
+                    </select>
+                </div>
+                <div class="form-group mb-6">
+                    <label for="escGroup">Grupo de procedencia</label>
+                    <select id="escGroup" class="form-control" required>
+                        <!-- Loaded dynamically by JS -->
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary w-full">Guardar Registro</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Floating Simulator Widget -->
+    <div class="sim-widget" id="simWidget">
+        <button class="sim-trigger-btn" id="simTriggerBtn" title="Panel de Simulación de Roles">
+            <i class="fa-solid fa-gears"></i>
+        </button>
+        <div class="sim-panel" id="simPanel">
+            <h4><i class="fa-solid fa-laptop-code"></i> Control de Simulación</h4>
+            
+            <div class="sim-panel-section">
+                <span class="sim-panel-section-title">Usuario / Rol Activo</span>
+                <button class="sim-role-btn" data-email="ambar@email.com" data-role="member" id="simUserAmbar">
+                    <i class="fa-solid fa-user"></i>
+                    <div>
+                        <strong>Ámbar A.</strong>
+                        <span style="display:block; font-size:0.65rem; opacity:0.7;">Miembro Regular (CDMX)</span>
+                    </div>
+                </button>
+                <button class="sim-role-btn" data-email="mariana@email.com" data-role="admin" id="simUserMariana">
+                    <i class="fa-solid fa-user-tie"></i>
+                    <div>
+                        <strong>Mariana C.</strong>
+                        <span style="display:block; font-size:0.65rem; opacity:0.7;">Coordinadora (Satélite)</span>
+                    </div>
+                </button>
+                <button class="sim-role-btn" data-email="superadmin@email.com" data-role="superadmin" id="simUserSuper">
+                    <i class="fa-solid fa-crown"></i>
+                    <div>
+                        <strong>Superusuario</strong>
+                        <span style="display:block; font-size:0.65rem; opacity:0.7;">Superadmin</span>
+                    </div>
+                </button>
+            </div>
+            
+            <div class="sim-panel-section">
+                <span class="sim-panel-section-title">Navegación Rápida</span>
+                <a href="index.html" class="sim-page-link">
+                    <span>📱 Aplicación Móvil</span>
+                    <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i>
+                </a>
+                <a href="admin.html" class="sim-page-link">
+                    <span>💻 Panel Admin</span>
+                    <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i>
+                </a>
+                <a href="superadmin.html" class="sim-page-link">
+                    <span>👑 Portal Superadmin</span>
+                    <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

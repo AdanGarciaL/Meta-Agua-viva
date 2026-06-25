@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agua Viva - Panel de Administración</title>
+    <!-- Google Fonts: Serif (Playfair Display) & Sans-Serif (Outfit) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin-theme">
+    
+    <!-- Admin Auth Overlay -->
+    <div class="admin-auth-overlay" id="adminAuthOverlay">
+        <div class="admin-auth-box">
+            <!-- Login View -->
+            <div id="adminAuthLoginView">
+                <h1 class="admin-auth-title font-serif">Agua Viva</h1>
+                <p class="admin-auth-subtitle">Portal Administrativo</p>
+                <div id="adminAuthError" class="admin-auth-error" style="display: none; padding: 0.75rem; background-color: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: 8px; color: #ef4444; font-size: 0.8rem; text-align: center; margin-bottom: 1.25rem; font-weight: 500;"></div>
+                <form id="adminAuthLoginForm" class="admin-auth-form">
+                    <div class="form-group-white">
+                        <label for="adminLoginEmail">Correo Electrónico</label>
+                        <input type="email" id="adminLoginEmail" class="form-control-white" placeholder="coordinador@correo.com" required>
+                    </div>
+                    <div class="form-group-white">
+                        <label for="adminLoginPassword">Contraseña</label>
+                        <input type="password" id="adminLoginPassword" class="form-control-white" placeholder="••••••••" required>
+                    </div>
+                    <div class="admin-auth-footer-actions">
+                        <button type="submit" class="btn-admin-auth-submit">Ingresar al Panel</button>
+                        <button type="button" class="btn-admin-auth-switch" id="adminSwitchToRegisterBtn">Registrar cuenta de Coordinador</button>
+                        <button type="button" class="btn-admin-auth-switch" id="adminLoginGuestBtn" style="font-weight: 600; color: var(--admin-purple);">Ingresar como Mariana C. (Líder Sede Centro)</button>
+                        <button type="button" class="btn-admin-auth-switch" id="adminLoginGuestSuperBtn" style="font-weight: 600; color: #f43f5e; margin-top: 0.25rem;">Ingresar como Superadmin (Portal de Control)</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Register View -->
+            <div id="adminAuthRegisterView" style="display: none;">
+                <h1 class="admin-auth-title font-serif">Agua Viva</h1>
+                <p class="admin-auth-subtitle">Registro de Coordinadores</p>
+                <form id="adminAuthRegisterForm" class="admin-auth-form">
+                    <div class="form-group-white">
+                        <label for="adminRegEmail">Correo Electrónico *</label>
+                        <input type="email" id="adminRegEmail" class="form-control-white" placeholder="coordinador@correo.com" required>
+                    </div>
+                    <div class="form-group-white">
+                        <label for="adminRegPassword">Contraseña *</label>
+                        <input type="password" id="adminRegPassword" class="form-control-white" placeholder="Mínimo 6 caracteres" required minlength="6">
+                    </div>
+                    <div class="form-group-white">
+                        <label for="adminRegName">Nombre Completo *</label>
+                        <input type="text" id="adminRegName" class="form-control-white" placeholder="Ej. Mariana Chávez" required>
+                    </div>
+                    <div class="form-group-white">
+                        <label for="adminRegRegion">Región *</label>
+                        <select id="adminRegRegion" class="form-control-white" required>
+                            <option value="">Selecciona Región</option>
+                            <option value="Región 1 CDMX">Región 1 CDMX</option>
+                            <option value="Región 2 Estado de México">Región 2 Estado de México</option>
+                            <option value="Región 3 Querétaro y Guanajuato">Región 3 Querétaro y Guanajuato</option>
+                            <option value="Región 4 Puebla">Región 4 Puebla</option>
+                            <option value="Región 5 Guerrero">Región 5 Guerrero</option>
+                            <option value="Región 6 Yucatán">Región 6 Yucatán</option>
+                            <option value="Región 7 Chicago">Región 7 Chicago</option>
+                            <option value="Región 8 Veracruz">Región 8 Veracruz</option>
+                            <option value="Región 9 Monterrey">Región 9 Monterrey</option>
+                        </select>
+                    </div>
+                    <div class="form-group-white">
+                        <label for="adminRegGroup">Grupo *</label>
+                        <select id="adminRegGroup" class="form-control-white" required disabled>
+                            <option value="">Primero selecciona una región</option>
+                        </select>
+                    </div>
+                    <div class="form-group-white">
+                        <label for="adminRegLeaderRoleType">Cargo Administrativo solicitado *</label>
+                        <select id="adminRegLeaderRoleType" class="form-control-white" required>
+                            <option value="LIDER">Líder de Grupo</option>
+                            <option value="AE">AE (Atracciones Externas)</option>
+                            <option value="AI">AI (Atracciones Internas)</option>
+                        </select>
+                    </div>
+                    <div class="admin-auth-footer-actions">
+                        <button type="submit" class="btn-admin-auth-submit">Registrar y Solicitar Aprobación</button>
+                        <button type="button" class="btn-admin-auth-switch" id="adminSwitchToLoginBtn">¿Ya tienes cuenta? Inicia sesión aquí</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Web Layout -->
+    <div class="admin-layout">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <div class="brand-logo" style="background-color: #7C3AED; box-shadow: 0 4px 10px rgba(124, 58, 237, 0.3);">
+                    <span>AV</span>
+                </div>
+                <div class="brand-text">
+                    <h3>Agua Viva</h3>
+                    <p>panel admin</p>
+                </div>
+            </div>
+
+            <nav class="sidebar-menu">
+                <span class="menu-category">GENERAL</span>
+                <ul>
+                    <li>
+                        <a href="#" class="menu-item" data-view="view-inicio">
+                            <i class="fa-solid fa-house"></i> Inicio
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="menu-item" data-view="view-miembros">
+                            <i class="fa-solid fa-users"></i> Miembros
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="menu-item active" data-view="view-asistencia">
+                            <i class="fa-solid fa-qrcode"></i> Tomar asistencia
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="menu-item" data-view="view-eventos">
+                            <i class="fa-regular fa-calendar"></i> Eventos
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="menu-item" data-view="view-haciendas">
+                            <i class="fa-solid fa-campground"></i> Haciendas
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="menu-item" data-view="view-aprobaciones">
+                            <i class="fa-solid fa-user-check text-indigo"></i> Aprobaciones
+                        </a>
+                    </li>
+                    <!-- Superadmin Special Tab (Only shown to Superadmin role) -->
+                    <li id="sidebarSuperadminTab" style="display: none;">
+                        <a href="superadmin.html" class="menu-item">
+                            <i class="fa-solid fa-crown text-purple"></i> Superadmin
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Bottom Profile Card & Role Switcher -->
+            <div class="sidebar-profile-wrapper">
+                <div class="sidebar-profile">
+                    <div class="profile-avatar" id="adminProfileAvatar">M</div>
+                    <div class="profile-details">
+                        <h4 id="adminProfileName">Mariana C.</h4>
+                        <p id="adminProfileRole">Coord. Sede Centro</p>
+                        <a href="#" id="adminLogoutLink" style="font-size: 0.7rem; color: #ef4444; display: block; margin-top: 0.25rem; text-decoration: underline; font-weight: 500;">Cerrar Sesión</a>
+                    </div>
+                </div>
+                <div class="role-selector-pills mt-2">
+                    <button class="pill-btn active" data-role="admin" id="pillRoleAdmin" title="Simular como Coordinador/Admin">Admin</button>
+                    <button class="pill-btn" data-role="superadmin" id="pillRoleSuper" title="Simular como Superadministrador">Super</button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="admin-main">
+            
+            <!-- VIEW 1: INICIO (Placeholder for Dashboard) -->
+            <section class="admin-view" id="view-inicio">
+                <div class="view-header">
+                    <h1 class="font-serif">Inicio</h1>
+                    <p class="subtitle">Resumen global de la Sede Centro</p>
+                </div>
+                <div class="view-content">
+                    <div class="grid-3-col">
+                        <div class="card-kpi">
+                            <h3>12</h3>
+                            <p>Miembros registrados</p>
+                        </div>
+                        <div class="card-kpi">
+                            <h3>9</h3>
+                            <p>Activos esta semana</p>
+                        </div>
+                        <div class="card-kpi">
+                            <h3>92%</h3>
+                            <p>Asistencia promedio</p>
+                        </div>
+                    </div>
+                    <div class="card-admin mt-6">
+                        <h3 class="font-serif">Bienvenido al Panel de Administración</h3>
+                        <p class="mt-2 text-secondary">Desde aquí puedes coordinar juntas de asistencia en vivo, registrar nuevos integrantes para Jóvenes en Agua Viva, y dar seguimiento a los retiros de la Hacienda de tu región.</p>
+                        <button class="btn btn-primary mt-4" id="btnGoAsistencia">
+                            <i class="fa-solid fa-qrcode"></i> Ir a Tomar Asistencia
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 2: TOMAR ASISTENCIA (Check-in view) -->
+            <section class="admin-view active" id="view-asistencia">
+                <!-- Two-Column Layout (Main Panel + Live checked-in sidebar) -->
+                <div class="live-attendance-container">
+                    
+                    <!-- Left: QR generation and controls -->
+                    <div class="attendance-control-panel">
+                        <div class="attendance-live-header">
+                            <span class="badge-live"><span class="pulse-dot"></span> EN VIVO</span>
+                            <span class="live-time-elapsed">Inició hace <strong id="timeElapsedVal">23 min</strong> - 19:00</span>
+                        </div>
+                        
+                        <div class="meeting-details-banner">
+                            <span class="section-subtitle">SESIÓN DE ASISTENCIA</span>
+                            <h1 class="font-serif font-bold">Junta del miércoles</h1>
+                            <p class="meeting-subtitle text-secondary">Sede Centro · 26 mayo 2026 · 19:00</p>
+                        </div>
+
+                        <!-- QR Code & Manual Code Box -->
+                        <div class="card-admin qr-generation-card">
+                            <div class="qr-code-wrapper">
+                                <!-- Mock QR image representation -->
+                                <div class="mock-qr-display">
+                                    <div class="qr-mock-square-corners">
+                                        <div class="qr-mock-eye top-left"></div>
+                                        <div class="qr-mock-eye top-right"></div>
+                                        <div class="qr-mock-eye bottom-left"></div>
+                                        <div class="qr-mock-pixel-noise"></div>
+                                    </div>
+                                    <span class="qr-refresh-timer">SE RENUEVA EN <strong id="timerVal">0:18</strong></span>
+                                </div>
+                            </div>
+                            
+                            <div class="manual-code-wrapper">
+                                <span class="manual-code-label">CÓDIGO MANUAL</span>
+                                <h2 class="manual-code-value" id="manualCodeVal">K7-9MX</h2>
+                                <p class="manual-code-desc text-secondary">Los miembros escanean el QR o ingresan el código. El código se regenera cada 30 segundos por seguridad.</p>
+                                
+                                <div class="attendance-actions">
+                                    <button class="btn btn-outline" id="btnPauseSession">Pausar sesión</button>
+                                    <button class="btn btn-danger" id="btnCancelSession">Cerrar sesión</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Statistics boxes -->
+                        <div class="attendance-stats-grid">
+                            <div class="stat-box-mini presents">
+                                <span class="sbm-val" id="cntPresentes">8</span>
+                                <span class="sbm-label">Presentes</span>
+                            </div>
+                            <div class="stat-box-mini waiting">
+                                <span class="sbm-val" id="cntEsperando">4</span>
+                                <span class="sbm-label">Esperando</span>
+                            </div>
+                            <div class="stat-box-mini late">
+                                <span class="sbm-val" id="cntTarde">1</span>
+                                <span class="sbm-label">Tarde</span>
+                            </div>
+                            <div class="stat-box-mini xp">
+                                <span class="sbm-val text-purple" id="cntXPGiven">180</span>
+                                <span class="sbm-label">XP Otorgado</span>
+                            </div>
+                        </div>
+
+                        <!-- Manual entry trigger -->
+                        <div class="card-admin manual-phone-card">
+                            <div class="mpc-text">
+                                <h4>¿Alguien sin teléfono?</h4>
+                                <p class="text-secondary text-xs">Puedes registrar manualmente la asistencia en la lista de la derecha.</p>
+                            </div>
+                            <button class="btn btn-outline btn-xs" id="btnManualMarkAll">Marcar a mano</button>
+                        </div>
+                    </div>
+
+                    <!-- Right: Live arrivals list -->
+                    <div class="attendance-arrivals-panel">
+                        <div class="arrivals-header">
+                            <h3>Llegando en vivo</h3>
+                            <span class="arrivals-ratio" id="arrivalsRatio">8 de 12</span>
+                        </div>
+
+                        <!-- Checked-in list -->
+                        <div class="arrivals-scroll-list" id="checkedInArrivalsList">
+                            <!-- Dynamic checked-in items by JS -->
+                        </div>
+
+                        <div class="waiting-header">
+                            <h3>ESPERANDO · <span id="waitingCount">4</span></h3>
+                        </div>
+
+                        <!-- Waiting check-in list -->
+                        <div class="waiting-scroll-list" id="waitingCheckInList">
+                            <!-- Dynamic waiting items by JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 3: MIEMBROS (Directory list) -->
+            <section class="admin-view" id="view-miembros">
+                <div class="directory-container">
+                    
+                    <!-- Directory Header -->
+                    <div class="directory-header">
+                        <div>
+                            <span class="section-subtitle">SEDE CENTRO</span>
+                            <h1 class="font-serif">Miembros</h1>
+                            <p class="subtitle text-secondary"><strong id="dirTotalCount">12</strong> registrados · <strong id="dirActiveCount">9</strong> activos esta semana</p>
+                        </div>
+                        <div class="directory-actions">
+                            <button class="btn btn-outline" id="btnExportMembers"><i class="fa-solid fa-download"></i> Exportar</button>
+                            <button class="btn btn-primary" id="btnOpenNewMemberView"><i class="fa-solid fa-plus"></i> Nuevo miembro</button>
+                        </div>
+                    </div>
+
+                    <!-- KPI metrics grid -->
+                    <div class="directory-kpis-grid">
+                        <div class="kpi-card-white border-blue">
+                            <span class="kpi-white-title">Asistencias hoy</span>
+                            <div class="kpi-white-val-row">
+                                <span class="kpi-white-val">34</span>
+                                <span class="kpi-white-change text-green"><i class="fa-solid fa-arrow-trend-up"></i> +12%</span>
+                            </div>
+                        </div>
+                        <div class="kpi-card-white border-orange">
+                            <span class="kpi-white-title">Racha promedio</span>
+                            <div class="kpi-white-val-row">
+                                <span class="kpi-white-val">28d</span>
+                                <span class="kpi-white-change text-green"><i class="fa-solid fa-arrow-trend-up"></i> +4d</span>
+                            </div>
+                        </div>
+                        <div class="kpi-card-white border-purple">
+                            <span class="kpi-white-title">XP total otorgado</span>
+                            <div class="kpi-white-val-row">
+                                <span class="kpi-white-val">14.8k</span>
+                                <span class="kpi-white-change text-green"><i class="fa-solid fa-arrow-trend-up"></i> +580</span>
+                            </div>
+                        </div>
+                        <div class="kpi-card-white border-red">
+                            <span class="kpi-white-title">En riesgo</span>
+                            <div class="kpi-white-val-row">
+                                <span class="kpi-white-val">2</span>
+                                <span class="kpi-white-change text-red"><i class="fa-solid fa-arrow-trend-down"></i> -1</span>
+                            </div>
+                            <span class="kpi-white-desc">sin asistir &gt;7d</span>
+                        </div>
+                    </div>
+
+                    <!-- Filters and Search panel -->
+                    <div class="directory-filters-panel card-admin">
+                        <div class="search-box-white">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="dirSearchInput" placeholder="Buscar por alias...">
+                        </div>
+                        
+                        <div class="filter-tab-buttons" id="dirFilterTabs">
+                            <button class="tab-btn active" data-filter="all">Todos · 12</button>
+                            <button class="tab-btn" data-filter="active">Activos · 9</button>
+                            <button class="tab-btn" data-filter="risk">En riesgo · 2</button>
+                            <button class="tab-btn" data-filter="new">Nuevos · 1</button>
+                        </div>
+                        
+                        <div class="sort-select-wrapper" style="margin-right: 1rem;">
+                            <label>Filtrar Rol:</label>
+                            <select id="dirRoleFilter" class="styled-select-white">
+                                <option value="all">Todos los Roles</option>
+                                <option value="PADRINO">Padrinos</option>
+                                <option value="OREJA">Orejas</option>
+                                <option value="APOYO">Apoyos</option>
+                                <option value="JAV">JAV</option>
+                            </select>
+                        </div>
+                        <div class="sort-select-wrapper">
+                            <label>Ordenar:</label>
+                            <select id="dirSortSelect" class="styled-select-white">
+                                <option value="level">Nivel</option>
+                                <option value="racha">Racha</option>
+                                <option value="clean">Tiempo Limpio</option>
+                                <option value="name">Alias</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Directory Table -->
+                    <div class="card-admin directory-table-card">
+                        <div class="table-responsive">
+                            <table class="directory-table">
+                                <thead>
+                                    <tr>
+                                        <th>MIEMBRO</th>
+                                        <th>NIVEL</th>
+                                        <th>RACHA</th>
+                                        <th>TIEMPO LIMPIO</th>
+                                        <th>CELULAR</th>
+                                        <th>ÚLTIMA ASISTENCIA</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dirTableBody">
+                                    <!-- Dynamic rows by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 4: DETALLE MIEMBRO (Individual view) -->
+            <section class="admin-view" id="view-detalle-miembro">
+                <div class="member-detail-container">
+                    
+                    <!-- Breadcrumbs -->
+                    <nav class="breadcrumbs">
+                        <a href="#" class="breadcrumb-back" id="btnBackToDirectory">Miembros</a> &gt; <span id="detailMemberNameBreadcrumb">Ámbar</span>
+                    </nav>
+
+                    <!-- Profile Header Card -->
+                    <div class="card-admin detail-profile-header-card">
+                        <div class="dph-main-info">
+                            <div class="dph-avatar" id="detailAvatarCircle">Á</div>
+                            <div class="dph-texts">
+                                <div class="dph-title-row">
+                                    <h1 class="font-serif" id="detailMemberName">Ámbar</h1>
+                                    <span class="badge-role badge-padrino" id="detailLevelLabel">Nv 4 · Faro</span>
+                                    <span class="badge-role badge-oreja" id="detailRachaLabel"><i class="fa-solid fa-fire"></i> 28d</span>
+                                </div>
+                                <p class="dph-meta text-secondary" id="detailMetaInfo">Miembro desde junio 2025 &middot; Celular: <span id="detailPhoneSpan" class="text-purple font-bold">55-1234-5678</span> &middot; Sobriedad: <span id="detailSobrietySpan" class="font-medium">26/05/2026</span></p>
+                            </div>
+                        </div>
+                        
+                        <!-- Actions & Progress bar -->
+                        <div class="dph-side-panel">
+                            <div class="dph-actions-row">
+                                <button class="btn btn-outline btn-xs" id="btnAssignPadrino"><i class="fa-solid fa-user-plus"></i> Asignar padrino</button>
+                                <button class="btn btn-outline btn-xs"><i class="fa-regular fa-comment"></i> Enviar mensaje</button>
+                            </div>
+                            
+                            <div class="level-progress-wrapper w-full mt-4">
+                                <div class="level-xp-text text-xs">
+                                    <span class="text-secondary">Progreso a <strong id="detailNextLevel">Aurora</strong></span>
+                                    <span class="text-secondary"><strong id="detailXPLabel">420</strong> / 650 XP</span>
+                                </div>
+                                <div class="progress-bar-bg">
+                                    <div class="progress-bar-fill" id="detailProgressBarFill" style="width: 64.6%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Metrics summary grid -->
+                    <div class="grid-4-col mb-6">
+                        <div class="card-kpi-white">
+                            <span class="kpi-white-title">Tiempo limpio</span>
+                            <span class="kpi-white-big-val" id="lblDetailCleanDays">95</span>
+                            <span class="kpi-white-sub-label">días</span>
+                        </div>
+                        <div class="card-kpi-white">
+                            <span class="kpi-white-title">Asistencias totales</span>
+                            <span class="kpi-white-big-val" id="lblDetailTotalJuntas">34</span>
+                            <span class="kpi-white-sub-label">sesiones</span>
+                        </div>
+                        <div class="card-kpi-white">
+                            <span class="kpi-white-title">Haciendas</span>
+                            <span class="kpi-white-big-val" id="lblDetailHaciendas">1</span>
+                            <span class="kpi-white-sub-label">retiros</span>
+                        </div>
+                        <div class="card-kpi-white">
+                            <span class="kpi-white-title">Asistencia 12 sem.</span>
+                            <span class="kpi-white-big-val text-purple" id="lblDetailAttendanceRate">92%</span>
+                            <span class="kpi-white-sub-label">de constancia</span>
+                        </div>
+                    </div>
+
+                    <!-- Details Columns -->
+                    <div class="detail-columns-layout">
+                        
+                        <!-- Col Left: Charts & History -->
+                        <div class="detail-col-left">
+                            
+                            <!-- Attendance bar chart -->
+                            <div class="card-admin mb-6">
+                                <div class="card-header-flex">
+                                    <h3 class="font-serif">Asistencia · últimas 12 semanas</h3>
+                                    <div class="chart-tab-buttons">
+                                        <button class="btn btn-outline btn-xs active">12 sem</button>
+                                        <button class="btn btn-outline btn-xs">6 meses</button>
+                                        <button class="btn btn-outline btn-xs">1 año</button>
+                                    </div>
+                                </div>
+                                <p class="card-desc">Juntas por semana registradas.</p>
+                                
+                                <div class="weekly-bar-chart">
+                                    <!-- Bar Chart representation -->
+                                    <div class="chart-bars-container" id="attendanceBarChartContainer">
+                                        <!-- Dynamic bars injected by JS -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- History timeline -->
+                            <div class="card-admin">
+                                <div class="card-header-flex">
+                                    <h3 class="font-serif">Historial reciente</h3>
+                                    <button class="btn-text" id="btnViewAllHistory">Ver todo</button>
+                                </div>
+                                <div class="timeline-scroll-box" id="detailHistoryTimeline">
+                                    <!-- Dynamic history items -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Col Right: Badges & Private Coordinator Notes -->
+                        <div class="detail-col-right">
+                            
+                            <!-- Badges grid -->
+                            <div class="card-admin mb-6">
+                                <h3 class="font-serif mb-2" id="lblDetailInsigniasCount">Insignias · 5 de 9</h3>
+                                <div class="badges-mini-grid" id="detailBadgesGrid">
+                                    <!-- Dynamic badges list by JS -->
+                                </div>
+                            </div>
+
+                            <!-- Coordinator private notes -->
+                            <div class="card-admin">
+                                <h3 class="font-serif mb-2"><i class="fa-solid fa-file-pen text-purple"></i> Notas del coordinador</h3>
+                                <p class="card-desc">Observaciones del proceso, visibles únicamente por los coordinadores de sede.</p>
+                                
+                                <div class="notes-feed-list" id="detailNotesFeedList">
+                                    <!-- Dynamic notes -->
+                                </div>
+
+                                <div class="add-note-form mt-4">
+                                    <textarea id="txtNewNote" class="form-control-white w-full" rows="3" placeholder="Añadir una observación del miembro..."></textarea>
+                                    <button class="btn btn-primary w-full mt-2" id="btnAddNoteSubmit">
+                                        <i class="fa-solid fa-plus"></i> Guardar Nota
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW 5: NUEVO MIEMBRO (Create Member Form) -->
+            <section class="admin-view" id="view-nuevo-miembro">
+                <div class="new-member-container">
+                    
+                    <nav class="breadcrumbs">
+                        <a href="#" class="breadcrumb-back" id="btnCancelNewMember">Miembros</a> &gt; <span>Nuevo</span>
+                    </nav>
+
+                    <div class="new-member-header">
+                        <h1 class="font-serif">Dale la bienvenida</h1>
+                        <p class="subtitle text-secondary">Solo necesitamos un alias. Lo demás es opcional. La identidad real nunca se comparte con otros miembros.</p>
+                    </div>
+
+                    <!-- Split columns: Form on left, live card preview on right -->
+                    <div class="new-member-split-layout">
+                        
+                        <!-- Left: Registration Form -->
+                        <div class="card-admin new-member-form-card">
+                            <form id="newMemberForm">
+                                <h3 class="font-serif border-bottom-title mb-4">Identidad pública</h3>
+                                <p class="form-desc text-secondary mb-4">Lo único que otros miembros verán</p>
+
+                                <div class="form-group-white mb-4">
+                                    <label for="frmAlias">ALIAS *</label>
+                                    <input type="text" id="frmAlias" class="form-control-white" placeholder="Ej. Ámbar" required>
+                                    <span class="field-help-text text-secondary">Algo que te represente. Animales, elementos, palabras. No tu nombre real.</span>
+                                </div>
+
+                                <div class="form-group-white mb-6">
+                                    <label>AVATAR</label>
+                                    <!-- Color circle selection -->
+                                    <div class="avatar-color-picker" id="avatarColorPicker">
+                                        <button type="button" class="color-btn active" data-color="#c2410c" style="background-color: #c2410c;"></button>
+                                        <button type="button" class="color-btn" data-color="#b91c1c" style="background-color: #b91c1c;"></button>
+                                        <button type="button" class="color-btn" data-color="#1d4ed8" style="background-color: #1d4ed8;"></button>
+                                        <button type="button" class="color-btn" data-color="#6d28d9" style="background-color: #6d28d9;"></button>
+                                        <button type="button" class="color-btn" data-color="#047857" style="background-color: #047857;"></button>
+                                        <button type="button" class="color-btn" data-color="#be185d" style="background-color: #be185d;"></button>
+                                        <button type="button" class="color-btn" data-color="#0369a1" style="background-color: #0369a1;"></button>
+                                        <button type="button" class="color-btn" data-color="#556b2f" style="background-color: #556b2f;"></button>
+                                    </div>
+                                </div>
+
+                                <h3 class="font-serif border-bottom-title mb-4">Datos privados</h3>
+                                <p class="form-desc text-secondary mb-4">Solo el coordinador puede verlos</p>
+
+                                <div class="form-grid-2-col mb-4">
+                                    <div class="form-group-white">
+                                        <label for="frmRealName">NOMBRE (OPCIONAL)</label>
+                                        <input type="text" id="frmRealName" class="form-control-white" placeholder="—">
+                                    </div>
+                                    <div class="form-group-white">
+                                        <label for="frmAge">EDAD</label>
+                                        <input type="number" id="frmAge" class="form-control-white" value="22" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-grid-2-col mb-4">
+                                    <div class="form-group-white">
+                                        <label for="frmPhone">NÚMERO CELULAR *</label>
+                                        <input type="tel" id="frmPhone" class="form-control-white" placeholder="Ej. 55-1234-5678" required>
+                                    </div>
+                                    <div class="form-group-white">
+                                        <label for="frmSobrietyDate">INICIO DE SOBRIEDAD *</label>
+                                        <input type="date" id="frmSobrietyDate" class="form-control-white" value="2026-03-01" required>
+                                    </div>
+                                </div>
+
+                                <div class="form-group-white mb-6">
+                                    <label for="frmEmergency">CONTACTO DE EMERGENCIA</label>
+                                    <input type="text" id="frmEmergency" class="form-control-white" placeholder="Nombre + teléfono">
+                                </div>
+
+                                <h3 class="font-serif border-bottom-title mb-4">Inicio del camino</h3>
+                                <p class="form-desc text-secondary mb-4">Para calcular tiempo limpio y racha</p>
+
+                                <div class="form-grid-2-col mb-6">
+                                    <div class="form-group-white">
+                                        <label for="frmStartDate">FECHA DE INICIO</label>
+                                        <input type="date" id="frmStartDate" class="form-control-white" value="2026-05-26">
+                                    </div>
+                                    <div class="form-group-white">
+                                        <label for="frmFirstMeeting">PRIMERA JUNTA ASIGNADA</label>
+                                        <select id="frmFirstMeeting" class="form-control-white">
+                                            <option value="Junta semanal · Miércoles 19:00">Junta semanal · Miércoles 19:00</option>
+                                            <option value="Junta de Jóvenes · Domingo 18:00">Junta de Jóvenes · Domingo 18:00</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary w-full">Crear Registro</button>
+                            </form>
+                        </div>
+
+                        <!-- Right: Live card Preview (Dark Cosmic Card styling) -->
+                        <div class="new-member-preview-container">
+                            <div class="preview-card-wrapper">
+                                <!-- Mobile dark cosmic card frame -->
+                                <div class="mobile-live-preview-card">
+                                    <div class="preview-avatar" id="prevAvatarCircle" style="background-color: #c2410c;">Á</div>
+                                    <div class="preview-member-info">
+                                        <span class="pmi-alias" id="prevAliasLabel">Ámbar</span>
+                                        <span class="pmi-level">NV 1 · CHISPA</span>
+                                    </div>
+                                    
+                                    <div class="preview-xp-bar-wrapper">
+                                        <div class="xp-bar-labels">
+                                            <span>0 / 50 XP para Llama</span>
+                                        </div>
+                                        <div class="preview-xp-progress-bg">
+                                            <div class="preview-xp-progress-fill" style="width: 0%;"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="preview-welcome-box">
+                                        <span class="prev-w-title">BIENVENIDA</span>
+                                        <p class="prev-w-desc">"Hoy enciendes la primera luz. Eso ya es valiente."</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Emergency warning banner -->
+                            <div class="alert-info-white">
+                                <div class="aiw-icon"><i class="fa-solid fa-circle-info"></i></div>
+                                <div class="aiw-text">
+                                    <p>Al registrarlo se generará un código de invitación de un solo uso. Compártelo en persona; expira en 24h.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- EVENTOS & HACIENDAS -->
+            <section class="admin-view" id="view-eventos">
+                <div class="view-header">
+                    <h1 class="font-serif">Calendario y Eventos</h1>
+                    <p class="subtitle text-secondary">Gestión de reuniones de grupo, regionales e institucionales</p>
+                </div>
+                
+                <div class="events-container-grid" style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-top: 1.5rem;">
+                    
+                    <!-- Left: Calendars view list -->
+                    <div>
+                        <div class="card-admin" style="margin-bottom: 1.5rem;">
+                            <div class="card-header-flex" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--admin-border); padding-bottom: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+                                <h3 class="font-serif">Calendarios Activos</h3>
+                                <div style="display: flex; gap: 1rem; align-items: center;">
+                                    <div class="calendar-tabs" id="adminCalendarTabs" style="display: flex; gap: 0.5rem;">
+                                        <button type="button" class="btn btn-xs btn-outline active" data-cal="GROUP" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">Grupo</button>
+                                        <button type="button" class="btn btn-xs btn-outline" data-cal="REGIONAL" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">Regional</button>
+                                        <button type="button" class="btn btn-xs btn-outline" data-cal="ANNUAL" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">Anual</button>
+                                    </div>
+                                    <div style="height: 15px; width: 1px; background: #ccc;"></div>
+                                    <div class="view-toggle-buttons" id="adminCalendarViewToggle" style="display: flex; gap: 0.25rem;">
+                                        <button type="button" class="btn btn-xs btn-outline active" data-view="LIST" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;" title="Ver Lista"><i class="fa-solid fa-list"></i></button>
+                                        <button type="button" class="btn btn-xs btn-outline" data-view="WEEK" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;" title="Ver Semanal"><i class="fa-solid fa-calendar-week"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="events-list-table" id="adminEventsListTableContainer">
+                                <table class="custom-table" id="adminEventsTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Fecha</th>
+                                            <th>Reunión / Tema</th>
+                                            <th>Detalles</th>
+                                            <th>Ponente</th>
+                                            <th>XP</th>
+                                            <th class="text-right">Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="adminEventsTableBody">
+                                        <!-- Injected by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div id="adminWeeklyCalendarContainer" style="display: none; margin-top: 1rem;">
+                                <div class="weekly-grid-header" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; text-align: center; font-weight: 600; font-size: 0.8rem; border-bottom: 1px solid var(--admin-border); padding-bottom: 0.5rem; margin-bottom: 0.5rem;">
+                                    <div>Lunes</div>
+                                    <div>Martes</div>
+                                    <div>Miércoles</div>
+                                    <div>Jueves</div>
+                                    <div>Viernes</div>
+                                    <div>Sábado</div>
+                                    <div>Domingo</div>
+                                </div>
+                                <div id="adminWeeklyCalendarGrid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; min-height: 250px;">
+                                    <!-- Populated by JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Schedule new event Form (For coordinators) -->
+                    <div id="adminCreateEventContainer">
+                        <div class="card-admin">
+                            <h3 class="font-serif border-bottom-title mb-4">Agendar Evento</h3>
+                            <form id="adminCreateEventForm">
+                                <div class="form-group-white mb-3">
+                                    <label for="evtTitle">Título del Evento / Tema *</label>
+                                    <input type="text" id="evtTitle" class="form-control-white w-full" placeholder="Ej. El Despertar" required>
+                                </div>
+                                <div class="form-group-white mb-3">
+                                    <label for="evtCalendar">Calendario Destino *</label>
+                                    <select id="evtCalendar" class="form-control-white w-full" required>
+                                        <option value="GROUP">Grupo (Interno)</option>
+                                        <option value="REGIONAL">Regional (Intergrupal)</option>
+                                        <option value="ANNUAL">Anual (Nacional)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group-white mb-3" id="evtGroupSelectContainer">
+                                    <label for="evtGroup">Grupo Destino *</label>
+                                    <select id="evtGroup" class="form-control-white w-full">
+                                        <!-- Injected by JS -->
+                                    </select>
+                                </div>
+                                <div class="form-group-white mb-3">
+                                    <label for="evtType">Tipo de Junta *</label>
+                                    <select id="evtType" class="form-control-white w-full" required>
+                                        <option value="NORMAL">Junta Normal (Tema/Ponente)</option>
+                                        <option value="INICIANDO">Iniciando el camino</option>
+                                        <option value="POSTMORTEM">PostMortem</option>
+                                        <option value="CONSAGRACION">Consagración</option>
+                                        <option value="OYP">OyP (Orejas y Padrinos)</option>
+                                        <option value="TRIBUNA">Tribuna</option>
+                                        <option value="CIRCULO">Círculo de Recuperación</option>
+                                        <option value="TALLER">Taller</option>
+                                        <option value="JH">Junta de Hacienda (JH)</option>
+                                        <option value="NOCHES_DE_GUERRA">Noche de Guerra</option>
+                                        <option value="PREPARACIONES_JAV">Preparación JAV</option>
+                                        <option value="JUNTAS_JAV">Juntas JAV</option>
+                                        <option value="PADRES_JAV">Junta de Padres JAV</option>
+                                        <optgroup label="Hacienda (Solo Superadmin)" id="evtHaciendaGroup">
+                                            <option value="R1">Hacienda R1 (CDMX)</option>
+                                            <option value="R4">Hacienda R4 (Puebla)</option>
+                                            <option value="JOVENES">Hacienda Jóvenes JAV</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div class="form-group-white mb-3">
+                                    <label for="evtInfo" id="evtInfoLabel">Ubicación / Detalles *</label>
+                                    <input type="text" id="evtInfo" class="form-control-white w-full" placeholder="Ej. Sede Centro · Sala A" required>
+                                </div>
+                                <div class="form-group-white mb-3">
+                                    <label for="evtSpeaker">Ponente / Responsable *</label>
+                                    <input type="text" id="evtSpeaker" class="form-control-white w-full" placeholder="Ej. Padrino Juan A." required>
+                                </div>
+                                <div class="form-grid-2-col mb-3">
+                                    <div class="form-group-white">
+                                        <label for="evtDay">Día (Ej. 29)</label>
+                                        <input type="text" id="evtDay" class="form-control-white" placeholder="29" required>
+                                    </div>
+                                    <div class="form-group-white">
+                                        <label for="evtMonth">Mes (Ej. Vie)</label>
+                                        <input type="text" id="evtMonth" class="form-control-white" placeholder="Vie" required>
+                                    </div>
+                                </div>
+                                <div class="form-grid-2-col mb-4">
+                                    <div class="form-group-white">
+                                        <label for="evtTime">Hora (Ej. 19:00)</label>
+                                        <input type="text" id="evtTime" class="form-control-white" placeholder="19:00" required>
+                                    </div>
+                                    <div class="form-group-white">
+                                        <label for="evtXp">Puntos XP *</label>
+                                        <input type="number" id="evtXp" class="form-control-white" value="15" required>
+                                    </div>
+                                </div>
+                                <div class="form-group-white mb-4 auth-checkbox-group" style="display:flex; align-items:center; gap:0.5rem;">
+                                    <input type="checkbox" id="evtIsJav" style="width:16px; height:16px;">
+                                    <label for="evtIsJav" style="font-weight:normal; text-transform:none; cursor:pointer;">¿Es un evento exclusivo JAV?</label>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-full" id="adminCreateEventSubmit">
+                                    <i class="fa-solid fa-calendar-plus"></i> Guardar en Calendario
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="admin-view" id="view-haciendas">
+                <div class="view-header-flex" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
+                    <div>
+                        <h1 class="font-serif">Haciendas y POA</h1>
+                        <p class="subtitle text-secondary">Control del POA de retiros de la región en tiempo real</p>
+                    </div>
+                    <div>
+                        <select id="adminHaciendaSelect" class="form-control-white" style="width:250px;">
+                            <option value="h1">Hacienda Región 4 (Julio 2026)</option>
+                            <option value="h2">Hacienda JAV Región 1 (Agosto 2026)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Totales Grid -->
+                <div class="grid-4-col mb-6" style="display:grid; grid-template-columns: repeat(4, 1fr); gap:1rem;">
+                    <div class="card-kpi-white">
+                        <h3 class="kpi-white-big-val text-purple" id="adminPoaTotalEscribientes" style="font-size:1.8rem; font-weight:700; color:#7c3aed;">5</h3>
+                        <p class="kpi-white-label" style="font-size:0.75rem; color:var(--admin-text-secondary); text-transform:uppercase; margin-top:0.25rem;">Total Escribientes</p>
+                    </div>
+                    <div class="card-kpi-white">
+                        <h3 class="kpi-white-big-val text-green" id="adminPoaTotalApoyos" style="font-size:1.8rem; font-weight:700; color:#10b981;">7</h3>
+                        <p class="kpi-white-label" style="font-size:0.75rem; color:var(--admin-text-secondary); text-transform:uppercase; margin-top:0.25rem;">Total Apoyos</p>
+                    </div>
+                    <div class="card-kpi-white">
+                        <h3 class="kpi-white-big-val text-cyan" id="adminPoaTotalPadrinos" style="font-size:1.8rem; font-weight:700; color:#06b6d4;">3</h3>
+                        <p class="kpi-white-label" style="font-size:0.75rem; color:var(--admin-text-secondary); text-transform:uppercase; margin-top:0.25rem;">Total Padrinos</p>
+                    </div>
+                    <div class="card-kpi-white">
+                        <h3 class="kpi-white-big-val text-orange" id="adminPoaTotalOrejas" style="font-size:1.8rem; font-weight:700; color:#f97316;">1</h3>
+                        <p class="kpi-white-label" style="font-size:0.75rem; color:var(--admin-text-secondary); text-transform:uppercase; margin-top:0.25rem;">Total Orejas</p>
+                    </div>
+                </div>
+
+                <!-- Two columns for Escribientes CRUD and Semaphores -->
+                <div class="events-container-grid" style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
+                    
+                    <!-- Left: Escribientes List and Add Form -->
+                    <div>
+                        <!-- Declarar mi asistencia -->
+                        <div class="card-admin mb-6" style="background:#fff; border:1px solid var(--admin-border); border-radius:12px; padding:1.5rem; margin-bottom:1.5rem;">
+                            <h3 class="font-serif border-bottom-title mb-4" style="font-size:1.15rem; font-weight:600; border-bottom:1px solid #eee; padding-bottom:0.5rem; margin-bottom:1rem;"><i class="fa-solid fa-clipboard-question text-purple" style="color:#7c3aed; margin-right:0.5rem;"></i> Declarar mi Asistencia (Coordinador)</h3>
+                            <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:1rem;">
+                                <div class="form-group-white">
+                                    <label style="font-size:0.75rem; font-weight:700; color:var(--admin-text-secondary); display:block; margin-bottom:0.4rem;">¿Asistirás?</label>
+                                    <select id="adminAttendingHacienda" class="form-control-white w-full">
+                                        <option value="true">Sí, asistiré</option>
+                                        <option value="false">No asistiré</option>
+                                    </select>
+                                </div>
+                                <div class="form-group-white">
+                                    <label style="font-size:0.75rem; font-weight:700; color:var(--admin-text-secondary); display:block; margin-bottom:0.4rem;">Turno de Llegada</label>
+                                    <select id="adminArrivalShift" class="form-control-white w-full">
+                                        <option value="PRE_AVANZADA">Pre-avanzada (Jueves)</option>
+                                        <option value="AVANZADA">Avanzada (Viernes mañana)</option>
+                                        <option value="VIERNES_TARDE_NOCHE">Viernes Tarde/Noche</option>
+                                        <option value="SABADO_MANANA">Sábado Mañana</option>
+                                        <option value="SABADO_TARDE_NOCHE">Sábado Tarde/Noche</option>
+                                        <option value="DOMINGO">Domingo</option>
+                                    </select>
+                                </div>
+                                <div class="form-group-white">
+                                    <label style="font-size:0.75rem; font-weight:700; color:var(--admin-text-secondary); display:block; margin-bottom:0.4rem;">Transporte</label>
+                                    <select id="adminTransportStatus" class="form-control-white w-full">
+                                        <option value="NONE">Por mi cuenta</option>
+                                        <option value="PROVIDES_TRANSPORT">Llevo auto propio</option>
+                                        <option value="NEEDS_TRANSPORT">Necesito transporte</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary mt-4" id="adminSaveLogisticsBtn" style="font-size:0.85rem; padding:0.6rem 1rem; margin-top:1rem;">
+                                <i class="fa-solid fa-floppy-disk"></i> Guardar Declaración
+                            </button>
+                        </div>
+
+                        <!-- Escribientes Manager -->
+                        <div class="card-admin" style="background:#fff; border:1px solid var(--admin-border); border-radius:12px; padding:1.5rem;">
+                            <div class="card-header-flex" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding-bottom:0.75rem; margin-bottom:1rem;">
+                                <h3 class="font-serif" style="font-size:1.15rem; font-weight:600;">Gestión de Escribientes</h3>
+                                <div style="display:flex; gap:0.5rem; align-items:center;">
+                                    <input type="text" id="adminSearchEscribiente" class="form-control-white" placeholder="Buscar escribiente..." style="padding:0.35rem 0.5rem; font-size:0.8rem; width:180px; border:1px solid var(--admin-border); border-radius:6px;">
+                                    <button class="btn btn-xs btn-primary" id="adminOpenAddEscribienteModal">
+                                        <i class="fa-solid fa-plus"></i> Registrar
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="table-responsive">
+                                <table class="custom-table" id="adminEscribientesTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Género</th>
+                                            <th>Grupo</th>
+                                            <th class="text-right">Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="adminEscribientesTableBody">
+                                        <!-- Injected by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Traffic Lights and Audit Logs -->
+                    <div>
+                        <!-- Semáforo por grupo -->
+                        <div class="card-admin mb-6" style="background:#fff; border:1px solid var(--admin-border); border-radius:12px; padding:1.5rem; margin-bottom:1.5rem;">
+                            <h3 class="font-serif border-bottom-title mb-4" style="font-size:1.15rem; font-weight:600; border-bottom:1px solid #eee; padding-bottom:0.5rem; margin-bottom:1rem;">Semáforo de Carga por Grupo</h3>
+                            <div class="groups-semaphore-list" id="adminGroupsSemaphoreList">
+                                <!-- Injected by JS -->
+                            </div>
+                        </div>
+
+                        <!-- Audit Logs -->
+                        <div class="card-admin" style="background:#fff; border:1px solid var(--admin-border); border-radius:12px; padding:1.5rem;">
+                            <h3 class="font-serif border-bottom-title mb-4" style="font-size:1.15rem; font-weight:600; border-bottom:1px solid #eee; padding-bottom:0.5rem; margin-bottom:1rem;"><i class="fa-solid fa-clock-rotate-left"></i> Registro de Cambios</h3>
+                            <div class="changelog-list" id="adminAuditChangelogList" style="max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem;">
+                                <!-- Injected by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- VIEW: APROBACIONES (Integrated Approvals & Admin Management) -->
+            <section class="admin-view" id="view-aprobaciones">
+                <div class="view-header">
+                    <h1 class="font-serif">Aprobaciones y Cargos</h1>
+                    <p class="subtitle">Gestión de solicitudes de clasificación, cargos y altas de coordinadores</p>
+                </div>
+                <div class="view-content">
+                    <!-- Mini KPIs -->
+                    <div class="directory-kpis-grid mb-6">
+                        <div class="kpi-card-white border-purple">
+                            <span class="kpi-white-title">Admins Activos</span>
+                            <span class="kpi-white-val" id="lblApprAdminsCount">0</span>
+                            <span class="kpi-white-desc">Líderes, AE, AI en servicio</span>
+                        </div>
+                        <div class="kpi-card-white border-orange">
+                            <span class="kpi-white-title">Solicitudes Pendientes</span>
+                            <span class="kpi-white-val" id="lblApprPendingCount">0</span>
+                            <span class="kpi-white-desc">Coordinadores y cargos por aprobar</span>
+                        </div>
+                        <div class="kpi-card-white border-blue">
+                            <span class="kpi-white-title">Sedes Registradas</span>
+                            <span class="kpi-white-val">9</span>
+                            <span class="kpi-white-desc">Regiones activas</span>
+                        </div>
+                    </div>
+
+                    <div class="poa-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        
+                        <!-- Col 1: Pending Requests -->
+                        <div class="card-admin" style="background:#fff; border:1px solid var(--admin-border); border-radius:12px; padding:1.5rem;">
+                            <h3 class="font-serif mb-2" style="font-size:1.15rem; font-weight:600; border-bottom:1px solid #eee; padding-bottom:0.5rem; margin-bottom:1rem;"><i class="fa-solid fa-user-clock text-orange"></i> Solicitudes Pendientes</h3>
+                            <p class="card-desc" style="font-size:0.8rem; color:var(--admin-text-secondary); margin-bottom:1rem;">Autorizaciones de personal administrativo, servidores de apoyo y clasificaciones especiales.</p>
+                            
+                            <!-- Pending Tabs -->
+                            <div class="super-tabs" id="apprPendingTabs" style="display: flex; gap: 0.5rem; margin-top: 1rem; margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;">
+                                <button type="button" class="btn btn-xs btn-outline active" data-tab="COORDINATORS" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; background-color: var(--admin-purple); color: white;">Coordinadores</button>
+                                <button type="button" class="btn btn-xs btn-outline" data-tab="ROLES" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">Cargos / Clasificación</button>
+                            </div>
+                            
+                            <!-- Tab 1: Coordinators -->
+                            <div class="pending-coordinators-list" id="apprPendingList" style="display: flex; flex-direction: column; gap: 0.75rem; max-height: 400px; overflow-y: auto;">
+                                <!-- Dynamic pending list -->
+                            </div>
+                            
+                            <!-- Tab 2: Role/Classifications Requests -->
+                            <div class="pending-roles-list" id="apprPendingRolesList" style="display: none; flex-direction: column; gap: 0.75rem; max-height: 400px; overflow-y: auto;">
+                                <!-- Dynamic pending roles list -->
+                            </div>
+                        </div>
+
+                        <!-- Col 2: Active Coordinators list -->
+                        <div class="card-admin" style="background:#fff; border:1px solid var(--admin-border); border-radius:12px; padding:1.5rem;">
+                            <h3 class="font-serif mb-2" style="font-size:1.15rem; font-weight:600; border-bottom:1px solid #eee; padding-bottom:0.5rem; margin-bottom:1rem;"><i class="fa-solid fa-user-shield text-purple"></i> Administradores Registrados</h3>
+                            <p class="card-desc" style="font-size:0.8rem; color:var(--admin-text-secondary); margin-bottom:1rem;">Personal con credenciales de edición, permisos y control operativo de grupos.</p>
+                            
+                            <div class="table-responsive">
+                                <table class="custom-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Coordinador</th>
+                                            <th>Rol Asignado</th>
+                                            <th>Grupo</th>
+                                            <th class="text-right">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="apprAdminsTableBody">
+                                        <!-- Dynamic active admins -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- MODAL: Add Escribiente Admin -->
+            <div class="modal-overlay" id="adminAddEscribienteModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:20000; justify-content:center; align-items:center;">
+                <div class="admin-auth-box" style="width:100%; max-width:400px; background:#fff; padding:2rem; border-radius:12px;">
+                    <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding-bottom:0.75rem; margin-bottom:1rem;">
+                        <h3 class="font-serif">Registrar Escribiente</h3>
+                        <button type="button" class="btn-close-modal" id="adminCloseEscribienteModal" style="background:none; border:none; font-size:1.2rem; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <form id="adminAddEscribienteForm">
+                        <div class="form-group-white mb-3">
+                            <label for="admEscName">Nombre(s) *</label>
+                            <input type="text" id="admEscName" class="form-control-white w-full" placeholder="Ej. Carlos" required style="border: 1px solid var(--admin-border); background: #fdfdfd;">
+                        </div>
+                        <div class="form-group-white mb-3">
+                            <label for="admEscLastInitial">Inicial del Apellido *</label>
+                            <input type="text" id="admEscLastInitial" class="form-control-white w-full" maxlength="1" placeholder="Ej. M" required style="text-transform:uppercase; border: 1px solid var(--admin-border); background: #fdfdfd;">
+                        </div>
+                        <div class="form-group-white mb-3">
+                            <label for="admEscGender">Género *</label>
+                            <select id="admEscGender" class="form-control-white w-full" required style="border: 1px solid var(--admin-border); background: #fdfdfd;">
+                                <option value="MALE">Hombre</option>
+                                <option value="FEMALE">Mujer</option>
+                            </select>
+                        </div>
+                        <div class="form-group-white mb-4">
+                            <label for="admEscGroup">Grupo de Procedencia *</label>
+                            <select id="admEscGroup" class="form-control-white w-full" required style="border: 1px solid var(--admin-border); background: #fdfdfd;">
+                                <!-- Groups populated by JS -->
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-full">Guardar Registro</button>
+                    </form>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Floating Simulator Widget -->
+    <div class="sim-widget" id="simWidget">
+        <button class="sim-trigger-btn" id="simTriggerBtn" title="Panel de Simulación de Roles">
+            <i class="fa-solid fa-gears"></i>
+        </button>
+        <div class="sim-panel" id="simPanel">
+            <h4><i class="fa-solid fa-laptop-code"></i> Control de Simulación</h4>
+            
+            <div class="sim-panel-section">
+                <span class="sim-panel-section-title">Usuario / Rol Activo</span>
+
+                <button class="sim-role-btn" data-email="mariana@email.com" data-role="admin" id="simUserMariana">
+                    <i class="fa-solid fa-user-tie"></i>
+                    <div>
+                        <strong>Mariana C.</strong>
+                        <span style="display:block; font-size:0.65rem; opacity:0.7;">Coordinadora (Satélite)</span>
+                    </div>
+                </button>
+                <button class="sim-role-btn" data-email="superadmin@email.com" data-role="superadmin" id="simUserSuper">
+                    <i class="fa-solid fa-crown"></i>
+                    <div>
+                        <strong>Superusuario</strong>
+                        <span style="display:block; font-size:0.65rem; opacity:0.7;">Superadmin</span>
+                    </div>
+                </button>
+            </div>
+            
+            <div class="sim-panel-section">
+                <span class="sim-panel-section-title">Navegación Rápida</span>
+                <a href="index.html" class="sim-page-link">
+                    <span>📱 Aplicación Móvil</span>
+                    <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i>
+                </a>
+                <a href="admin.html" class="sim-page-link">
+                    <span>💻 Panel Admin</span>
+                    <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i>
+                </a>
+                <a href="superadmin.html" class="sim-page-link">
+                    <span>👑 Portal Superadmin</span>
+                    <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
