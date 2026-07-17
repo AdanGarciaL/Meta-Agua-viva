@@ -3,832 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agua Viva - Asistencia y Logística</title>
-    <!-- Google Fonts: Serif (Playfair Display) & Sans-Serif (Outfit) -->
+    <title>Agua Viva · Plataforma de Asistencia y Logística</title>
+    <meta name="description" content="Plataforma comunitaria de Agua Viva: asistencia por QR firmado, directorio por regiones, logística de Haciendas (POA) y gamificación de la recuperación.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
-    <!-- FontAwesome for Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        :root {
+            --bg: #070611;
+            --surface: rgba(18, 16, 38, 0.72);
+            --border: rgba(255, 255, 255, 0.09);
+            --glow: rgba(112, 0, 255, 0.22);
+            --primary: #7000ff;
+            --cyan: #06b6d4;
+            --text: #ffffff;
+            --text2: #9ea4c4;
+            --muted: #626784;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+        .font-serif { font-family: 'Playfair Display', Georgia, serif; }
+
+        .stars { position: fixed; inset: 0; background-image: radial-gradient(1px 1px at 20% 30%, #fff, transparent), radial-gradient(1px 1px at 60% 70%, #fff, transparent), radial-gradient(1.5px 1.5px at 80% 20%, #fff, transparent), radial-gradient(1px 1px at 35% 80%, #fff, transparent), radial-gradient(1.5px 1.5px at 90% 60%, #fff, transparent), radial-gradient(1px 1px at 10% 60%, #fff, transparent); opacity: .35; pointer-events: none; }
+        .glow { position: fixed; border-radius: 50%; filter: blur(120px); pointer-events: none; }
+        .glow-1 { width: 480px; height: 480px; background: rgba(112, 0, 255, .28); top: -140px; right: -120px; }
+        .glow-2 { width: 420px; height: 420px; background: rgba(6, 182, 212, .16); bottom: -120px; left: -120px; }
+
+        .wrap { position: relative; max-width: 1080px; margin: 0 auto; padding: 0 22px; }
+
+        header.hero { padding: 72px 0 44px; text-align: center; }
+        .hero-logo { height: 92px; object-fit: contain; filter: drop-shadow(0 4px 18px rgba(124, 58, 237, .45)); animation: rise .7s cubic-bezier(.22,1,.36,1); }
+        .hero h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); margin: 18px 0 6px; animation: rise .7s .08s cubic-bezier(.22,1,.36,1) backwards; }
+        .hero .tag { display: inline-flex; align-items: center; gap: 7px; font-size: .74rem; font-weight: 700; letter-spacing: .06em; color: var(--cyan); border: 1px solid rgba(6,182,212,.35); background: rgba(6,182,212,.1); padding: 6px 14px; border-radius: 999px; animation: rise .7s .14s cubic-bezier(.22,1,.36,1) backwards; }
+        .hero p.lead { max-width: 640px; margin: 20px auto 0; color: var(--text2); font-size: 1.02rem; line-height: 1.65; animation: rise .7s .2s cubic-bezier(.22,1,.36,1) backwards; }
+        @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+
+        .surfaces { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin: 44px 0; }
+        .surface { display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 26px 22px; text-decoration: none; color: inherit; backdrop-filter: blur(10px); transition: transform .22s ease, border-color .22s ease, box-shadow .25s ease; animation: rise .6s backwards; }
+        .surface:nth-child(2) { animation-delay: .08s; }
+        .surface:nth-child(3) { animation-delay: .16s; }
+        .surface:hover { transform: translateY(-5px); border-color: var(--glow); box-shadow: 0 18px 44px rgba(112, 0, 255, .22); }
+        .surface .s-icon { width: 52px; height: 52px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 14px; color: #fff; }
+        .surface.movil .s-icon { background: linear-gradient(135deg, #7000ff, #b794f6); }
+        .surface.panel .s-icon { background: linear-gradient(135deg, #d6a739, #f5e4b8); color: #4a3a08; }
+        .surface.portal .s-icon { background: linear-gradient(135deg, #7c3aed, #4f46e5); }
+        .surface h3 { font-size: 1.18rem; margin-bottom: 6px; }
+        .surface p { font-size: .82rem; color: var(--text2); line-height: 1.55; flex: 1; }
+        .surface .s-cta { margin-top: 16px; font-size: .8rem; font-weight: 700; color: var(--cyan); }
+        .surface .s-cta i { transition: transform .2s ease; }
+        .surface:hover .s-cta i { transform: translateX(4px); }
+
+        .features { margin: 24px 0 40px; }
+        .features h2, .demo h2, .docs h2 { font-size: 1.6rem; text-align: center; margin-bottom: 6px; }
+        .features .sub, .demo .sub, .docs .sub { text-align: center; color: var(--muted); font-size: .86rem; margin-bottom: 26px; }
+        .feat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+        .feat { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 18px; transition: transform .2s ease, border-color .2s ease; }
+        .feat:hover { transform: translateY(-3px); border-color: var(--glow); }
+        .feat i { color: var(--cyan); font-size: 1.05rem; }
+        .feat h4 { font-size: .92rem; margin: 10px 0 5px; }
+        .feat p { font-size: .76rem; color: var(--text2); line-height: 1.5; }
+
+        .demo { margin: 40px 0; }
+        .demo-box { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 26px; }
+        .demo table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+        .demo th { text-align: left; color: var(--muted); font-size: .7rem; letter-spacing: .06em; padding: 8px 10px; border-bottom: 1px solid var(--border); }
+        .demo td { padding: 10px; border-bottom: 1px dashed var(--border); color: var(--text2); }
+        .demo td:first-child { color: var(--cyan); font-family: monospace; font-size: .8rem; }
+        .demo tr:last-child td { border-bottom: none; }
+        .demo .note { font-size: .74rem; color: var(--muted); margin-top: 14px; line-height: 1.5; }
+
+        .docs { margin: 40px 0 20px; }
+        .docs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; }
+        .doc-link { display: flex; align-items: center; gap: 13px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px; text-decoration: none; color: inherit; transition: border-color .2s ease, transform .2s ease; }
+        .doc-link:hover { border-color: var(--glow); transform: translateY(-2px); }
+        .doc-link i { color: var(--primary); font-size: 1.2rem; }
+        .doc-link strong { display: block; font-size: .88rem; }
+        .doc-link span { font-size: .72rem; color: var(--muted); }
+
+        footer { text-align: center; padding: 36px 0 48px; color: var(--muted); font-size: .76rem; line-height: 1.7; }
+        footer .heart { color: #f43f5e; }
+
+        @media (max-width: 760px) {
+            .surfaces { grid-template-columns: 1fr; }
+            header.hero { padding: 52px 0 30px; }
+        }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; } }
+    </style>
 </head>
-<body class="dark-theme">
-    <!-- Background Stars & Glows -->
+<body>
     <div class="stars"></div>
-    <div class="cosmic-glow glow-1"></div>
-    <div class="cosmic-glow glow-2"></div>
-    <div class="cosmic-glow glow-jav" id="glowJav"></div>
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
 
-    <!-- Auth Overlay (Login / Register) -->
-    <div class="auth-overlay" id="authOverlay">
-        <div class="auth-box">
-            <!-- Login View -->
-            <div id="authLoginView">
-                <h1 class="auth-title font-serif">Agua Viva</h1>
-                <p class="auth-subtitle">Iniciar Sesión</p>
-                <form id="authLoginForm" class="auth-form">
-                    <div class="form-group">
-                        <label for="loginEmail">Correo Electrónico</label>
-                        <input type="email" id="loginEmail" class="form-control" placeholder="nombre@correo.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="loginPassword">Contraseña</label>
-                        <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" required>
-                    </div>
-                    <div class="auth-footer-actions">
-                        <button type="submit" class="btn-auth-submit">Entrar</button>
-                        <button type="button" class="btn-auth-switch" id="switchToRegisterBtn">¿No tienes cuenta? Regístrate aquí</button>
-                        <button type="button" class="btn-auth-switch" id="loginGuestBtn" style="font-weight: 600; color: var(--color-cyan);">Entrar como Ámbar (Invitado Rápido)</button>
-                        <button type="button" class="btn-auth-switch" id="loginGuestMarianaBtn" style="font-weight: 600; color: #a78bfa; margin-top: 0.25rem;">Entrar como Mariana (Coordinadora)</button>
-                        <button type="button" class="btn-auth-switch" id="loginGuestSuperBtn" style="font-weight: 600; color: #f43f5e; margin-top: 0.25rem;">Entrar como Superadmin</button>
-                    </div>
-                </form>
-            </div>
-
-            <!-- Register View -->
-            <div id="authRegisterView" style="display: none;">
-                <h1 class="auth-title font-serif">Agua Viva</h1>
-                <p class="auth-subtitle">Crear Cuenta</p>
-                <form id="authRegisterForm" class="auth-form">
-                    <div class="form-group">
-                        <label for="regEmail">Correo Electrónico *</label>
-                        <input type="email" id="regEmail" class="form-control" placeholder="nombre@correo.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="regPassword">Contraseña *</label>
-                        <input type="password" id="regPassword" class="form-control" placeholder="Mínimo 6 caracteres" required minlength="6">
-                    </div>
-                    <div class="form-group">
-                        <label for="regName">Nombre(s) *</label>
-                        <input type="text" id="regName" class="form-control" placeholder="Ej. Rogelio" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="regLastInitial">Inicial del Apellido *</label>
-                        <input type="text" id="regLastInitial" class="form-control" maxlength="1" placeholder="Ej. I" required style="text-transform: uppercase;">
-                    </div>
-                    <div class="form-group">
-                        <label for="regDob">Fecha de Nacimiento (Validación JAV) *</label>
-                        <input type="date" id="regDob" class="form-control" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="regRegion">Región *</label>
-                        <select id="regRegion" class="form-control" required>
-                            <option value="">Selecciona Región</option>
-                            <option value="Región 1 CDMX">Región 1 CDMX</option>
-                            <option value="Región 2 Estado de México">Región 2 Estado de México</option>
-                            <option value="Región 3 Querétaro y Guanajuato">Región 3 Querétaro y Guanajuato</option>
-                            <option value="Región 4 Puebla">Región 4 Puebla</option>
-                            <option value="Región 5 Guerrero">Región 5 Guerrero</option>
-                            <option value="Región 6 Yucatán">Región 6 Yucatán</option>
-                            <option value="Región 7 Chicago">Región 7 Chicago</option>
-                            <option value="Región 8 Veracruz">Región 8 Veracruz</option>
-                            <option value="Región 9 Monterrey">Región 9 Monterrey</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="regGroup">Grupo *</label>
-                        <select id="regGroup" class="form-control" required disabled>
-                            <option value="">Primero selecciona una región</option>
-                        </select>
-                    </div>
-                    
-                    <!-- Roll / Clasificación -->
-                    <div class="form-group">
-                        <label for="regRoleClass">Clasificación Básica</label>
-                        <select id="regRoleClass" class="form-control">
-                            <option value="Apoyo">Apoyo</option>
-                            <option value="Oreja">Oreja (Requiere Aprobación)</option>
-                            <option value="Padrino">Padrino (Requiere Aprobación)</option>
-                        </select>
-                    </div>
-
-                    <!-- Server Roles -->
-                    <div class="form-group" id="regServerGroup">
-                        <label for="regServerRole">Cargo de Servidor (Opcional)</label>
-                        <select id="regServerRole" class="form-control">
-                            <option value="Ninguno">Ninguno</option>
-                            <option value="COM">COM (Comité de Orden y Métodos)</option>
-                            <option value="Manager">Manager de Grupo</option>
-                            <option value="Tesorería de Grupo">Tesorería de Grupo</option>
-                            <option value="Preparador de primeros inventarios">Preparador de primeros inventarios</option>
-                            <option value="Coordinador de hacienda">Coordinador de hacienda</option>
-                            <option value="Literatura">Literatura</option>
-                            <option value="RSG">RSG (Representante de Servicios Generales)</option>
-                        </select>
-                    </div>
-
-                    <!-- JAV Server Roles (conditional) -->
-                    <div class="form-group" id="regJavServerGroup" style="display: none;">
-                        <label for="regJavServerRole">Cargo de Servidor JAV (Opcional)</label>
-                        <select id="regJavServerRole" class="form-control">
-                            <option value="Ninguno">Ninguno</option>
-                            <option value="COM JAV">COM JAV</option>
-                            <option value="Preparador JAV">Preparador de primeros inventarios JAV</option>
-                            <option value="Coordinador hacienda JAV">Coordinador de hacienda JAV</option>
-                            <option value="AE JAV">AE JAV (Atracciones Externas JAV)</option>
-                            <option value="AI JAV">AI JAV (Atracciones Internas JAV)</option>
-                        </select>
-                    </div>
-
-                    <!-- Leader Request Checkbox -->
-                    <div class="form-group auth-checkbox-group">
-                        <input type="checkbox" id="regIsLeaderRequest">
-                        <label for="regIsLeaderRequest">Solicitar ser Coordinador (Líder, AE o AI de Grupo)</label>
-                    </div>
-                    <div class="form-group" id="leaderTypeGroup" style="display: none; padding-left: 1.5rem;">
-                        <label for="regLeaderRoleType">Tipo de Coordinador</label>
-                        <select id="regLeaderRoleType" class="form-control">
-                            <option value="LIDER">Líder de Grupo</option>
-                            <option value="AE">AE (Atracciones Externas)</option>
-                            <option value="AI">AI (Atracciones Internas)</option>
-                        </select>
-                    </div>
-
-                    <div class="auth-footer-actions">
-                        <button type="submit" class="btn-auth-submit">Registrarse y Esperar Aprobación</button>
-                        <button type="button" class="btn-auth-switch" id="switchToLoginBtn">¿Ya tienes cuenta? Inicia sesión aquí</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Container -->
-    <div class="app-container">
-        
-        <!-- Header -->
-        <header class="app-header">
-            <div class="user-profile">
-                <div class="avatar" id="avatarBtn">Á</div>
-                <div class="user-info">
-                    <span class="greeting">Hola,</span>
-                    <span class="username" id="userNameLabel">Ámbar</span>
-                </div>
-            </div>
-            <div class="header-actions">
-                <button class="btn-theme-toggle" id="javToggleBtn" title="Cambiar a Sección JAV">
-                    <i class="fa-solid fa-rocket"></i> <span class="hide-mobile">Modo JAV</span>
-                </button>
-                <button class="btn-notification" id="notifBtn">
-                    <i class="fa-regular fa-bell"></i>
-                    <span class="notif-badge" id="notifBadge"></span>
-                </button>
-                <div class="notif-dropdown" id="notifDropdown">
-                    <div class="notif-header">
-                        <span>Notificaciones</span>
-                        <button type="button" class="notif-clear-btn" id="notifClearBtn">Limpiar</button>
-                    </div>
-                    <div class="notif-body" id="notifBody">
-                        <!-- Populated by JS -->
-                    </div>
-                </div>
-                <button class="btn-notification" id="logoutBtn" title="Cerrar Sesión" style="margin-left: 0.5rem; color: var(--color-red);">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                </button>
-            </div>
+    <div class="wrap">
+        <header class="hero">
+            <img src="assets/Icons/LOGO AV.png" alt="Logo Agua Viva" class="hero-logo">
+            <h1 class="font-serif">Agua Viva</h1>
+            <span class="tag"><i class="fa-solid fa-flask"></i> VERSIÓN DE FASE TEMPRANA · PROTOTIPO FUNCIONAL</span>
+            <p class="lead">Plataforma comunitaria para la recuperación: asistencia a juntas con <strong>QR firmado</strong>, directorio de la militancia en <strong>9 regiones</strong>, logística completa de <strong>Haciendas (POA)</strong> y gamificación del proceso. Todo corre en tu navegador, sin instalación.</p>
         </header>
 
-        <!-- Main Content Viewport -->
-        <main class="app-viewport" id="appViewport">
-            
-            <!-- SECTION 1: INICIO (Dashboard Miembro) -->
-            <section class="app-section active" id="sec-inicio">
-                <!-- Faro Progress Card -->
-                <div class="card card-level">
-                    <div class="level-header">
-                        <span class="level-subtitle">NIVEL 4 · DE 8</span>
-                        <h2 class="level-title font-serif">Faro</h2>
-                    </div>
-                    <div class="level-progress-wrapper">
-                        <div class="level-xp-text">
-                            <span class="current-xp"><strong>420</strong> XP</span>
-                            <span class="xp-needed">faltan <strong class="color-cyan">230 XP</strong> para Aurora</span>
-                        </div>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 64.6%;"></div>
-                        </div>
-                    </div>
-                </div>
+        <section class="surfaces">
+            <a class="surface movil" href="app.html">
+                <div class="s-icon"><i class="fa-solid fa-mobile-screen-button"></i></div>
+                <h3 class="font-serif">Aplicación Móvil</h3>
+                <p>Para toda la comunidad: progreso y nivel, próxima junta con ponente y tema, declaración POA de Haciendas, escáner QR con validación real, historial, logros y modo <strong>JAV</strong>. Los servidores aprobados (Líder, AE, AI) reciben su sección <strong>Mi Servicio</strong> con semáforo regional, escribientes, auditoría, junta de atracciones o gestión de juntas.</p>
+                <span class="s-cta">Abrir la app <i class="fa-solid fa-arrow-right"></i></span>
+            </a>
+            <a class="surface panel" href="admin.html">
+                <div class="s-icon"><i class="fa-solid fa-desktop"></i></div>
+                <h3 class="font-serif">Panel Administrativo</h3>
+                <p>Para Líderes y Atracciones: pase de lista en vivo con QR rotativo, directorios por grupo/región/interregional con permisos por alcance, expedientes completos, calendario mensual y anual, rectificación del POA con semáforo automático y exportación a <strong>Excel de 7 hojas</strong>.</p>
+                <span class="s-cta">Abrir el panel <i class="fa-solid fa-arrow-right"></i></span>
+            </a>
+            <a class="surface portal" href="superadmin.html">
+                <div class="s-icon"><i class="fa-solid fa-crown"></i></div>
+                <h3 class="font-serif">Portal Superadmin</h3>
+                <p>Administración central protegida con credenciales de fábrica: aprobación de Líderes, alta y baja de regiones y sedes, agendado de Haciendas con aviso a las 9 regiones, y control total de la Junta de Atracciones.</p>
+                <span class="s-cta">Abrir el portal <i class="fa-solid fa-arrow-right"></i></span>
+            </a>
+        </section>
 
-                <!-- Stats Grid -->
-                <div class="stats-grid">
-                    <div class="card card-stat">
-                        <span class="stat-label">RACHA</span>
-                        <div class="stat-value-container">
-                            <span class="stat-value">28</span>
-                            <i class="fa-solid fa-fire stat-icon color-orange animate-pulse"></i>
-                        </div>
-                        <span class="stat-desc">días seguidos</span>
-                    </div>
-                    <div class="card card-stat">
-                        <span class="stat-label">TIEMPO LIMPIO</span>
-                        <div class="stat-value-container">
-                            <span class="stat-value">95</span>
-                            <i class="fa-solid fa-seedling stat-icon color-green"></i>
-                        </div>
-                        <span class="stat-desc">días acumulados</span>
-                    </div>
-                </div>
+        <section class="features">
+            <h2 class="font-serif">¿Qué hay dentro?</h2>
+            <p class="sub">Funciones reales, verificadas con una suite de pruebas automatizadas</p>
+            <div class="feat-grid">
+                <div class="feat"><i class="fa-solid fa-qrcode"></i><h4>Asistencia por QR firmado</h4><p>Token JWT HS256 que expira cada 30 segundos + validación por geolocalización contra la sede. Funciona offline con cola de sincronización.</p></div>
+                <div class="feat"><i class="fa-solid fa-traffic-light"></i><h4>Semáforo POA automático</h4><p>Verde, amarillo o rojo por grupo según registros nuevos y días sin rectificar, activo en la ventana de 2 semanas antes de cada Hacienda.</p></div>
+                <div class="feat"><i class="fa-solid fa-user-shield"></i><h4>Permisos por rol</h4><p>Superadmin, Líder, AE, AI y militancia — cada quien edita solo su alcance (grupo y región). Aprobar Líderes es exclusivo del Superadmin.</p></div>
+                <div class="feat"><i class="fa-solid fa-file-excel"></i><h4>Exportación Excel</h4><p>Reporte .xlsx real con 7 hojas: Militancia, Padrinos, Orejas, JAV, Servidores, Sedes y Calendario de Atracciones.</p></div>
+                <div class="feat"><i class="fa-solid fa-rocket"></i><h4>Modo JAV</h4><p>Jóvenes en Agua Viva (13–18): detección automática por edad, estética neón propia y eventos exclusivos priorizados.</p></div>
+                <div class="feat"><i class="fa-solid fa-trophy"></i><h4>Gamificación</h4><p>XP, niveles (Chispa → Sol), rachas de asistencia e insignias calculadas de los datos reales de cada miembro.</p></div>
+            </div>
+        </section>
 
-                <!-- Scan QR Banner -->
-                <div class="card card-banner-scan" id="bannerScanBtn">
-                    <div class="banner-content">
-                        <div class="banner-icon-bg">
-                            <i class="fa-solid fa-qrcode"></i>
-                        </div>
-                        <div class="banner-text">
-                            <h3>Escanear junta</h3>
-                            <p>Apunta al QR de la sala para registrar asistencia</p>
-                        </div>
-                    </div>
-                    <i class="fa-solid fa-chevron-right banner-arrow"></i>
-                </div>
+        <section class="demo">
+            <h2 class="font-serif">Pruébalo en 30 segundos</h2>
+            <p class="sub">Cuentas de demostración · contraseña <code>123</code></p>
+            <div class="demo-box">
+                <table>
+                    <thead><tr><th>CUENTA</th><th>ROL</th><th>QUÉ VER</th></tr></thead>
+                    <tbody>
+                        <tr><td>ambar@email.com</td><td>Miembro · Padrino</td><td>App: progreso, tags, avance de inventarios, POA</td></tr>
+                        <tr><td>bruma@email.com</td><td>Miembro · JAV</td><td>App con la experiencia JAV completa</td></tr>
+                        <tr><td>diego@email.com</td><td>Atracciones Externas</td><td>App: Mi Servicio con semáforo regional y junta</td></tr>
+                        <tr><td>mariana@email.com</td><td>Líder de grupo</td><td>Panel admin completo + Mi Servicio total en la app</td></tr>
+                        <tr><td>superadmin@email.com</td><td>Superadmin</td><td>Panel con permisos totales; el portal usa credenciales de fábrica</td></tr>
+                    </tbody>
+                </table>
+                <p class="note"><i class="fa-solid fa-circle-info"></i> Los datos viven en el <strong>localStorage</strong> de tu navegador: la app y el panel comparten los cambios en vivo entre pestañas. Es un prototipo sin servidor — nada sale de tu equipo.</p>
+            </div>
+        </section>
 
-                <!-- Next Meetings List with Calendar tabs -->
-                <div class="meetings-header" style="flex-wrap: wrap; gap: 0.5rem;">
-                    <h3>Calendario</h3>
-                    <div style="display: flex; gap: 0.5rem; align-items: center;">
-                        <div class="calendar-tabs" id="calendarTabs" style="display: flex; gap: 0.35rem;">
-                            <button type="button" class="btn-xs tab-btn active" data-cal="GROUP" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.25rem 0.45rem; color: white; cursor: pointer; font-size: 0.75rem;">Mi Grupo</button>
-                            <button type="button" class="btn-xs tab-btn" data-cal="REGIONAL" style="background: transparent; border: 1px solid transparent; border-radius: 8px; padding: 0.25rem 0.45rem; color: var(--text-secondary); cursor: pointer; font-size: 0.75rem;">Regional</button>
-                            <button type="button" class="btn-xs tab-btn" data-cal="ANNUAL" style="background: transparent; border: 1px solid transparent; border-radius: 8px; padding: 0.25rem 0.45rem; color: var(--text-secondary); cursor: pointer; font-size: 0.75rem;">Anual</button>
-                        </div>
-                        <div style="height: 12px; width: 1px; background: rgba(255,255,255,0.2);"></div>
-                        <div class="view-toggle-buttons" id="calendarViewToggle" style="display: flex; gap: 0.2rem;">
-                            <button type="button" class="btn-xs active" data-view="LIST" style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.25rem 0.35rem; color: white; cursor: pointer; font-size: 0.7rem;"><i class="fa-solid fa-list"></i></button>
-                            <button type="button" class="btn-xs" data-view="WEEK" style="background: transparent; border: 1px solid transparent; border-radius: 6px; padding: 0.25rem 0.35rem; color: var(--text-secondary); cursor: pointer; font-size: 0.7rem;"><i class="fa-solid fa-calendar-week"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="meetings-list" id="upcomingMeetingsList">
-                    <!-- Dynamic Meetings injected by JS -->
-                </div>
-                <div id="weeklyCalendarContainer" style="display: none; margin-top: 1rem;">
-                    <div class="weekly-grid-header" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.25rem; text-align: center; font-weight: 600; font-size: 0.65rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.25rem; margin-bottom: 0.25rem; color: var(--text-secondary);">
-                        <div>L</div>
-                        <div>M</div>
-                        <div>M</div>
-                        <div>J</div>
-                        <div>V</div>
-                        <div>S</div>
-                        <div>D</div>
-                    </div>
-                    <div id="weeklyCalendarGrid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.25rem; min-height: 120px;">
-                        <!-- Populated by JS -->
-                    </div>
-                </div>
-            </section>
+        <section class="docs">
+            <h2 class="font-serif">Documentación</h2>
+            <p class="sub">Para usuarios, colaboradores y quien construya la versión oficial</p>
+            <div class="docs-grid">
+                <a class="doc-link" href="https://github.com/adan-garcia/agua-viva-asistencia#readme" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i><div><strong>Repositorio y README</strong><span>Código fuente, guía rápida y cuentas demo</span></div></a>
+                <a class="doc-link" href="docs/README-DEV.md" target="_blank"><i class="fa-solid fa-code"></i><div><strong>Guía para desarrolladores</strong><span>Arquitectura, módulos, permisos y pruebas</span></div></a>
+                <a class="doc-link" href="docs/ESPECIFICACION.md" target="_blank"><i class="fa-solid fa-book"></i><div><strong>Especificación maestra</strong><span>Roles, funciones por sección, modelo de datos y roadmap</span></div></a>
+            </div>
+        </section>
 
-            <!-- SECTION 2: SCANNER (QR Registration) -->
-            <section class="app-section" id="sec-scanner">
-                <div class="scanner-container">
-                    <div class="scanner-header">
-                        <h2 class="font-serif">Escanear QR</h2>
-                        <p>El QR aparece al iniciar la junta. Se renueva cada 30 segundos.</p>
-                    </div>
-                    
-                    <div class="qr-target-box">
-                        <div class="qr-corner top-left"></div>
-                        <div class="qr-corner top-right"></div>
-                        <div class="qr-corner bottom-left"></div>
-                        <div class="qr-corner bottom-right"></div>
-                        <div class="qr-laser"></div>
-                        <div class="qr-mock-code">
-                            <i class="fa-solid fa-qrcode fa-5x opacity-40"></i>
-                        </div>
-                    </div>
-
-                    <p class="scanner-instruction font-serif">Apunta al QR de la sala</p>
-
-                    <div class="scanner-footer">
-                        <button class="btn btn-secondary w-full" id="manualCodeBtn">
-                            <i class="fa-solid fa-keyboard"></i> Ingresar código manualmente
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- SECTION 3: HISTORIAL (Tu Cielo) -->
-            <section class="app-section" id="sec-historial">
-                <div class="historial-header">
-                    <span class="section-subtitle">TU CIELO</span>
-                    <h2 class="font-serif section-title">Historial</h2>
-                </div>
-
-                <!-- Stats Quick Cards -->
-                <div class="stats-quick-row">
-                    <div class="quick-stat-card">
-                        <span class="qs-val" id="hist-total-juntas">34</span>
-                        <span class="qs-label">Juntas</span>
-                    </div>
-                    <div class="quick-stat-card">
-                        <span class="qs-val" id="hist-total-haciendas">3</span>
-                        <span class="qs-label">Haciendas</span>
-                    </div>
-                    <div class="quick-stat-card">
-                        <span class="qs-val text-green" id="hist-clean-days">142</span>
-                        <span class="qs-label">Días limpio</span>
-                    </div>
-                </div>
-
-                <!-- SVG Trend Chart -->
-                <div class="card chart-card">
-                    <div class="chart-header">
-                        <span>Últimas 12 semanas</span>
-                        <span class="chart-status color-cyan"><i class="fa-solid fa-arrow-trend-up"></i> constante</span>
-                    </div>
-                    <div class="chart-body">
-                        <svg class="trend-chart-svg" viewBox="0 0 300 80">
-                            <!-- SVG Grid lines -->
-                            <line x1="0" y1="20" x2="300" y2="20" stroke="rgba(255,255,255,0.05)" />
-                            <line x1="0" y1="50" x2="300" y2="50" stroke="rgba(255,255,255,0.05)" />
-                            <!-- Sparkline path -->
-                            <path d="M 0,60 Q 25,50 50,65 T 100,55 T 150,45 T 200,50 T 250,38 T 300,42" fill="none" stroke="url(#chartGradient)" stroke-width="3" stroke-linecap="round"/>
-                            <!-- Gradient definition -->
-                            <defs>
-                                <linearGradient id="chartGradient" x1="0" y1="0" x2="1" y2="0">
-                                    <stop offset="0%" stop-color="#7000ff" />
-                                    <stop offset="100%" stop-color="#00d9ff" />
-                                </linearGradient>
-                            </defs>
-                        </svg>
-                    </div>
-                </div>
-
-                <!-- Chronological Timeline -->
-                <div class="timeline-title font-serif">Mayo 2026</div>
-                <div class="timeline-list" id="timelineList">
-                    <!-- Dynamic Timeline items by JS -->
-                </div>
-            </section>
-
-            <!-- SECTION 4: HACIENDAS (Retiros y POA Dashboard) -->
-            <section class="app-section" id="sec-haciendas">
-                <div class="section-header-flex">
-                    <div>
-                        <span class="section-subtitle">LOGÍSTICA REGIONAL</span>
-                        <h2 class="font-serif section-title">Haciendas y POA</h2>
-                    </div>
-                    <div class="hacienda-selector-wrapper">
-                        <select id="haciendaSelect" class="styled-select">
-                            <option value="h1">Hacienda Región 4 (Julio 2026)</option>
-                            <option value="h2">Hacienda JAV Región 1 (Agosto 2026)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- User Attendance Declaration Tab -->
-                <div class="card declaration-card" id="userDeclarationCard">
-                    <h3 class="font-serif card-title"><i class="fa-solid fa-clipboard-question color-cyan"></i> Declarar mi Asistencia</h3>
-                    <p class="card-desc">Confirma tus detalles de traslado y turnos para el próximo retiro regional.</p>
-                    
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="attendingCheck">¿Asistirás a la Hacienda?</label>
-                            <div class="toggle-buttons-group" id="attendanceToggleGroup">
-                                <button type="button" class="btn-toggle active" data-val="true">Sí, asistiré</button>
-                                <button type="button" class="btn-toggle" data-val="false">No iré</button>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="arrivalShift">Turno de llegada</label>
-                            <select id="arrivalShift" class="form-control">
-                                <option value="PRE_AVANZADA">Pre-avanzada (Jueves)</option>
-                                <option value="AVANZADA">Avanzada (Viernes mañana con escribientes)</option>
-                                <option value="VIERNES_TARDE_NOCHE">Viernes Tarde/Noche</option>
-                                <option value="SABADO_MANANA">Sábado Mañana</option>
-                                <option value="SABADO_TARDE_NOCHE">Sábado Tarde/Noche</option>
-                                <option value="DOMINGO">Domingo</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Movilidad / Transporte</label>
-                            <select id="transportStatus" class="form-control">
-                                <option value="NEEDS_TRANSPORT">Necesito que me lleven (Sin auto)</option>
-                                <option value="PROVIDES_TRANSPORT">Llevo auto propio (Ofrezco lugares)</option>
-                                <option value="NONE">Me traslado por mi cuenta</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group" id="capacityGroup" style="display:none;">
-                            <label for="transportCapacity">Lugares disponibles en auto</label>
-                            <input type="number" id="transportCapacity" class="form-control" min="1" max="10" value="4">
-                        </div>
-                    </div>
-                    <button class="btn btn-primary btn-save-logistics" id="saveLogisticsBtn">
-                        <i class="fa-solid fa-floppy-disk"></i> Guardar Declaración
-                    </button>
-                </div>
-
-                <!-- Admin & Atracciones POA Section (Only shown/accessible to Leader, AE, AI) -->
-                <div class="poa-admin-panel">
-                    <div class="poa-header">
-                        <h3 class="font-serif text-glow-purple"><i class="fa-solid fa-shield-halved"></i> Panel POA (Líderes y Atracciones)</h3>
-                        <span class="badge badge-admin">Acceso Autorizado</span>
-                    </div>
-
-                    <!-- Global Hacienda Stats Summary -->
-                    <div class="poa-stats-row">
-                        <div class="poa-stat-box card">
-                            <span class="psb-val" id="poa-total-escribientes">48</span>
-                            <span class="psb-label">Escribientes</span>
-                        </div>
-                        <div class="poa-stat-box card">
-                            <span class="psb-val" id="poa-total-apoyos">24</span>
-                            <span class="psb-label">Apoyos</span>
-                        </div>
-                        <div class="poa-stat-box card">
-                            <span class="psb-val" id="poa-total-padrinos">12</span>
-                            <span class="psb-label">Padrinos</span>
-                        </div>
-                        <div class="poa-stat-box card">
-                            <span class="psb-val" id="poa-total-orejas">6</span>
-                            <span class="psb-label">Orejas</span>
-                        </div>
-                        <div class="poa-stat-box card">
-                            <span class="psb-val text-cyan" id="poa-transport-ratio">32 / 40</span>
-                            <span class="psb-label">Lugares Transp.</span>
-                        </div>
-                    </div>
-
-                    <!-- Group Status Traffic Lights (Semaforos) -->
-                    <div class="poa-grid">
-                        
-                        <!-- Col 1: Groups & Traffic Light Semaphore List -->
-                        <div class="card poa-groups-card">
-                            <h4 class="card-title font-serif">Semáforo de Carga por Grupo</h4>
-                            <p class="card-desc">Estado de actualización de datos de escribientes y servidores.</p>
-                            <div class="groups-semaphore-list" id="groupsSemaphoreList">
-                                <!-- Loaded dynamically via JS -->
-                            </div>
-                        </div>
-
-                        <!-- Col 2: Escribientes Write-in Manager -->
-                        <div class="card poa-escribientes-card">
-                            <div class="card-header-flex">
-                                <h4 class="card-title font-serif">Gestión de Escribientes</h4>
-                                <button class="btn btn-xs btn-primary" id="openAddEscribienteModal">
-                                    <i class="fa-solid fa-plus"></i> Registrar
-                                </button>
-                            </div>
-                            <p class="card-desc">Registra a quienes vivirán la experiencia de la hacienda.</p>
-                            
-                            <div class="search-box">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                                <input type="text" id="searchEscribienteInput" placeholder="Buscar escribiente...">
-                            </div>
-
-                            <div class="table-responsive">
-                                <table class="custom-table" id="escribientesTable">
-                                    <thead>
-                                        <tr>
-                                            <th>Nombre</th>
-                                            <th>Género</th>
-                                            <th>Grupo</th>
-                                            <th class="text-right">Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="escribientesListBody">
-                                        <!-- Dynamic rows by JS -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <!-- Change Log / Registro de Cambios -->
-                    <div class="card changelog-card mt-6">
-                        <h4 class="card-title font-serif"><i class="fa-solid fa-clock-rotate-left"></i> Registro de Cambios (Historial de Auditoría)</h4>
-                        <p class="card-desc">Actualizaciones recientes realizadas por los coordinadores y atracciones de la región.</p>
-                        <div class="changelog-list" id="auditChangeLogList">
-                            <!-- Dynamic change logs -->
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- SECTION 5: MIEMBROS -->
-            <!-- SECTION 5: LOGROS (Achievements & Roadmap) -->
-            <section class="app-section" id="sec-logros">
-                <!-- Mini Profile Card -->
-                <div class="card logros-profile-card">
-                    <div class="logros-profile-header">
-                        <div class="avatar" style="width: 55px; height: 55px; font-size: 1.4rem;">Á</div>
-                        <div class="logros-profile-info">
-                            <h2 class="font-serif">Ámbar</h2>
-                            <span class="logros-join-date">Miembro desde jun 2025</span>
-                            <div class="logros-badges-row">
-                                <span class="badge-role badge-jav-tag">Nv 4 · Faro</span>
-                                <span class="badge-role badge-oreja"><i class="fa-solid fa-fire"></i> 28d</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="level-progress-wrapper" style="margin-top: 1.25rem;">
-                        <div class="level-xp-text">
-                            <span class="current-xp">Faro &rarr; Aurora</span>
-                            <span class="current-xp"><strong>420</strong> / 650 XP</span>
-                        </div>
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" style="width: 64.6%;"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Camino de Luz Roadmap -->
-                <div class="roadmap-header">
-                    <h3 class="font-serif">Camino de luz</h3>
-                </div>
-                <div class="roadmap-scroll-container">
-                    <div class="roadmap-track">
-                        <div class="roadmap-item completed">
-                            <div class="roadmap-dot"><span class="dot-symbol">•</span></div>
-                            <span class="roadmap-level-name">Nv 1</span>
-                            <span class="roadmap-level-title font-serif">Chispa</span>
-                        </div>
-                        <div class="roadmap-item completed">
-                            <div class="roadmap-dot"><i class="fa-solid fa-diamond"></i></div>
-                            <span class="roadmap-level-name">Nv 2</span>
-                            <span class="roadmap-level-title font-serif">Llama</span>
-                        </div>
-                        <div class="roadmap-item completed">
-                            <div class="roadmap-dot"><i class="fa-solid fa-star-of-david"></i></div>
-                            <span class="roadmap-level-name">Nv 3</span>
-                            <span class="roadmap-level-title font-serif">Brasa</span>
-                        </div>
-                        <div class="roadmap-item active">
-                            <div class="roadmap-dot"><i class="fa-solid fa-lightbulb"></i></div>
-                            <span class="roadmap-level-name">Nv 4</span>
-                            <span class="roadmap-level-title font-serif">Faro</span>
-                        </div>
-                        <div class="roadmap-item locked">
-                            <div class="roadmap-dot"><i class="fa-solid fa-star"></i></div>
-                            <span class="roadmap-level-name">Nv 5</span>
-                            <span class="roadmap-level-title font-serif">Aurora</span>
-                        </div>
-                        <div class="roadmap-item locked">
-                            <div class="roadmap-dot"><i class="fa-solid fa-sun"></i></div>
-                            <span class="roadmap-level-name">Nv 6</span>
-                            <span class="roadmap-level-title font-serif">Sol</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Insignias Grid -->
-                <div class="insignias-header">
-                    <h3 class="font-serif">Insignias</h3>
-                    <span class="insignias-count">5 / 9</span>
-                </div>
-                
-                <div class="insignias-grid">
-                    <div class="badge-card unlocked">
-                        <div class="badge-icon-fire"><i class="fa-solid fa-fire animate-pulse"></i></div>
-                        <span class="badge-name">7 días</span>
-                        <span class="badge-desc">Una semana firme</span>
-                    </div>
-                    <div class="badge-card unlocked">
-                        <div class="badge-icon-fire"><i class="fa-solid fa-fire animate-pulse"></i></div>
-                        <span class="badge-name">30 días</span>
-                        <span class="badge-desc">Un mes completo</span>
-                    </div>
-                    <div class="badge-card locked">
-                        <div class="badge-icon-fire"><i class="fa-solid fa-fire"></i></div>
-                        <span class="badge-name">90 días</span>
-                        <span class="badge-desc">Tres meses</span>
-                    </div>
-                    <div class="badge-card locked">
-                        <div class="badge-icon-fire"><i class="fa-solid fa-fire"></i></div>
-                        <span class="badge-name">1 año</span>
-                        <span class="badge-desc">Vuelta al sol</span>
-                    </div>
-                    <div class="badge-card unlocked-star-blue">
-                        <div class="badge-icon-star"><i class="fa-solid fa-star"></i></div>
-                        <span class="badge-name">Primera junta</span>
-                        <span class="badge-desc">Llegaste</span>
-                    </div>
-                    <div class="badge-card unlocked-star-blue">
-                        <div class="badge-icon-star"><i class="fa-solid fa-star"></i></div>
-                        <span class="badge-name">10 juntas</span>
-                        <span class="badge-desc">Constante</span>
-                    </div>
-                    <div class="badge-card unlocked-star-purple">
-                        <div class="badge-icon-star"><i class="fa-solid fa-trophy"></i></div>
-                        <span class="badge-name">Hacienda</span>
-                        <span class="badge-desc">Viviste la exp</span>
-                    </div>
-                    <div class="badge-card locked-star">
-                        <div class="badge-icon-star"><i class="fa-solid fa-check"></i></div>
-                        <span class="badge-name">Padrino activo</span>
-                        <span class="badge-desc">Acompañado</span>
-                    </div>
-                    <div class="badge-card locked-star">
-                        <div class="badge-icon-star"><i class="fa-solid fa-sun"></i></div>
-                        <span class="badge-name">Madrugador</span>
-                        <span class="badge-desc">Pre-avanzada</span>
-                    </div>
-                </div>
-            </section>
-
-            <!-- SECTION 6: AJUSTES (Profile Edit) -->
-            <section class="app-section" id="sec-settings">
-                <div class="settings-header" style="margin-bottom: 1.5rem;">
-                    <span class="section-subtitle">MI PERFIL</span>
-                    <h2 class="font-serif section-title" style="margin-bottom: 0;">Ajustes</h2>
-                </div>
-
-                <div class="card settings-card">
-                    <form id="settingsProfileForm">
-                        <div class="profile-preview-wrapper" style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem; padding: 1rem 0; border-bottom: 1px solid var(--border-color);">
-                            <div class="avatar" id="settingsAvatarPreview" style="width: 75px; height: 75px; font-size: 2rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff;">Á</div>
-                            <span style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 500;">Vista previa de tu avatar</span>
-                        </div>
-
-                        <div class="form-group mb-4" style="margin-bottom: 1.2rem; display: flex; flex-direction: column; gap: 0.4rem;">
-                            <label for="settingsAlias" style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase;">Alias / Nombre</label>
-                            <input type="text" id="settingsAlias" class="form-control" placeholder="Ej. Ámbar" required style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); border-radius: 10px; padding: 0.75rem 1rem; color: white; font-size: 0.9rem; transition: all 0.3s; width: 100%;">
-                        </div>
-
-                        <div class="form-group mb-4" style="margin-bottom: 1.2rem; display: flex; flex-direction: column; gap: 0.4rem;">
-                            <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase;">Color de Avatar</label>
-                            <div class="color-picker-grid">
-                                <button type="button" class="color-btn" data-color="#be185d" style="background-color: #be185d;"></button>
-                                <button type="button" class="color-btn" data-color="#6d28d9" style="background-color: #6d28d9;"></button>
-                                <button type="button" class="color-btn" data-color="#1d4ed8" style="background-color: #1d4ed8;"></button>
-                                <button type="button" class="color-btn" data-color="#0369a1" style="background-color: #0369a1;"></button>
-                                <button type="button" class="color-btn" data-color="#047857" style="background-color: #047857;"></button>
-                                <button type="button" class="color-btn" data-color="#556b2f" style="background-color: #556b2f;"></button>
-                                <button type="button" class="color-btn" data-color="#c2410c" style="background-color: #c2410c;"></button>
-                                <button type="button" class="color-btn" data-color="#b91c1c" style="background-color: #b91c1c;"></button>
-                                <button type="button" class="color-btn" data-color="#0F172A" style="background-color: #0F172A;"></button>
-                                <button type="button" class="color-btn" data-color="#d946ef" style="background-color: #d946ef;"></button>
-                            </div>
-                        </div>
-
-                        <div class="form-group mb-6" style="margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 0.4rem;">
-                            <label for="settingsAvatarIcon" style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase;">Icono del Avatar</label>
-                            <select id="settingsAvatarIcon" class="form-control" style="background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); border-radius: 10px; padding: 0.75rem 1rem; color: white; font-size: 0.9rem; transition: all 0.3s; width: 100%;">
-                                <option value="initial">Inicial del Nombre (Letra)</option>
-                                <option value="fa-user-astronaut">Astronauta (JAV)</option>
-                                <option value="fa-rocket">Cohete (Espacio)</option>
-                                <option value="fa-fire">Fuego (Racha)</option>
-                                <option value="fa-heart">Corazón (Hermandad)</option>
-                                <option value="fa-star">Estrella (Luz)</option>
-                                <option value="fa-shield-halved">Escudo (Servicio)</option>
-                            </select>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary w-full mb-4" style="width:100%; margin-bottom: 1rem; background: linear-gradient(135deg, var(--primary) 0%, #9035ff 100%); border: none; border-radius: 10px; padding: 0.85rem; color: white; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: all 0.3s;">
-                            <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios
-                        </button>
-                        
-                        <button type="button" class="btn btn-secondary w-full" id="settingsLogoutBtn" style="width:100%; color: var(--color-red); border: 1px solid rgba(239, 68, 68, 0.3); background: transparent; border-radius: 10px; padding: 0.85rem; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: all 0.3s;">
-                            <i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión
-                        </button>
-                    </form>
-                </div>
-            </section>
-        </main>
-
-        <!-- Navigation Bottom Bar (Mobile layout, but works as main app navigator) -->
-        <nav class="app-navigation">
-            <button class="nav-item active" data-target="sec-inicio">
-                <i class="fa-solid fa-house"></i>
-                <span>Inicio</span>
-            </button>
-            <button class="nav-item" data-target="sec-scanner">
-                <i class="fa-solid fa-qrcode"></i>
-                <span>Asistencia</span>
-            </button>
-            <button class="nav-item" data-target="sec-historial">
-                <i class="fa-regular fa-calendar-days"></i>
-                <span>Historial</span>
-            </button>
-            <button class="nav-item" data-target="sec-haciendas">
-                <i class="fa-solid fa-campground"></i>
-                <span>Haciendas</span>
-            </button>
-            <button class="nav-item" data-target="sec-logros">
-                <i class="fa-solid fa-trophy"></i>
-                <span>Logros</span>
-            </button>
-            <button class="nav-item" data-target="sec-settings" id="btnNavSettings">
-                <i class="fa-solid fa-gear"></i>
-                <span>Ajustes</span>
-            </button>
-        </nav>
+        <footer>
+            Proyecto comunitario de <strong>Agua Viva</strong> en fase temprana · hecho con <span class="heart">♥</span> para la recuperación.<br>
+            Panel web + apps nativas Android/iOS en el roadmap — colaboradores bienvenidos.
+        </footer>
     </div>
-
-    <!-- MODAL: Level Up Celebration (Aurora) -->
-    <div class="modal-overlay" id="levelUpModal">
-        <div class="modal-content level-up-celebration text-center">
-            <span class="level-up-badge-top">▲ SUBISTE DE NIVEL</span>
-            <div class="glowing-aurora-star">
-                <i class="fa-solid fa-star animate-pulse"></i>
-            </div>
-            <span class="level-sub">NIVEL 5</span>
-            <h1 class="level-name font-serif text-glow-cyan">Aurora</h1>
-            <p class="level-congrats">Tu luz ya se ve desde lejos. Otros caminan más confiados porque tú sigues aquí.</p>
-            
-            <div class="insignia-earned-card">
-                <div class="insignia-icon"><i class="fa-solid fa-trophy"></i></div>
-                <div class="insignia-text text-left">
-                    <strong>Insignia Nueva: Aurora Boreal</strong>
-                    <span>Primer miembro en llegar a nivel 5 este mes.</span>
-                </div>
-            </div>
-
-            <button class="btn btn-primary w-full mt-4" id="closeLevelUpBtn">Seguir brillando</button>
-        </div>
-    </div>
-
-    <!-- MODAL: Add Escribiente -->
-    <div class="modal-overlay" id="addEscribienteModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="font-serif">Registrar Nuevo Escribiente</h3>
-                <button class="btn-close-modal" id="closeAddEscribienteModal"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <form id="addEscribienteForm">
-                <div class="form-group mb-4">
-                    <label for="escName">Nombre(s)</label>
-                    <input type="text" id="escName" class="form-control" placeholder="Ej. Juan Carlos" required>
-                </div>
-                <div class="form-group mb-4">
-                    <label for="escLastInitial">Inicial del Apellido</label>
-                    <input type="text" id="escLastInitial" class="form-control" maxlength="1" placeholder="Ej. G" required style="text-transform: uppercase;">
-                </div>
-                <div class="form-group mb-4">
-                    <label for="escGender">Género</label>
-                    <select id="escGender" class="form-control" required>
-                        <option value="MALE">Hombre</option>
-                        <option value="FEMALE">Mujer</option>
-                    </select>
-                </div>
-                <div class="form-group mb-6">
-                    <label for="escGroup">Grupo de procedencia</label>
-                    <select id="escGroup" class="form-control" required>
-                        <!-- Loaded dynamically by JS -->
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary w-full">Guardar Registro</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Floating Simulator Widget -->
-    <div class="sim-widget" id="simWidget">
-        <button class="sim-trigger-btn" id="simTriggerBtn" title="Panel de Simulación de Roles">
-            <i class="fa-solid fa-gears"></i>
-        </button>
-        <div class="sim-panel" id="simPanel">
-            <h4><i class="fa-solid fa-laptop-code"></i> Control de Simulación</h4>
-            
-            <div class="sim-panel-section">
-                <span class="sim-panel-section-title">Usuario / Rol Activo</span>
-                <button class="sim-role-btn" data-email="ambar@email.com" data-role="member" id="simUserAmbar">
-                    <i class="fa-solid fa-user"></i>
-                    <div>
-                        <strong>Ámbar A.</strong>
-                        <span style="display:block; font-size:0.65rem; opacity:0.7;">Miembro Regular (CDMX)</span>
-                    </div>
-                </button>
-                <button class="sim-role-btn" data-email="mariana@email.com" data-role="admin" id="simUserMariana">
-                    <i class="fa-solid fa-user-tie"></i>
-                    <div>
-                        <strong>Mariana C.</strong>
-                        <span style="display:block; font-size:0.65rem; opacity:0.7;">Coordinadora (Satélite)</span>
-                    </div>
-                </button>
-                <button class="sim-role-btn" data-email="superadmin@email.com" data-role="superadmin" id="simUserSuper">
-                    <i class="fa-solid fa-crown"></i>
-                    <div>
-                        <strong>Superusuario</strong>
-                        <span style="display:block; font-size:0.65rem; opacity:0.7;">Superadmin</span>
-                    </div>
-                </button>
-            </div>
-            
-            <div class="sim-panel-section">
-                <span class="sim-panel-section-title">Navegación Rápida</span>
-                <a href="index.html" class="sim-page-link">
-                    <span>📱 Aplicación Móvil</span>
-                    <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i>
-                </a>
-                <a href="admin.html" class="sim-page-link">
-                    <span>💻 Panel Admin</span>
-                    <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i>
-                </a>
-                <a href="superadmin.html" class="sim-page-link">
-                    <span>👑 Portal Superadmin</span>
-                    <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i>
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <script src="app.js"></script>
 </body>
 </html>

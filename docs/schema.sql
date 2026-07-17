@@ -30,8 +30,43 @@ CREATE TABLE groups (
 
 -- Enum types for distinct roles and statuses
 CREATE TYPE user_role_enum AS ENUM ('SUPERADMIN', 'LIDER', 'AE', 'AI', 'MEMBER');
-CREATE TYPE oyp_status_enum AS ENUM ('NONE', 'APOYO', 'OREJA', 'PADRINO');
-CREATE TYPE servidor_status_enum AS ENUM ('NONE', 'SERV_NORMAL', 'SERV_JAV');
+CREATE TYPE militancia_status_enum AS ENUM ('CONCIENCIA', 'MILITANCIA');
+CREATE TYPE experiencia_nivel_enum AS ENUM ('NINGUNO', 'APOYO', 'OREJA', 'PADRINO');
+
+CREATE TYPE estigma_enfermedad_enum AS ENUM (
+    'ALCOHOLISMO',
+    'DROGADICCION',
+    'CODEPENDENCIA',
+    'ANOREXIA',
+    'BULINOREXICA',
+    'DEPENDIENTE',
+    'NEUROSIS'
+);
+
+CREATE TYPE servicio_adulto_enum AS ENUM (
+    'LIDER',
+    'AE',
+    'AI',
+    'COM',
+    'TG',
+    'MANAGER',
+    'SECRETARIO',
+    'RSG',
+    'LITERATURA',
+    'PPI',
+    'COORDINADOR_HACIENDA',
+    'PASO_12',
+    'COACH_JAV'
+);
+
+CREATE TYPE servicio_jav_enum AS ENUM (
+    'REPRESENTANTE_JAV',
+    'AE_JAV',
+    'AI_JAV',
+    'COM_JAV',
+    'PPI_JAV',
+    'COORDINADOR_HACIENDA_JAV'
+);
 
 CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -46,30 +81,119 @@ CREATE TABLE users (
     group_id UUID REFERENCES groups(id) ON DELETE SET NULL,
     
     -- JAV status: Boolean indicating if member belongs to Jóvenes en Agua Viva.
-    -- Can be automatically updated by a trigger based on age, or overridden.
     is_jav BOOLEAN DEFAULT FALSE,
     
     -- Main authorization role
     role user_role_enum NOT NULL DEFAULT 'MEMBER',
-    is_approved_leader BOOLEAN NOT NULL DEFAULT FALSE, -- Approved by Superadmin
-    leader_approved_by UUID REFERENCES users(id),
-    leader_approved_at TIMESTAMP WITH TIME ZONE,
+    is_approved_role BOOLEAN NOT NULL DEFAULT FALSE, -- Approved by Superadmin/Leader
+    role_approved_by UUID REFERENCES users(id),
+    role_approved_at TIMESTAMP WITH TIME ZONE,
     
-    -- Orejas & Padrinos status
-    oyp_status oyp_status_enum NOT NULL DEFAULT 'NONE',
-    is_approved_oyp BOOLEAN NOT NULL DEFAULT FALSE, -- Approved by Superadmin/Admin (Leader/AE/AI)
-    oyp_approved_by UUID REFERENCES users(id),
-    oyp_approved_at TIMESTAMP WITH TIME ZONE,
+    -- Estigmas/enfermedades
+    estigma estigma_enfermedad_enum,
     
-    -- Servidor status and role
-    servidor_status servidor_status_enum NOT NULL DEFAULT 'NONE',
-    servidor_role VARCHAR(100), -- Specific role (e.g., 'COM', 'MANAGER', 'TESORERIA_GRUPO', etc.)
-    is_approved_servidor BOOLEAN NOT NULL DEFAULT FALSE, -- Approved by Superadmin/Admin
-    servidor_approved_by UUID REFERENCES users(id),
-    servidor_approved_at TIMESTAMP WITH TIME ZONE,
+    -- Militancia status
+    militancia_status militancia_status_enum NOT NULL DEFAULT 'MILITANCIA',
+    
+    -- Servicios asignados (Adulto o JAV)
+    servicio_adult servicio_adulto_enum,
+    servicio_jav servicio_jav_enum,
+    is_approved_servicio BOOLEAN NOT NULL DEFAULT FALSE,
+    servicio_approved_by UUID REFERENCES users(id),
+    servicio_approved_at TIMESTAMP WITH TIME ZONE,
+    
+    -- Nivel de experiencia y fechas históricas
+    experiencia_nivel experiencia_nivel_enum NOT NULL DEFAULT 'NINGUNO',
+    is_approved_experiencia BOOLEAN NOT NULL DEFAULT FALSE,
+    experiencia_approved_by UUID REFERENCES users(id),
+    experiencia_approved_at TIMESTAMP WITH TIME ZONE,
+    apoyo_since DATE,       -- Desde cuándo nació (primera escritura)
+    oreja_since DATE,       -- Desde cuándo se consagró como oreja
+    padrino_since DATE,     -- Desde cuándo se consagró como padrino
+    
+    -- Relación de Apadrinamiento (Sponsor)
+    sponsor_id UUID REFERENCES users(id) ON DELETE SET NULL,
+    
+    -- Foto de perfil (URL o base64 para el prototipo)
+    avatar_url TEXT,
+    
+    -- Aceptación de términos y condiciones
+    terms_accepted BOOLEAN NOT NULL DEFAULT FALSE,
+    terms_accepted_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ====================================================================
+-- 2.1. CATALOGS & RELATION TABLES FOR EXPERIENCE AND INVENTORIES
+-- ====================================================================
+
+-- Catalog table for escrituras/inventarios
+CREATE TABLE escrituras_list (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(100) UNIQUE NOT NULL,
+    type VARCHAR(50) NOT NULL -- 'NORMAL' or 'SERVIDOR'
+);
+
+-- Catalog table for ejercicios de seguimiento
+CREATE TABLE ejercicios_list (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(100) UNIQUE NOT NULL
+);
+
+-- User completed escrituras (with approval state)
+CREATE TABLE user_escrituras (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    escritura_id UUID NOT NULL REFERENCES escrituras_list(id) ON DELETE CASCADE,
+    is_approved BOOLEAN NOT NULL DEFAULT FALSE,
+    approved_by UUID REFERENCES users(id),
+    approved_at TIMESTAMP WITH TIME ZONE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT unique_user_escritura UNIQUE (user_id, escritura_id)
+);
+
+-- User completed ejercicios (with approval state)
+CREATE TABLE user_ejercicios (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    ejercicio_id UUID NOT NULL REFERENCES ejercicios_list(id) ON DELETE CASCADE,
+    is_approved BOOLEAN NOT NULL DEFAULT FALSE,
+    approved_by UUID REFERENCES users(id),
+    approved_at TIMESTAMP WITH TIME ZONE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT unique_user_ejercicio UNIQUE (user_id, ejercicio_id)
+);
+
+-- Inventarios que un Padrino apadrina (seleccionados en masa)
+CREATE TABLE padrino_inventarios_apadrina (
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    escritura_id UUID NOT NULL REFERENCES escrituras_list(id) ON DELETE CASCADE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, escritura_id)
+);
+
+-- Inventarios que un Padrino u Oreja orejea (escucha en 5to paso)
+CREATE TABLE padrino_inventarios_orejea (
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    escritura_id UUID NOT NULL REFERENCES escrituras_list(id) ON DELETE CASCADE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, escritura_id)
+);
+
+-- Approval Requests Queue (for leader and superadmin authorizations)
+CREATE TABLE approval_requests (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    request_type VARCHAR(50) NOT NULL, -- 'ROLE_CHANGE', 'SERVICE_CHANGE', 'GROUP_TRANSFER', 'EXPERIENCE_CHANGE', 'ADD_ESCRITURA', 'ADD_EJERCICIO'
+    status VARCHAR(20) NOT NULL DEFAULT 'PENDING', -- 'PENDING', 'APPROVED', 'REJECTED'
+    requested_data JSONB NOT NULL, -- stores key-value pairs of proposed changes (e.g. { "servicio_adult": "AE" })
+    downgrade_reason TEXT, -- filled in when a member downgrades (e.g. Padrino -> Apoyo)
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    resolved_by UUID REFERENCES users(id),
+    resolved_at TIMESTAMP WITH TIME ZONE
 );
 
 -- Indexing for lookup speed in search/filtering
@@ -77,6 +201,8 @@ CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_users_region_group ON users(region_id, group_id);
 CREATE INDEX idx_users_role ON users(role);
 CREATE INDEX idx_users_is_jav ON users(is_jav);
+CREATE INDEX idx_users_experiencia ON users(experiencia_nivel);
+CREATE INDEX idx_approval_requests_status ON approval_requests(status);
 
 -- ====================================================================
 -- 3. CALENDARS & MEETINGS
@@ -191,9 +317,10 @@ CREATE INDEX idx_regional_events_date ON regional_events(start_time);
 -- 5. HACIENDAS & POA LOGISTICS
 -- ====================================================================
 
--- Represents a Hacienda event (major logistics event held per region)
+-- Represents a Hacienda event (major logistics event held per region, linked to a global annual calendar event)
 CREATE TABLE haciendas (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    annual_meeting_id UUID REFERENCES meetings(id) ON DELETE CASCADE, -- Reference to the global annual calendar event
     region_id UUID NOT NULL REFERENCES regions(id) ON DELETE CASCADE,
     title VARCHAR(150) NOT NULL,
     start_date DATE NOT NULL,
@@ -203,7 +330,8 @@ CREATE TABLE haciendas (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     
-    CONSTRAINT check_hacienda_dates CHECK (start_date <= end_date)
+    CONSTRAINT check_hacienda_dates CHECK (start_date <= end_date),
+    CONSTRAINT unique_annual_hacienda_per_region UNIQUE (annual_meeting_id, region_id) -- Prevents duplicate regional logistics events for the same annual retreat
 );
 
 -- Enum for shifts when members arrive at the Hacienda

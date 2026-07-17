@@ -4,24 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agua Viva - Portal Superadmin</title>
-    <!-- Google Fonts: Serif (Playfair Display) & Sans-Serif (Outfit) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
-    <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="css/admin.css">
 </head>
 <body class="admin-theme">
-    
-    <!-- Admin Web Layout -->
+
+    <div class="super-gate" id="superGate">
+        <div class="super-gate-card">
+            <div class="super-gate-logo" style="background:#fff; overflow:hidden; border-radius:50%; width:64px; height:64px; display:flex; align-items:center; justify-content:center; margin:0 auto 1.5rem auto; padding:6px; box-shadow:0 4px 12px rgba(124,58,237,0.3);">
+                <img src="assets/Icons/LOGO AV.png" alt="Logo AV" style="width:100%; height:100%; object-fit:contain;">
+            </div>
+            <h2 class="font-serif">Portal Superadmin</h2>
+            <p class="super-gate-sub">Acceso restringido · Control central de Agua Viva</p>
+
+            <form id="superGateForm" class="super-gate-form" autocomplete="off">
+                <div class="form-group-admin">
+                    <label for="superUser">Usuario de administración</label>
+                    <input type="text" id="superUser" placeholder="Usuario" autocomplete="off" spellcheck="false" required>
+                </div>
+                <div class="form-group-admin">
+                    <label for="superPass">Contraseña</label>
+                    <input type="password" id="superPass" placeholder="••••••••••••" autocomplete="new-password" required>
+                </div>
+                <div class="super-gate-error" id="superGateError"></div>
+                <button type="submit" class="btn btn-primary w-full">
+                    <i class="fa-solid fa-unlock-keyhole"></i> Ingresar al portal
+                </button>
+                <button type="button" class="super-gate-hint-btn" id="superGateHintBtn">
+                    <i class="fa-solid fa-key"></i> Usar credenciales de fábrica
+                </button>
+            </form>
+
+            <div class="super-gate-footer">
+                <i class="fa-solid fa-shield-halved"></i> Sesión protegida · se cierra al salir del portal
+            </div>
+        </div>
+    </div>
+
     <div class="admin-layout">
         
-        <!-- Sidebar Navigation -->
         <aside class="admin-sidebar">
             <div class="sidebar-header">
-                <div class="brand-logo" style="background-color: #7C3AED; box-shadow: 0 4px 10px rgba(124, 58, 237, 0.3);">
-                    <span>AV</span>
+                <div class="brand-logo" style="background-color: #fff; box-shadow: 0 4px 10px rgba(124, 58, 237, 0.2); overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 4px;">
+                    <img src="assets/Icons/LOGO AV.png" alt="Logo AV" style="height: 100%; width: 100%; object-fit: contain;">
                 </div>
                 <div class="brand-text">
                     <h3>Agua Viva</h3>
@@ -57,7 +85,6 @@
                             <i class="fa-solid fa-campground"></i> Haciendas
                         </a>
                     </li>
-                    <!-- Superadmin Tab (Active on this page) -->
                     <li id="sidebarSuperadminTab">
                         <a href="superadmin.html" class="menu-item active">
                             <i class="fa-solid fa-crown text-purple"></i> Superadmin
@@ -66,7 +93,6 @@
                 </ul>
             </nav>
 
-            <!-- Bottom Profile Card & Role Switcher -->
             <div class="sidebar-profile-wrapper">
                 <div class="sidebar-profile">
                     <div class="profile-avatar" id="adminProfileAvatar" style="background-color: #7C3AED;">S</div>
@@ -79,13 +105,14 @@
                     <button class="pill-btn" data-role="admin" id="pillRoleAdmin" title="Simular como Coordinador/Admin">Admin</button>
                     <button class="pill-btn active" data-role="superadmin" id="pillRoleSuper" title="Simular como Superadministrador">Super</button>
                 </div>
+                <button class="super-logout-btn" id="superLogoutBtn" title="Cerrar sesión del portal Superadmin">
+                    <i class="fa-solid fa-right-from-bracket"></i> Cerrar portal
+                </button>
             </div>
         </aside>
 
-        <!-- Main Content Area -->
         <main class="admin-main">
             
-            <!-- VIEW: SUPERADMIN PORTAL -->
             <section class="admin-view active" id="view-superadmin">
                 <div class="view-header">
                     <div class="dph-title-row">
@@ -97,7 +124,6 @@
 
                 <div class="view-content">
                     
-                    <!-- Superadmin mini KPIs -->
                     <div class="directory-kpis-grid mb-6">
                         <div class="kpi-card-white border-purple">
                             <span class="kpi-white-title">Admins Activos</span>
@@ -116,31 +142,39 @@
                         </div>
                     </div>
 
+                    <!-- Barra de sub-pestañas del portal Superadmin -->
+                    <div class="super-subtabs" id="superSubtabs">
+                        <button type="button" class="super-subtab active" data-subview="sv-solicitudes"><i class="fa-solid fa-user-shield"></i> Solicitudes y Admins</button>
+                        <button type="button" class="super-subtab" data-subview="sv-regiones"><i class="fa-solid fa-folder-tree"></i> Regiones y Sedes</button>
+                        <button type="button" class="super-subtab" data-subview="sv-eventos"><i class="fa-regular fa-calendar-days"></i> Eventos y Calendario</button>
+                        <button type="button" class="super-subtab" data-subview="sv-junta"><i class="fa-solid fa-users-rays"></i> Junta de Atracciones</button>
+                    </div>
+
+                    <div class="super-subview active" id="sv-solicitudes">
+                    <div class="superadmin-section-header" style="margin-bottom: 1rem; border-bottom: 2px solid var(--admin-purple); padding-bottom: 0.5rem;">
+                        <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--admin-purple); display: flex; align-items: center; gap: 0.5rem; margin: 0;">
+                            <i class="fa-solid fa-user-shield"></i> Solicitudes y Administradores Registrados
+                        </h2>
+                    </div>
+
                     <div class="poa-grid">
                         
-                        <!-- Col 1: Pending Requests -->
                         <div class="card-admin">
                             <h3 class="font-serif mb-2"><i class="fa-solid fa-user-clock text-orange"></i> Solicitudes Pendientes</h3>
                             <p class="card-desc">Autorizaciones de personal administrativo, servidores de apoyo y clasificaciones especiales.</p>
                             
-                            <!-- Superadmin Pending Tabs -->
                             <div class="super-tabs" id="superPendingTabs" style="display: flex; gap: 0.5rem; margin-top: 1rem; margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;">
                                 <button type="button" class="btn btn-xs btn-outline active" data-tab="COORDINATORS" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; background-color: var(--admin-purple); color: white;">Coordinadores</button>
                                 <button type="button" class="btn btn-xs btn-outline" data-tab="ROLES" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">Cargos / Clasificación</button>
                             </div>
                             
-                            <!-- Tab 1: Coordinators -->
                             <div class="pending-coordinators-list" id="superPendingList" style="display: flex; flex-direction: column; gap: 0.75rem; max-height: 400px; overflow-y: auto;">
-                                <!-- Dynamic pending list -->
                             </div>
                             
-                            <!-- Tab 2: Role/Classifications Requests -->
                             <div class="pending-roles-list" id="superPendingRolesList" style="display: none; flex-direction: column; gap: 0.75rem; max-height: 400px; overflow-y: auto;">
-                                <!-- Dynamic pending roles list -->
                             </div>
                         </div>
 
-                        <!-- Col 2: Active Coordinators list -->
                         <div class="card-admin">
                             <h3 class="font-serif mb-2"><i class="fa-solid fa-user-shield text-purple"></i> Administradores Registrados</h3>
                             <p class="card-desc">Personal con credenciales de edición, permisos y control operativo de grupos.</p>
@@ -156,20 +190,275 @@
                                         </tr>
                                     </thead>
                                     <tbody id="superAdminsTableBody">
-                                        <!-- Dynamic active admins -->
                                     </tbody>
                                 </table>
                             </div>
                         </div>
 
                     </div>
-                </div>
-            </section>
+
+                    </div>
+                    <!-- SUBVISTA 2: REGIONES Y SEDES -->
+                    <div class="super-subview" id="sv-regiones">
+                    <div class="superadmin-section-header" style="margin-bottom: 1rem; border-bottom: 2px solid var(--admin-purple); padding-bottom: 0.5rem;">
+                        <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--admin-purple); display: flex; align-items: center; gap: 0.5rem; margin: 0;">
+                            <i class="fa-solid fa-folder-tree"></i> Registro Central de Regiones y Sedes
+                        </h2>
+                    </div>
+
+                    <!-- Central Registry of Regions & Sedes (Full Width) -->
+                    <div class="card-admin mt-6" style="margin-top: 0.5rem; background: #fff; border: 1px solid var(--admin-border); border-radius: 12px; padding: 1.5rem;">
+                        <h3 class="font-serif mb-2" style="font-size: 1.25rem;"><i class="fa-solid fa-folder-tree text-purple" style="color: var(--admin-purple); margin-right: 0.5rem;"></i> Registro Central de Regiones y Sedes</h3>
+                        <p class="card-desc">Administración exclusiva del superusuario para dar de alta o baja regiones y sedes (grupos) del sistema.</p>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1.5rem;">
+                            <div style="border-right: 1px solid #eee; padding-right: 1.5rem;">
+                                <h4 class="font-serif mb-3" style="font-size: 1rem; font-weight: 600; color: #333;"><i class="fa-solid fa-map text-purple" style="color: var(--admin-purple); margin-right: 0.25rem;"></i> Gestión de Regiones</h4>
+                                <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                                    <input type="text" id="txtNewRegionName" class="form-control-white" placeholder="Ej. Región 10 Noroeste" style="flex: 1; border: 1px solid #ddd; border-radius: 6px; padding: 0.4rem 0.6rem; font-size: 0.85rem; outline: none; background: #fafafa;">
+                                    <button type="button" class="btn btn-primary btn-xs" id="btnAddRegion" style="padding: 0.4rem 0.75rem; font-size: 0.85rem; background: var(--admin-purple); border-color: var(--admin-purple); color: white;"><i class="fa-solid fa-plus"></i> Nueva Región</button>
+                                </div>
+                                <div class="list-group-scrollable" id="superRegionsList" style="max-height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem;">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-serif mb-3" style="font-size: 1rem; font-weight: 600; color: #333;" id="lblSuperSelectedRegionTitle"><i class="fa-solid fa-house-chimney text-purple" style="color: var(--admin-purple); margin-right: 0.25rem;"></i> Selecciona una Región</h4>
+                                <div id="superGroupsManagementContent" style="display: none;">
+                                    <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                                        <input type="text" id="txtNewGroupName" class="form-control-white" placeholder="Ej. Nueva Sede" style="flex: 1; border: 1px solid #ddd; border-radius: 6px; padding: 0.4rem 0.6rem; font-size: 0.85rem; outline: none; background: #fafafa;">
+                                        <button type="button" class="btn btn-primary btn-xs" id="btnAddGroup" style="padding: 0.4rem 0.75rem; font-size: 0.85rem; background: var(--admin-purple); border-color: var(--admin-purple); color: white;"><i class="fa-solid fa-plus"></i> Nueva Sede</button>
+                                    </div>
+                                    <div class="list-group-scrollable" id="superGroupsList" style="max-height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem;">
+                                    </div>
+                                </div>
+                                <div id="superGroupsManagementEmpty" style="text-align: center; color: var(--admin-text-secondary); font-size: 0.85rem; padding: 4rem 0;">
+                                    <i class="fa-solid fa-arrow-left" style="font-size: 1.5rem; margin-bottom: 0.5rem; display: block; opacity: 0.6; color: var(--admin-purple);"></i>
+                                    Selecciona una región de la lista izquierda para gestionar sus sedes.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div><!-- /sv-regiones -->
+
+                    <!-- SUBVISTA: EVENTOS Y CALENDARIO ANUAL (control total del ciclo) -->
+                    <div class="super-subview" id="sv-eventos">
+                    <div class="superadmin-section-header" style="margin-bottom: 1rem; border-bottom: 2px solid var(--admin-purple); padding-bottom: 0.5rem;">
+                        <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--admin-purple); display: flex; align-items: center; gap: 0.5rem; margin: 0;">
+                            <i class="fa-regular fa-calendar-days"></i> Eventos y Calendario Anual
+                        </h2>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: 340px 1fr; gap: 1.5rem; align-items:start;">
+                        <!-- Form: agendar cualquier evento del ciclo -->
+                        <div class="card-admin">
+                            <h3 class="font-serif mb-2" style="font-size:1.05rem;"><i class="fa-solid fa-calendar-plus text-purple"></i> Agendar evento</h3>
+                            <p class="card-desc" style="font-size:0.78rem;">Juntas, regionales, interregionales, eventos JAV y Haciendas — todo el ciclo desde aquí.</p>
+                            <form id="portalEventForm" style="display:flex; flex-direction:column; gap:0.7rem; margin-top:0.75rem;">
+                                <div class="form-group-white">
+                                    <label class="me-label">Tipo de evento *</label>
+                                    <select id="pevType" class="me-input" required>
+                                        <optgroup label="Juntas y regionales">
+                                            <option value="NORMAL">Junta normal</option>
+                                            <option value="TRIBUNA">Tribuna</option>
+                                            <option value="OYP">OyP (Orejas y Padrinos)</option>
+                                            <option value="TALLER">Taller</option>
+                                            <option value="JSG">JSG (Junta de Servicios Generales)</option>
+                                        </optgroup>
+                                        <optgroup label="Interregionales / institucionales">
+                                            <option value="CONCORDIA">Concordia</option>
+                                            <option value="CONFERENCIA">Conferencia</option>
+                                            <option value="FORO">Foro</option>
+                                            <option value="COMITES">Comités</option>
+                                            <option value="INVENTARIO_SERVIDORES">Inventario de Servidores</option>
+                                        </optgroup>
+                                        <optgroup label="JAV (Jóvenes en Agua Viva)">
+                                            <option value="JUNTAS_JAV">Junta JAV</option>
+                                            <option value="PREPARACIONES_JAV">Preparación JAV</option>
+                                            <option value="CAMP_JAV">Campamento JAV</option>
+                                            <option value="FORO_JAV">Foro Jóvenes</option>
+                                        </optgroup>
+                                        <optgroup label="Haciendas (experiencias)">
+                                            <option value="HAC_R1">Hacienda Región 1 (CDMX)</option>
+                                            <option value="HAC_R2">Hacienda Región 2 (Edo. México)</option>
+                                            <option value="HAC_R3">Hacienda Región 3 (Qro./Gto.)</option>
+                                            <option value="HAC_R4">Hacienda Región 4 (Puebla)</option>
+                                            <option value="HAC_R5">Hacienda Región 5 (Guerrero)</option>
+                                            <option value="HAC_R6">Hacienda Región 6 (Yucatán)</option>
+                                            <option value="HAC_R7">Hacienda Región 7 (Chicago)</option>
+                                            <option value="HAC_R8">Hacienda Región 8 (Veracruz)</option>
+                                            <option value="HAC_R9">Hacienda Región 9 (Monterrey)</option>
+                                            <option value="HAC_JAV">Hacienda JAV (interregional)</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                                <div class="form-group-white" id="pevTitleGroup">
+                                    <label class="me-label">Título / Tema *</label>
+                                    <input type="text" id="pevTitle" class="me-input" placeholder="Ej. Foro de crecimiento">
+                                </div>
+                                <div class="form-group-white" id="pevRegionGroup">
+                                    <label class="me-label">Región</label>
+                                    <select id="pevRegion" class="me-input"></select>
+                                </div>
+                                <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.6rem;">
+                                    <div class="form-group-white">
+                                        <label class="me-label">Fecha inicio *</label>
+                                        <input type="date" id="pevStart" class="me-input" required>
+                                    </div>
+                                    <div class="form-group-white">
+                                        <label class="me-label">Fecha fin (opcional)</label>
+                                        <input type="date" id="pevEnd" class="me-input">
+                                    </div>
+                                </div>
+                                <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.6rem;">
+                                    <div class="form-group-white">
+                                        <label class="me-label">Hora</label>
+                                        <input type="time" id="pevTime" class="me-input" value="19:00">
+                                    </div>
+                                    <div class="form-group-white">
+                                        <label class="me-label">Puntos XP</label>
+                                        <input type="number" id="pevXp" class="me-input" value="15" min="5" max="60">
+                                    </div>
+                                </div>
+                                <p id="pevHint" style="font-size:0.72rem; color:var(--admin-text-muted); margin:0;"></p>
+                                <button type="submit" class="btn btn-primary w-full" style="background:var(--admin-purple); border-color:var(--admin-purple);">
+                                    <i class="fa-solid fa-calendar-check"></i> Agendar en el ciclo
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Tablero: Calendario Anual del ciclo -->
+                        <div class="card-admin">
+                            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.5rem;">
+                                <h3 class="font-serif" style="font-size:1.05rem; margin:0;"><i class="fa-regular fa-calendar text-purple"></i> Calendario Anual <span id="boardCycleLabel" style="font-weight:400; color:var(--admin-text-muted); font-size:0.85rem;"></span></h3>
+                                <div class="board-legend">
+                                    <span><i class="lg lg-hac"></i> Hacienda</span>
+                                    <span><i class="lg lg-jav"></i> JAV</span>
+                                    <span><i class="lg lg-inst"></i> Institucional</span>
+                                    <span><i class="lg lg-reg"></i> Regional</span>
+                                    <span><i class="lg lg-grp"></i> Grupo</span>
+                                </div>
+                            </div>
+                            <div class="annual-board-wrap">
+                                <div id="annualBoard"></div>
+                            </div>
+                            <div id="boardDetail" class="board-detail" style="display:none;"></div>
+                        </div>
+                    </div>
+                    </div><!-- /sv-eventos -->
+
+
+                    <!-- SUBVISTA 3: JUNTA DE ATRACCIONES -->
+                    <div class="super-subview" id="sv-junta">
+                    <div class="superadmin-section-header" style="margin-bottom: 1rem; border-bottom: 2px solid var(--admin-purple); padding-bottom: 0.5rem;">
+                        <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--admin-purple); display: flex; align-items: center; gap: 0.5rem; margin: 0;">
+                            <i class="fa-solid fa-users-rays"></i> Panel de Control: Junta de Atracciones
+                        </h2>
+                    </div>
+
+                    <!-- Junta de Atracciones - Control de Simulación (Full Width) -->
+                    <div class="card-admin mt-6" id="sec-junta-atracciones" style="margin-top: 0.5rem; background: #fff; border: 1px solid var(--admin-border); border-radius: 12px; padding: 1.5rem;">
+                        <h3 class="font-serif mb-2" style="font-size: 1.25rem;"><i class="fa-solid fa-users-rays text-purple" style="color: var(--admin-purple); margin-right: 0.5rem;"></i> Asignación y Pase de Lista</h3>
+                        <p class="card-desc">Registra la asistencia en tiempo real de los servidores para el pase de lista de su región y asigna padrinos al calendario.</p>
+
+                        <div style="display: grid; grid-template-columns: 350px 1fr; gap: 1.5rem; margin-top: 1.5rem;">
+                            <div style="border-right: 1px solid #eee; padding-right: 1.5rem;">
+                                <h4 class="font-serif mb-3" style="font-size: 1rem; font-weight: 600; color: #333;"><i class="fa-solid fa-clipboard-user text-purple"></i> Pase de Lista (Asistencia)</h4>
+                                
+                                <div class="form-group-white mb-3" style="margin-bottom: 0.75rem;">
+                                    <label for="juntaControlRegion" style="font-size: 0.75rem; font-weight: bold; color: #555; display: block; margin-bottom: 0.25rem;">Filtrar por Región:</label>
+                                    <select id="juntaControlRegion" class="form-control-white w-full" style="border: 1px solid #ddd; border-radius: 6px; padding: 0.4rem; font-size: 0.85rem; outline: none; background: #fafafa; width: 100%;">
+                                    </select>
+                                </div>
+                                <p class="card-desc" style="font-size: 0.75rem; margin-bottom: 1rem;">Haz clic sobre el botón de un servidor para registrar su asistencia y agregarlo a la cola de prioridad.</p>
+                                
+                                <div id="superJuntaAttendanceButtons" style="display: flex; flex-direction: column; gap: 0.4rem; max-height: 250px; overflow-y: auto; margin-bottom: 1rem;">
+                                </div>
+                                <button type="button" class="btn btn-outline w-full" id="btnResetJuntaAttendance" style="padding:0.4rem; font-size:0.8rem; border-color:#ccc; color:#666; font-weight:500;">
+                                    <i class="fa-solid fa-rotate-left"></i> Limpiar Pase de Lista
+                                </button>
+                            </div>
+
+                            <div>
+                                <h4 class="font-serif mb-3" style="font-size: 1rem; font-weight: 600; color: #333;"><i class="fa-solid fa-calendar-plus text-purple"></i> Asignación del Calendario</h4>
+                                
+                                <form id="superJuntaBookingForm" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin-bottom: 1.5rem; position: relative;">
+                                    <div class="form-group-white">
+                                        <label for="juntaDay" style="font-size:0.75rem; font-weight:bold; color:#555;">Día (1 a 31):</label>
+                                        <select id="juntaDay" class="form-control-white w-full" required style="border: 1px solid #ddd; border-radius: 6px; padding: 0.4rem; font-size: 0.85rem; outline: none; background: #fafafa;">
+                                        </select>
+                                    </div>
+                                    <div class="form-group-white">
+                                        <label for="juntaReqGroup" style="font-size:0.75rem; font-weight:bold; color:#555;">Grupo Solicitante:</label>
+                                        <select id="juntaReqGroup" class="form-control-white w-full" required style="border: 1px solid #ddd; border-radius: 6px; padding: 0.4rem; font-size: 0.85rem; outline: none; background: #fafafa;">
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group-white" id="juntaAutocompleteGroup" style="grid-column: span 2; position: relative;">
+                                        <label for="juntaSponsorSearch" style="font-size:0.75rem; font-weight:bold; color:#555;">Buscar Padrino:</label>
+                                        <input type="text" id="juntaSponsorSearch" class="form-control-white w-full" placeholder="Escribe nombre para buscar..." style="border: 1px solid #ddd; border-radius: 6px; padding: 0.4rem 0.6rem; font-size: 0.85rem; outline: none; background: #fafafa;" autocomplete="off">
+                                        <div id="juntaSponsorSearchResults" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #ddd; border-radius: 6px; max-height: 150px; overflow-y: auto; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.15);">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group-white" style="grid-column: span 2; display: flex; align-items: center; gap: 0.5rem; padding: 0.15rem 0;">
+                                        <input type="checkbox" id="juntaManualSponsorToggle" style="cursor:pointer; width: auto;">
+                                        <label for="juntaManualSponsorToggle" style="font-size:0.75rem; font-weight:bold; color:#555; cursor:pointer;">Selección manual por región/grupo</label>
+                                    </div>
+
+                                    <div id="juntaManualSponsorFields" style="display: none; grid-column: span 2; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
+                                        <div class="form-group-white">
+                                            <label for="juntaSponsorRegionManual" style="font-size:0.7rem; font-weight:bold; color:#555;">Región:</label>
+                                            <select id="juntaSponsorRegionManual" class="form-control-white w-full" style="border: 1px solid #ddd; border-radius: 6px; padding: 0.4rem; font-size: 0.8rem; outline: none; background: #fafafa; width: 100%;">
+                                            </select>
+                                        </div>
+                                        <div class="form-group-white">
+                                            <label for="juntaSponsorGroupManual" style="font-size:0.7rem; font-weight:bold; color:#555;">Grupo:</label>
+                                            <select id="juntaSponsorGroupManual" class="form-control-white w-full" disabled style="border: 1px solid #ddd; border-radius: 6px; padding: 0.4rem; font-size: 0.8rem; outline: none; background: #fafafa; width: 100%;">
+                                                <option value="">Selecciona Grupo</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group-white">
+                                            <label for="juntaSponsorListManual" style="font-size:0.7rem; font-weight:bold; color:#555;">Padrino:</label>
+                                            <select id="juntaSponsorListManual" class="form-control-white w-full" disabled style="border: 1px solid #ddd; border-radius: 6px; padding: 0.4rem; font-size: 0.8rem; outline: none; background: #fafafa; width: 100%;">
+                                                <option value="">Selecciona Padrino</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div id="juntaSponsorConfirmCard" style="grid-column: span 2; display:none;"></div>
+
+                                    <input type="hidden" id="juntaSponsorName" required>
+                                    <input type="hidden" id="juntaSponsorGroup" required>
+
+                                    <button type="submit" class="btn btn-primary w-full" style="grid-column: span 2; padding:0.5rem; background: var(--admin-purple); border-color:var(--admin-purple); color:white; font-size:0.85rem; font-weight:bold; cursor:pointer;">
+                                        <i class="fa-solid fa-calendar-check"></i> Registrar Padrino en Calendario
+                                    </button>
+                                </form>
+
+                                <h4 class="font-serif mb-2" style="font-size: 0.95rem; font-weight: bold; border-top: 1px solid #eee; padding-top: 1rem;"><i class="fa-solid fa-table-list text-purple"></i> Reservas Registradas (Julio 2026)</h4>
+                                <div class="table-responsive" style="max-height: 180px; overflow-y: auto;">
+                                    <table class="custom-table" style="font-size: 0.8rem; width:100%;">
+                                        <thead>
+                                            <tr style="background:#f4f4f5; text-align:left;">
+                                                <th style="padding:0.4rem;">Día</th>
+                                                <th style="padding:0.4rem;">Grupo Solicitante</th>
+                                                <th style="padding:0.4rem;">Padrino (Grupo)</th>
+                                                <th style="padding:0.4rem;" class="text-right">Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="superJuntaBookingsListBody">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>                    </div>                </div>            </section>
 
         </main>
     </div>
 
-    <!-- Floating Simulator Widget -->
     <div class="sim-widget" id="simWidget">
         <button class="sim-trigger-btn" id="simTriggerBtn" title="Panel de Simulación de Roles">
             <i class="fa-solid fa-gears"></i>
@@ -198,7 +487,7 @@
             
             <div class="sim-panel-section">
                 <span class="sim-panel-section-title">Navegación Rápida</span>
-                <a href="index.html" class="sim-page-link">
+                <a href="app.html" class="sim-page-link">
                     <span>📱 Aplicación Móvil</span>
                     <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i>
                 </a>
@@ -214,6 +503,27 @@
         </div>
     </div>
 
-    <script src="superadmin.js"></script>
+    <div class="admin-auth-overlay hidden" id="superWarningModal" style="z-index: 20000; background: rgba(0,0,0,0.65); display: none; align-items: center; justify-content: center; position: fixed; inset: 0; padding: 1.5rem;">
+        <div class="admin-auth-box" style="width: 100%; max-width: 460px; border-top: 4px solid #ef4444; padding: 2rem; background: #fff; border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.3);">
+            <h3 class="font-serif" style="color: #ef4444; font-size: 1.3rem; margin: 0 0 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;"><i class="fa-solid fa-triangle-exclamation"></i> Acción Crítica</h3>
+            <p id="lblSuperWarningMessage" style="font-size: 0.9rem; margin-bottom: 1rem; color: #333; line-height: 1.4; text-align: left;"></p>
+            
+            <div style="background: #fef2f2; border: 1px solid #fee2e2; border-radius: 8px; padding: 0.75rem; margin-bottom: 1.25rem; font-size: 0.8rem; color: #991b1b; text-align: left;" id="lblSuperWarningStats">
+            </div>
+            
+            <div class="form-group-white mb-4" style="margin-bottom: 1.25rem; text-align: left;">
+                <label for="txtSuperWarningConfirm" id="lblSuperWarningConfirmPrompt" style="font-size: 0.8rem; font-weight: 700; color: #555; display: block; margin-bottom: 0.5rem;">Escribe "ELIMINAR" para confirmar:</label>
+                <input type="text" id="txtSuperWarningConfirm" class="form-control-white w-full" placeholder="" style="border: 1px solid #ddd; outline: none; padding: 0.5rem; border-radius: 6px; width: 100%; background: #fafafa;" autocomplete="off">
+            </div>
+            
+            <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+                <button type="button" class="btn btn-outline btn-xs" id="btnCancelSuperWarning" style="padding: 0.5rem 1rem; font-size: 0.8rem; cursor: pointer; border: 1px solid #ccc; border-radius: 6px; background: #fff;">Cancelar</button>
+                <button type="button" class="btn btn-primary btn-xs" id="btnConfirmSuperWarning" style="background-color: #ef4444; border-color: #ef4444; color: white; padding: 0.5rem 1rem; font-size: 0.8rem; cursor: pointer; border: 1px solid #ef4444; border-radius: 6px;" disabled>Confirmar Eliminación</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/permissions.js"></script>
+    <script src="js/superadmin.js"></script>
 </body>
 </html>

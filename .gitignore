@@ -15,3 +15,7 @@ Desktop.ini
 
 # Log files
 *.log
+
+# Claude cache/workspace config
+.claude/
+

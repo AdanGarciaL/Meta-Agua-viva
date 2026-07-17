@@ -4,20 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agua Viva - Panel de Administración</title>
-    <!-- Google Fonts: Serif (Playfair Display) & Sans-Serif (Outfit) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
-    <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="css/admin.css">
 </head>
 <body class="admin-theme">
     
-    <!-- Admin Auth Overlay -->
     <div class="admin-auth-overlay" id="adminAuthOverlay">
         <div class="admin-auth-box">
-            <!-- Login View -->
             <div id="adminAuthLoginView">
                 <h1 class="admin-auth-title font-serif">Agua Viva</h1>
                 <p class="admin-auth-subtitle">Portal Administrativo</p>
@@ -40,7 +36,6 @@
                 </form>
             </div>
 
-            <!-- Register View -->
             <div id="adminAuthRegisterView" style="display: none;">
                 <h1 class="admin-auth-title font-serif">Agua Viva</h1>
                 <p class="admin-auth-subtitle">Registro de Coordinadores</p>
@@ -95,14 +90,12 @@
         </div>
     </div>
 
-    <!-- Admin Web Layout -->
     <div class="admin-layout">
         
-        <!-- Sidebar Navigation -->
         <aside class="admin-sidebar">
             <div class="sidebar-header">
-                <div class="brand-logo" style="background-color: #7C3AED; box-shadow: 0 4px 10px rgba(124, 58, 237, 0.3);">
-                    <span>AV</span>
+                <div class="brand-logo" style="background-color: #fff; box-shadow: 0 4px 10px rgba(124, 58, 237, 0.2); overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 4px;">
+                    <img src="assets/Icons/LOGO AV.png" alt="Logo AV" style="height: 100%; width: 100%; object-fit: contain;">
                 </div>
                 <div class="brand-text">
                     <h3>Agua Viva</h3>
@@ -120,7 +113,7 @@
                     </li>
                     <li>
                         <a href="#" class="menu-item" data-view="view-miembros">
-                            <i class="fa-solid fa-users"></i> Miembros
+                            <i class="fa-solid fa-users-viewfinder"></i> Directorios
                         </a>
                     </li>
                     <li>
@@ -139,11 +132,15 @@
                         </a>
                     </li>
                     <li>
+                        <a href="#" class="menu-item" data-view="view-junta-atracciones">
+                            <i class="fa-solid fa-users-rays text-purple"></i> Junta de Atracciones
+                        </a>
+                    </li>
+                    <li>
                         <a href="#" class="menu-item" data-view="view-aprobaciones">
                             <i class="fa-solid fa-user-check text-indigo"></i> Aprobaciones
                         </a>
                     </li>
-                    <!-- Superadmin Special Tab (Only shown to Superadmin role) -->
                     <li id="sidebarSuperadminTab" style="display: none;">
                         <a href="superadmin.html" class="menu-item">
                             <i class="fa-solid fa-crown text-purple"></i> Superadmin
@@ -152,7 +149,6 @@
                 </ul>
             </nav>
 
-            <!-- Bottom Profile Card & Role Switcher -->
             <div class="sidebar-profile-wrapper">
                 <div class="sidebar-profile">
                     <div class="profile-avatar" id="adminProfileAvatar">M</div>
@@ -164,35 +160,38 @@
                 </div>
                 <div class="role-selector-pills mt-2">
                     <button class="pill-btn active" data-role="admin" id="pillRoleAdmin" title="Simular como Coordinador/Admin">Admin</button>
+                    <button class="pill-btn" data-role="member" id="pillRoleMember" title="Previsualizar como Miembro (privacidad de contactos)">Miembro</button>
                     <button class="pill-btn" data-role="superadmin" id="pillRoleSuper" title="Simular como Superadministrador">Super</button>
                 </div>
             </div>
         </aside>
 
-        <!-- Main Content Area -->
         <main class="admin-main">
             
-            <!-- VIEW 1: INICIO (Placeholder for Dashboard) -->
             <section class="admin-view" id="view-inicio">
                 <div class="view-header">
                     <h1 class="font-serif">Inicio</h1>
                     <p class="subtitle">Resumen global de la Sede Centro</p>
                 </div>
                 <div class="view-content">
-                    <div class="grid-3-col">
-                        <div class="card-kpi">
-                            <h3>12</h3>
-                            <p>Miembros registrados</p>
+                    <div class="grid-3-col" style="grid-template-columns: repeat(4, 1fr);">
+                        <div class="card-kpi"><h3 id="homeKpiMembers">0</h3><p>Miembros registrados</p></div>
+                        <div class="card-kpi"><h3 id="homeKpiPresent">0</h3><p>Presentes hoy</p></div>
+                        <div class="card-kpi"><h3 id="homeKpiPending">0</h3><p>Grupos por validar</p></div>
+                        <div class="card-kpi"><h3 id="homeKpiHacienda" style="font-size:1.4rem;">—</h3><p>Próxima hacienda</p></div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem; margin-top:1.5rem;">
+                        <div class="card-admin">
+                            <h3 class="font-serif border-bottom-title mb-4">Próximos eventos</h3>
+                            <div id="homeUpcomingList"></div>
                         </div>
-                        <div class="card-kpi">
-                            <h3>9</h3>
-                            <p>Activos esta semana</p>
-                        </div>
-                        <div class="card-kpi">
-                            <h3>92%</h3>
-                            <p>Asistencia promedio</p>
+                        <div class="card-admin">
+                            <h3 class="font-serif border-bottom-title mb-4">Grupos por validar (POA)</h3>
+                            <div id="homePendingGroups"></div>
                         </div>
                     </div>
+
                     <div class="card-admin mt-6">
                         <h3 class="font-serif">Bienvenido al Panel de Administración</h3>
                         <p class="mt-2 text-secondary">Desde aquí puedes coordinar juntas de asistencia en vivo, registrar nuevos integrantes para Jóvenes en Agua Viva, y dar seguimiento a los retiros de la Hacienda de tu región.</p>
@@ -203,12 +202,9 @@
                 </div>
             </section>
 
-            <!-- VIEW 2: TOMAR ASISTENCIA (Check-in view) -->
             <section class="admin-view active" id="view-asistencia">
-                <!-- Two-Column Layout (Main Panel + Live checked-in sidebar) -->
                 <div class="live-attendance-container">
                     
-                    <!-- Left: QR generation and controls -->
                     <div class="attendance-control-panel">
                         <div class="attendance-live-header">
                             <span class="badge-live"><span class="pulse-dot"></span> EN VIVO</span>
@@ -221,10 +217,8 @@
                             <p class="meeting-subtitle text-secondary">Sede Centro · 26 mayo 2026 · 19:00</p>
                         </div>
 
-                        <!-- QR Code & Manual Code Box -->
                         <div class="card-admin qr-generation-card">
                             <div class="qr-code-wrapper">
-                                <!-- Mock QR image representation -->
                                 <div class="mock-qr-display">
                                     <div class="qr-mock-square-corners">
                                         <div class="qr-mock-eye top-left"></div>
@@ -239,6 +233,10 @@
                             <div class="manual-code-wrapper">
                                 <span class="manual-code-label">CÓDIGO MANUAL</span>
                                 <h2 class="manual-code-value" id="manualCodeVal">K7-9MX</h2>
+                                <div class="jwt-indicator" id="jwtIndicator" title="Cada código viaja dentro de un JSON Web Token firmado con HMAC-SHA256 que expira a los 30 segundos.">
+                                    <span class="jwt-dot"></span>
+                                    <span id="jwtStatusText">JWT HS256 firmado · exp 30 s</span>
+                                </div>
                                 <p class="manual-code-desc text-secondary">Los miembros escanean el QR o ingresan el código. El código se regenera cada 30 segundos por seguridad.</p>
                                 
                                 <div class="attendance-actions">
@@ -248,7 +246,6 @@
                             </div>
                         </div>
 
-                        <!-- Statistics boxes -->
                         <div class="attendance-stats-grid">
                             <div class="stat-box-mini presents">
                                 <span class="sbm-val" id="cntPresentes">8</span>
@@ -268,7 +265,6 @@
                             </div>
                         </div>
 
-                        <!-- Manual entry trigger -->
                         <div class="card-admin manual-phone-card">
                             <div class="mpc-text">
                                 <h4>¿Alguien sin teléfono?</h4>
@@ -278,39 +274,31 @@
                         </div>
                     </div>
 
-                    <!-- Right: Live arrivals list -->
                     <div class="attendance-arrivals-panel">
                         <div class="arrivals-header">
                             <h3>Llegando en vivo</h3>
                             <span class="arrivals-ratio" id="arrivalsRatio">8 de 12</span>
                         </div>
 
-                        <!-- Checked-in list -->
                         <div class="arrivals-scroll-list" id="checkedInArrivalsList">
-                            <!-- Dynamic checked-in items by JS -->
                         </div>
 
                         <div class="waiting-header">
                             <h3>ESPERANDO · <span id="waitingCount">4</span></h3>
                         </div>
 
-                        <!-- Waiting check-in list -->
                         <div class="waiting-scroll-list" id="waitingCheckInList">
-                            <!-- Dynamic waiting items by JS -->
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- VIEW 3: MIEMBROS (Directory list) -->
             <section class="admin-view" id="view-miembros">
                 <div class="directory-container">
-                    
-                    <!-- Directory Header -->
                     <div class="directory-header">
                         <div>
-                            <span class="section-subtitle">SEDE CENTRO</span>
-                            <h1 class="font-serif">Miembros</h1>
+                            <span class="section-subtitle" id="dirHeaderSubtitle">SEDE CENTRO</span>
+                            <h1 class="font-serif" id="dirHeaderTitle">Directorios</h1>
                             <p class="subtitle text-secondary"><strong id="dirTotalCount">12</strong> registrados · <strong id="dirActiveCount">9</strong> activos esta semana</p>
                         </div>
                         <div class="directory-actions">
@@ -319,108 +307,375 @@
                         </div>
                     </div>
 
-                    <!-- KPI metrics grid -->
-                    <div class="directory-kpis-grid">
-                        <div class="kpi-card-white border-blue">
-                            <span class="kpi-white-title">Asistencias hoy</span>
-                            <div class="kpi-white-val-row">
-                                <span class="kpi-white-val">34</span>
-                                <span class="kpi-white-change text-green"><i class="fa-solid fa-arrow-trend-up"></i> +12%</span>
+                    <!-- Pestañas del Directorio -->
+                    <div class="directory-tabs" id="dirTabSelector" style="display:flex; gap:0.5rem; margin-bottom:1.5rem; border-bottom:1px solid #eee; padding-bottom:0.5rem;">
+                        <button type="button" class="tab-btn active" data-dir-tab="militancia" style="padding:0.5rem 1rem; border:none; background:none; font-weight:600; cursor:pointer; color:var(--admin-purple); border-bottom:3px solid var(--admin-purple); font-size:0.9rem;">Militancia</button>
+                        <button type="button" class="tab-btn" data-dir-tab="mi-grupo" style="padding:0.5rem 1rem; border:none; background:none; font-weight:600; cursor:pointer; color:var(--admin-text-secondary); font-size:0.9rem;">Mi Grupo</button>
+                        <button type="button" class="tab-btn" data-dir-tab="regional" style="padding:0.5rem 1rem; border:none; background:none; font-weight:600; cursor:pointer; color:var(--admin-text-secondary); font-size:0.9rem;">Regional</button>
+                        <button type="button" class="tab-btn" data-dir-tab="interregional" style="padding:0.5rem 1rem; border:none; background:none; font-weight:600; cursor:pointer; color:var(--admin-text-secondary); font-size:0.9rem;">Interregional</button>
+                    </div>
+
+                    <div id="dirPanelMilitancia" class="dir-tab-panel active">
+                        <div class="directory-kpis-grid">
+                            <div class="kpi-card-white border-blue">
+                                <span class="kpi-white-title">Asistencias hoy</span>
+                                <div class="kpi-white-val-row">
+                                    <span class="kpi-white-val">34</span>
+                                    <span class="kpi-white-change text-green"><i class="fa-solid fa-arrow-trend-up"></i> +12%</span>
+                                </div>
+                            </div>
+                            <div class="kpi-card-white border-orange">
+                                <span class="kpi-white-title">Racha promedio</span>
+                                <div class="kpi-white-val-row">
+                                    <span class="kpi-white-val">28d</span>
+                                    <span class="kpi-white-change text-green"><i class="fa-solid fa-arrow-trend-up"></i> +4d</span>
+                                </div>
+                            </div>
+                            <div class="kpi-card-white border-purple">
+                                <span class="kpi-white-title">XP total otorgado</span>
+                                <div class="kpi-white-val-row">
+                                    <span class="kpi-white-val">14.8k</span>
+                                    <span class="kpi-white-change text-green"><i class="fa-solid fa-arrow-trend-up"></i> +580</span>
+                                </div>
+                            </div>
+                            <div class="kpi-card-white border-red">
+                                <span class="kpi-white-title">En riesgo</span>
+                                <div class="kpi-white-val-row">
+                                    <span class="kpi-white-val">2</span>
+                                    <span class="kpi-white-change text-red"><i class="fa-solid fa-arrow-trend-down"></i> -1</span>
+                                </div>
+                                <span class="kpi-white-desc">sin asistir &gt;7d</span>
                             </div>
                         </div>
-                        <div class="kpi-card-white border-orange">
-                            <span class="kpi-white-title">Racha promedio</span>
-                            <div class="kpi-white-val-row">
-                                <span class="kpi-white-val">28d</span>
-                                <span class="kpi-white-change text-green"><i class="fa-solid fa-arrow-trend-up"></i> +4d</span>
+
+                        <div class="directory-filters-panel card-admin">
+                            <div class="search-box-white">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="text" id="dirSearchInput" placeholder="Buscar por alias...">
+                            </div>
+                            
+                            <div class="filter-tab-buttons" id="dirFilterTabs">
+                                <button class="tab-btn active" data-filter="all">Todos · 12</button>
+                                <button class="tab-btn" data-filter="active">Activos · 9</button>
+                                <button class="tab-btn" data-filter="risk">En riesgo · 2</button>
+                                <button class="tab-btn" data-filter="new">Nuevos · 1</button>
+                            </div>
+                            
+                            <div class="sort-select-wrapper" style="margin-right: 1rem;">
+                                <label>Filtrar Rol:</label>
+                                <select id="dirRoleFilter" class="styled-select-white">
+                                    <option value="all">Todos los Roles</option>
+                                    <option value="PADRINO">Padrinos</option>
+                                    <option value="OREJA">Orejas</option>
+                                    <option value="APOYO">Apoyos</option>
+                                    <option value="JAV">JAV</option>
+                                </select>
+                            </div>
+                            <div class="sort-select-wrapper">
+                                <label>Ordenar:</label>
+                                <select id="dirSortSelect" class="styled-select-white">
+                                    <option value="level">Nivel</option>
+                                    <option value="racha">Racha</option>
+                                    <option value="clean">Tiempo Limpio</option>
+                                    <option value="name">Alias</option>
+                                </select>
                             </div>
                         </div>
-                        <div class="kpi-card-white border-purple">
-                            <span class="kpi-white-title">XP total otorgado</span>
-                            <div class="kpi-white-val-row">
-                                <span class="kpi-white-val">14.8k</span>
-                                <span class="kpi-white-change text-green"><i class="fa-solid fa-arrow-trend-up"></i> +580</span>
-                            </div>
+
+                        <div class="directory-warning-banner" style="margin-bottom: 0.75rem; padding: 0.6rem 1rem; background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 4px; color: #b45309; font-size: 0.8rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            <span><strong>Nota de Privacidad:</strong> Tienes acceso a la información de contacto de miembros de toda la comunidad para fines de servicio. Su uso es confidencial y responsabilidad del coordinador.</span>
                         </div>
-                        <div class="kpi-card-white border-red">
-                            <span class="kpi-white-title">En riesgo</span>
-                            <div class="kpi-white-val-row">
-                                <span class="kpi-white-val">2</span>
-                                <span class="kpi-white-change text-red"><i class="fa-solid fa-arrow-trend-down"></i> -1</span>
+                        <div class="card-admin directory-table-card">
+                            <div class="table-responsive">
+                                <table class="directory-table">
+                                    <thead>
+                                        <tr>
+                                            <th>MIEMBRO</th>
+                                            <th>NIVEL</th>
+                                            <th>RACHA</th>
+                                            <th>TIEMPO LIMPIO</th>
+                                            <th>CELULAR</th>
+                                            <th>ÚLTIMA ASISTENCIA</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="dirTableBody">
+                                    </tbody>
+                                </table>
                             </div>
-                            <span class="kpi-white-desc">sin asistir &gt;7d</span>
                         </div>
                     </div>
 
-                    <!-- Filters and Search panel -->
-                    <div class="directory-filters-panel card-admin">
-                        <div class="search-box-white">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                            <input type="text" id="dirSearchInput" placeholder="Buscar por alias...">
+                    <div id="dirPanelMiGrupo" class="dir-tab-panel" style="display:none;">
+                        <div class="view-header-flex mb-4" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
+                            <div>
+                                <span class="section-subtitle" id="dirMyGroupSubtitle" style="text-transform:uppercase; font-size:0.75rem; letter-spacing:0.05em; color:var(--admin-text-secondary); font-weight:700;">GRUPO SATÉLITE · REGIÓN 1</span>
+                                <h2 class="font-serif" id="dirMyGroupName" style="font-size:1.8rem; margin:0.25rem 0;">Estructura de Mi Sede</h2>
+                            </div>
                         </div>
-                        
-                        <div class="filter-tab-buttons" id="dirFilterTabs">
-                            <button class="tab-btn active" data-filter="all">Todos · 12</button>
-                            <button class="tab-btn" data-filter="active">Activos · 9</button>
-                            <button class="tab-btn" data-filter="risk">En riesgo · 2</button>
-                            <button class="tab-btn" data-filter="new">Nuevos · 1</button>
+
+                        <div style="display:grid; grid-template-columns: 1.2fr 1.8fr; gap:1.5rem; margin-bottom:2rem;">
+                            <div class="card-admin" style="background:#fff; border:1px solid var(--admin-border); border-radius:12px; padding:1.5rem;">
+                                <h3 class="font-serif border-bottom-title mb-4" style="font-size:1.15rem; font-weight:600; border-bottom:1px solid #eee; padding-bottom:0.5rem; margin-bottom:1rem;"><i class="fa-solid fa-map-location-dot text-purple" style="color:#7c3aed; margin-right:0.5rem;"></i> Ubicación de la Sede</h3>
+                                <form id="adminGroupLocationForm">
+                                    <div class="form-group-white mb-3">
+                                        <label style="font-size:0.75rem; font-weight:700; color:var(--admin-text-secondary); display:block; margin-bottom:0.4rem;">Enlace de Google Maps / Waze</label>
+                                        <input type="url" id="adminGroupLocLink" class="form-control-white w-full" placeholder="https://maps.google.com/?q=..." style="border:1px solid var(--admin-border); border-radius:6px; padding:0.5rem; width:100%; background:#fafafa; border:1px solid #ddd; outline:none; font-size:0.85rem;">
+                                    </div>
+
+                                    <div style="display:flex; gap:0.5rem; margin-top:1rem;">
+                                        <button type="button" class="btn btn-primary btn-xs" id="btnSaveGroupLocation" style="font-size:0.8rem; padding:0.5rem 0.8rem;">
+                                            <i class="fa-solid fa-floppy-disk"></i> Guardar Ubicación
+                                        </button>
+                                        <a id="btnViewGroupLocLink" href="#" target="_blank" class="btn btn-outline btn-xs" style="font-size:0.8rem; padding:0.5rem 0.8rem; text-decoration:none; text-align:center; color:#333; border:1px solid #ccc; display:flex; align-items:center; gap:0.25rem; border-radius:6px;">
+                                            <i class="fa-solid fa-arrow-up-right-from-square"></i> Ver Mapa
+                                        </a>
+                                    </div>
+                                    <div class="mt-4" style="margin-top:1rem; border-radius:8px; overflow:hidden; border:1px solid #ddd; height:180px; display:none;" id="adminGroupLocMapContainer">
+                                        <iframe id="iframeGroupLocMap" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="card-admin" style="background:#fff; border:1px solid var(--admin-border); border-radius:12px; padding:1.5rem;">
+                                <h3 class="font-serif border-bottom-title mb-4" style="font-size:1.15rem; font-weight:600; border-bottom:1px solid #eee; padding-bottom:0.5rem; margin-bottom:1rem;"><i class="fa-solid fa-user-tie text-purple" style="color:#7c3aed; margin-right:0.5rem;"></i> Cuadro Orgánico de Servidores</h3>
+                                <div class="table-responsive">
+                                    <table class="custom-table" style="width:100%; border-collapse:collapse; text-align:left; font-size:0.85rem;">
+                                        <thead>
+                                            <tr style="border-bottom:1px solid #eee; font-size:0.8rem; color:var(--admin-text-secondary); height:30px;">
+                                                <th style="padding:0.4rem;">Cargo</th>
+                                                <th style="padding:0.4rem;">Servidor</th>
+                                                <th style="padding:0.4rem;">Celular</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="adminMyGroupServidoresTableBody">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
-                        
-                        <div class="sort-select-wrapper" style="margin-right: 1rem;">
-                            <label>Filtrar Rol:</label>
-                            <select id="dirRoleFilter" class="styled-select-white">
-                                <option value="all">Todos los Roles</option>
-                                <option value="PADRINO">Padrinos</option>
-                                <option value="OREJA">Orejas</option>
-                                <option value="APOYO">Apoyos</option>
-                                <option value="JAV">JAV</option>
-                            </select>
-                        </div>
-                        <div class="sort-select-wrapper">
-                            <label>Ordenar:</label>
-                            <select id="dirSortSelect" class="styled-select-white">
-                                <option value="level">Nivel</option>
-                                <option value="racha">Racha</option>
-                                <option value="clean">Tiempo Limpio</option>
-                                <option value="name">Alias</option>
-                            </select>
+
+                        <div class="card-admin" style="background:#fff; border:1px solid var(--admin-border); border-radius:12px; padding:1.5rem;">
+                            <h3 class="font-serif border-bottom-title mb-3" style="font-size:1.15rem; font-weight:600; border-bottom:1px solid #eee; padding-bottom:0.5rem; margin-bottom:1rem;">Lista de Militancia (Mi Sede)</h3>
+                            <div class="table-responsive">
+                                <table class="directory-table" style="width:100%; font-size:0.9rem;">
+                                    <thead>
+                                        <tr style="text-align:left;">
+                                            <th style="padding:0.5rem 0.25rem;">MIEMBRO</th>
+                                            <th style="padding:0.5rem 0.25rem;">NIVEL</th>
+                                            <th style="padding:0.5rem 0.25rem;">RACHA</th>
+                                            <th style="padding:0.5rem 0.25rem;">TIEMPO LIMPIO</th>
+                                            <th style="padding:0.5rem 0.25rem;">CELULAR</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="adminMyGroupMilitanciaTableBody">
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Directory Table -->
-                    <div class="card-admin directory-table-card">
-                        <div class="table-responsive">
-                            <table class="directory-table">
-                                <thead>
-                                    <tr>
-                                        <th>MIEMBRO</th>
-                                        <th>NIVEL</th>
-                                        <th>RACHA</th>
-                                        <th>TIEMPO LIMPIO</th>
-                                        <th>CELULAR</th>
-                                        <th>ÚLTIMA ASISTENCIA</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody id="dirTableBody">
-                                    <!-- Dynamic rows by JS -->
-                                </tbody>
-                            </table>
+                    <div id="dirPanelRegional" class="dir-tab-panel" style="display:none;">
+                        <div class="view-header-flex mb-4" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
+                            <div>
+                                <span class="section-subtitle" id="dirRegionSubtitle" style="text-transform:uppercase; font-size:0.75rem; letter-spacing:0.05em; color:var(--admin-text-secondary); font-weight:700;">REGIÓN 1 CDMX</span>
+                                <h2 class="font-serif" style="font-size:1.8rem; margin:0.25rem 0;">Directorio Regional</h2>
+                            </div>
+                        </div>
+
+                        <div style="display:grid; grid-template-columns: 1.2fr 1.8fr; gap:1.5rem; margin-bottom:2rem;">
+                            <div>
+                                <div class="card-admin mb-6" style="background:#fff; border:1px solid var(--admin-border); border-radius:12px; padding:1.5rem; margin-bottom:1.5rem;">
+                                    <h3 class="font-serif border-bottom-title mb-3" style="font-size:1.15rem; font-weight:600; border-bottom:1px solid #eee; padding-bottom:0.5rem; margin-bottom:1rem;"><i class="fa-solid fa-campground text-purple" style="color:#7c3aed; margin-right:0.5rem;"></i> Ubicación de la Hacienda Regional</h3>
+                                    <form id="adminHaciendaLocationForm">
+                                        <div class="form-group-white mb-2">
+                                            <label style="font-size:0.75rem; font-weight:700; color:var(--admin-text-secondary); display:block; margin-bottom:0.4rem;">Nombre de la Hacienda</label>
+                                            <input type="text" id="adminHaciendaLocName" class="form-control-white w-full" placeholder="Ej. Hacienda Buena Vista" style="border:1px solid var(--admin-border); border-radius:6px; padding:0.5rem; width:100%; background:#fafafa; border:1px solid #ddd; outline:none; font-size:0.85rem;">
+                                        </div>
+                                        <div class="form-group-white mb-2">
+                                            <label style="font-size:0.75rem; font-weight:700; color:var(--admin-text-secondary); display:block; margin-bottom:0.4rem;">Enlace Google Maps / Hacienda</label>
+                                            <input type="url" id="adminHaciendaLocLink" class="form-control-white w-full" placeholder="https://maps.google.com/?q=..." style="border:1px solid var(--admin-border); border-radius:6px; padding:0.5rem; width:100%; background:#fafafa; border:1px solid #ddd; outline:none; font-size:0.85rem;">
+                                        </div>
+
+                                        <div style="display:flex; gap:0.5rem; margin-top:1rem;">
+                                            <button type="button" class="btn btn-primary btn-xs" id="btnSaveHaciendaLocation" style="font-size:0.8rem; padding:0.5rem 0.8rem;">
+                                                <i class="fa-solid fa-floppy-disk"></i> Guardar Hacienda
+                                            </button>
+                                            <a id="btnViewHaciendaLocLink" href="#" target="_blank" class="btn btn-outline btn-xs" style="font-size:0.8rem; padding:0.5rem 0.8rem; text-decoration:none; text-align:center; color:#333; border:1px solid #ccc; display:flex; align-items:center; gap:0.25rem; border-radius:6px;">
+                                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Ver Hacienda
+                                            </a>
+                                        </div>
+                                        <div class="mt-4" style="margin-top:1rem; border-radius:8px; overflow:hidden; border:1px solid #ddd; height:180px; display:none;" id="adminHaciendaLocMapContainer">
+                                            <iframe id="iframeHaciendaLocMap" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="card-admin" style="background:#fff; border:1px solid var(--admin-border); border-radius:12px; padding:1.5rem;">
+                                    <h3 class="font-serif border-bottom-title mb-3" style="font-size:1.15rem; font-weight:600; border-bottom:1px solid #eee; padding-bottom:0.5rem; margin-bottom:1rem;">Sedes en la Región</h3>
+                                    <div class="list-group-scrollable" id="adminRegionSedesList" style="max-height: 250px; overflow-y: auto; display:flex; flex-direction:column; gap:0.5rem;">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-admin" id="adminRegionalGroupDetailCard" style="background:#fff; border:1px solid var(--admin-border); border-radius:12px; padding:1.5rem;">
+                                <div style="text-align:center; padding:3rem 0; color:var(--admin-text-secondary);" id="adminRegionalGroupDetailEmpty">
+                                    <i class="fa-solid fa-arrow-left-long" style="font-size:2rem; margin-bottom:1rem; display:block;"></i>
+                                    Selecciona una sede de la lista izquierda para consultar sus servidores y militancia.
+                                </div>
+                                <div id="adminRegionalGroupDetailContent" style="display:none;">
+                                    <div style="display:flex; justify-content:space-between; align-items:start; border-bottom:1px solid #eee; padding-bottom:0.75rem; margin-bottom:1rem;">
+                                        <div>
+                                            <h3 class="font-serif" id="lblRegGroupDetailName" style="font-size:1.3rem; font-weight:600; margin:0;">Grupo Zaragoza</h3>
+
+                                        </div>
+                                        <a id="lblRegGroupDetailLink" href="#" target="_blank" class="btn btn-outline btn-xs" style="text-decoration:none; color:#333; font-size:0.8rem; padding:0.4rem 0.6rem; border:1px solid #ccc; display:flex; align-items:center; gap:0.25rem; border-radius:6px;">
+                                            <i class="fa-solid fa-map-pin"></i> Ver Mapa
+                                        </a>
+                                    </div>
+                                    <div class="mb-4" style="margin-bottom:1rem; border-radius:8px; overflow:hidden; border:1px solid #eee; height:120px; display:none;" id="adminRegGroupDetailMapContainer">
+                                        <iframe id="iframeRegGroupDetailMap" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                    </div>
+                                    
+                                    <h4 style="font-size:0.9rem; font-weight:700; margin-bottom:0.5rem; color:#444;"><i class="fa-solid fa-user-shield text-purple" style="color:#7c3aed; margin-right:0.25rem;"></i> Cuadro de Servidores</h4>
+                                    <div class="table-responsive mb-4">
+                                        <table class="custom-table" style="width:100%; border-collapse:collapse; font-size:0.85rem; text-align:left;">
+                                            <thead>
+                                                <tr style="border-bottom:1px solid #eee; color:var(--admin-text-secondary); height:30px;">
+                                                    <th style="padding:0.4rem;">Cargo</th>
+                                                    <th style="padding:0.4rem;">Nombre</th>
+                                                    <th style="padding:0.4rem;">Celular</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tblRegGroupDetailServidores">
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <h4 style="font-size:0.9rem; font-weight:700; margin-bottom:0.5rem; color:#444;"><i class="fa-solid fa-users text-purple" style="color:#7c3aed; margin-right:0.25rem;"></i> Militancia Activa</h4>
+                                    <div class="table-responsive" style="max-height:200px; overflow-y:auto;">
+                                        <table class="directory-table" style="width:100%; font-size:0.85rem; text-align:left;">
+                                            <thead>
+                                                <tr style="border-bottom:1px solid #eee;">
+                                                    <th style="padding:0.4rem;">Alias</th>
+                                                    <th style="padding:0.4rem;">Nivel</th>
+                                                    <th style="padding:0.4rem;">Racha</th>
+                                                    <th style="padding:0.4rem;">Celular</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tblRegGroupDetailMilitancia">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="dirPanelInterregional" class="dir-tab-panel" style="display:none;">
+                        <div class="view-header-flex mb-4" style="margin-bottom:1.5rem;">
+                            <div>
+                                <span class="section-subtitle" style="text-transform:uppercase; font-size:0.75rem; letter-spacing:0.05em; color:var(--admin-text-secondary); font-weight:700;">CONSEJO GENERAL</span>
+                                <h2 class="font-serif" style="font-size:1.8rem; margin:0.25rem 0;">Directorio Interregional (Nacional)</h2>
+                                <p class="subtitle text-secondary" style="font-size:0.9rem; color:var(--admin-text-secondary);">Navega a través de las 9 regiones de la comunidad para consultar sus sedes y liderazgos.</p>
+                            </div>
+                        </div>
+
+                        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:1rem; margin-bottom:2rem;" id="adminInterregionalGrid">
+                        </div>
+
+                        <div id="adminInterregionalDetailContainer" style="display:none; border-top:2px solid #eee; padding-top:2rem;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+                                <h3 class="font-serif" id="lblInterRegTitle" style="font-size:1.5rem; margin:0;">Región 4 Puebla</h3>
+                                <button type="button" class="btn btn-outline btn-xs" id="btnBackToInterregionalGrid" style="padding:0.4rem 0.75rem; font-size:0.8rem; border:1px solid #ccc; border-radius:6px; background:#fff; cursor:pointer;"><i class="fa-solid fa-arrow-left"></i> Volver a Regiones</button>
+                            </div>
+                            
+                            <div style="display:grid; grid-template-columns: 1.2fr 1.8fr; gap:1.5rem;">
+                                <div>
+                                    <div class="card-admin mb-6" style="background:#fff; border:1px solid var(--admin-border); border-radius:12px; padding:1.5rem; margin-bottom:1.5rem;">
+                                        <h4 class="font-serif border-bottom-title mb-2" style="font-size:1.1rem; font-weight:600; border-bottom:1px solid #eee; padding-bottom:0.5rem; margin-bottom:1rem;"><i class="fa-solid fa-campground text-purple" style="color:#7c3aed; margin-right:0.5rem;"></i> Hacienda de esta Región</h4>
+                                        <div style="font-size:0.85rem;">
+                                            <p style="margin-bottom:0.5rem;"><strong>Nombre:</strong> <span id="lblInterRegHaciendaName">Cargando...</span></p>
+
+                                            <a id="lblInterRegHaciendaLink" href="#" target="_blank" class="btn btn-outline btn-xs w-full text-center" style="text-decoration:none; color:#333; border:1px solid #ccc; display:block; padding:0.4rem; margin-top:0.75rem; border-radius:6px; text-align:center;">
+                                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Ver Ubicación de Hacienda
+                                            </a>
+                                            <div style="border-radius:8px; overflow:hidden; border:1px solid #eee; height:120px; margin-top:0.75rem; display:none;" id="adminInterRegHaciendaMapContainer">
+                                                <iframe id="iframeInterRegHaciendaMap" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-admin" style="background:#fff; border:1px solid var(--admin-border); border-radius:12px; padding:1.5rem;">
+                                        <h4 class="font-serif border-bottom-title mb-2" style="font-size:1.1rem; font-weight:600; border-bottom:1px solid #eee; padding-bottom:0.5rem; margin-bottom:1rem;">Sedes de la Región</h4>
+                                        <div class="list-group-scrollable" id="adminInterRegionSedesList" style="max-height: 250px; overflow-y: auto; display:flex; flex-direction:column; gap:0.5rem;">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-admin" id="adminInterRegionGroupDetailCard" style="background:#fff; border:1px solid var(--admin-border); border-radius:12px; padding:1.5rem;">
+                                    <div style="text-align:center; padding:3rem 0; color:var(--admin-text-secondary);" id="adminInterRegionGroupDetailEmpty">
+                                        Selecciona una sede regional de la lista izquierda para consultar sus detalles.
+                                    </div>
+                                    <div id="adminInterRegionGroupDetailContent" style="display:none;">
+                                        <div style="display:flex; justify-content:space-between; align-items:start; border-bottom:1px solid #eee; padding-bottom:0.75rem; margin-bottom:1rem;">
+                                            <div>
+                                                <h3 class="font-serif" id="lblInterRegGroupDetailName" style="font-size:1.3rem; font-weight:600; margin:0;">Grupo Zaragoza</h3>
+
+                                            </div>
+                                            <a id="lblInterRegGroupDetailLink" href="#" target="_blank" class="btn btn-outline btn-xs" style="text-decoration:none; color:#333; font-size:0.8rem; padding:0.4rem 0.6rem; border:1px solid #ccc; display:flex; align-items:center; gap:0.25rem; border-radius:6px;">
+                                                <i class="fa-solid fa-map-pin"></i> Ver Mapa
+                                            </a>
+                                        </div>
+                                        <div class="mb-4" style="margin-bottom:1rem; border-radius:8px; overflow:hidden; border:1px solid #eee; height:120px; display:none;" id="adminInterRegionGroupDetailMapContainer">
+                                            <iframe id="iframeInterRegionGroupDetailMap" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                        </div>
+                                        
+                                        <h4 style="font-size:0.9rem; font-weight:700; margin-bottom:0.5rem; color:#444;"><i class="fa-solid fa-user-shield text-purple" style="color:#7c3aed; margin-right:0.25rem;"></i> Cuadro de Servidores</h4>
+                                        <div class="table-responsive mb-4">
+                                            <table class="custom-table" style="width:100%; border-collapse:collapse; font-size:0.85rem; text-align:left;">
+                                                <thead>
+                                                    <tr style="border-bottom:1px solid #eee; color:var(--admin-text-secondary); height:30px;">
+                                                        <th style="padding:0.4rem;">Cargo</th>
+                                                        <th style="padding:0.4rem;">Nombre</th>
+                                                        <th style="padding:0.4rem;">Celular</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tblInterRegGroupDetailServidores">
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <h4 style="font-size:0.9rem; font-weight:700; margin-bottom:0.5rem; color:#444;"><i class="fa-solid fa-users text-purple" style="color:#7c3aed; margin-right:0.25rem;"></i> Militancia Activa</h4>
+                                        <div class="table-responsive" style="max-height:200px; overflow-y:auto;">
+                                            <table class="directory-table" style="width:100%; font-size:0.85rem; text-align:left;">
+                                                <thead>
+                                                    <tr style="border-bottom:1px solid #eee;">
+                                                        <th style="padding:0.4rem;">Alias</th>
+                                                        <th style="padding:0.4rem;">Nivel</th>
+                                                        <th style="padding:0.4rem;">Racha</th>
+                                                        <th style="padding:0.4rem;">Celular</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tblInterRegGroupDetailMilitancia">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- VIEW 4: DETALLE MIEMBRO (Individual view) -->
             <section class="admin-view" id="view-detalle-miembro">
                 <div class="member-detail-container">
                     
-                    <!-- Breadcrumbs -->
                     <nav class="breadcrumbs">
                         <a href="#" class="breadcrumb-back" id="btnBackToDirectory">Miembros</a> &gt; <span id="detailMemberNameBreadcrumb">Ámbar</span>
                     </nav>
 
-                    <!-- Profile Header Card -->
                     <div class="card-admin detail-profile-header-card">
                         <div class="dph-main-info">
                             <div class="dph-avatar" id="detailAvatarCircle">Á</div>
@@ -434,11 +689,11 @@
                             </div>
                         </div>
                         
-                        <!-- Actions & Progress bar -->
                         <div class="dph-side-panel">
                             <div class="dph-actions-row">
                                 <button class="btn btn-outline btn-xs" id="btnAssignPadrino"><i class="fa-solid fa-user-plus"></i> Asignar padrino</button>
-                                <button class="btn btn-outline btn-xs"><i class="fa-regular fa-comment"></i> Enviar mensaje</button>
+                                <button class="btn btn-outline btn-xs" id="btnMessageMember"><i class="fa-regular fa-comment"></i> Enviar mensaje</button>
+                                <button class="btn btn-outline btn-xs" id="btnEditMember"><i class="fa-solid fa-pen"></i> Editar</button>
                             </div>
                             
                             <div class="level-progress-wrapper w-full mt-4">
@@ -453,7 +708,6 @@
                         </div>
                     </div>
 
-                    <!-- Metrics summary grid -->
                     <div class="grid-4-col mb-6">
                         <div class="card-kpi-white">
                             <span class="kpi-white-title">Tiempo limpio</span>
@@ -477,62 +731,65 @@
                         </div>
                     </div>
 
-                    <!-- Details Columns -->
                     <div class="detail-columns-layout">
                         
-                        <!-- Col Left: Charts & History -->
                         <div class="detail-col-left">
                             
-                            <!-- Attendance bar chart -->
                             <div class="card-admin mb-6">
                                 <div class="card-header-flex">
                                     <h3 class="font-serif">Asistencia · últimas 12 semanas</h3>
                                     <div class="chart-tab-buttons">
-                                        <button class="btn btn-outline btn-xs active">12 sem</button>
-                                        <button class="btn btn-outline btn-xs">6 meses</button>
-                                        <button class="btn btn-outline btn-xs">1 año</button>
+                                        <button class="btn btn-outline btn-xs active" data-chart-range="12w">12 sem</button>
+                                        <button class="btn btn-outline btn-xs" data-chart-range="6m">6 meses</button>
+                                        <button class="btn btn-outline btn-xs" data-chart-range="1y">1 año</button>
                                     </div>
                                 </div>
                                 <p class="card-desc">Juntas por semana registradas.</p>
                                 
                                 <div class="weekly-bar-chart">
-                                    <!-- Bar Chart representation -->
                                     <div class="chart-bars-container" id="attendanceBarChartContainer">
-                                        <!-- Dynamic bars injected by JS -->
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- History timeline -->
                             <div class="card-admin">
                                 <div class="card-header-flex">
                                     <h3 class="font-serif">Historial reciente</h3>
                                     <button class="btn-text" id="btnViewAllHistory">Ver todo</button>
                                 </div>
                                 <div class="timeline-scroll-box" id="detailHistoryTimeline">
-                                    <!-- Dynamic history items -->
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Col Right: Badges & Private Coordinator Notes -->
                         <div class="detail-col-right">
                             
-                            <!-- Badges grid -->
                             <div class="card-admin mb-6">
                                 <h3 class="font-serif mb-2" id="lblDetailInsigniasCount">Insignias · 5 de 9</h3>
                                 <div class="badges-mini-grid" id="detailBadgesGrid">
-                                    <!-- Dynamic badges list by JS -->
                                 </div>
                             </div>
 
-                            <!-- Coordinator private notes -->
+                            <!-- Avance editable de Padrino/Oreja (inventarios y ejercicios) -->
+                            <div class="card-admin mb-6" id="detailProgressCard" style="display:none;">
+                                <h3 class="font-serif mb-2"><i class="fa-solid fa-graduation-cap text-purple"></i> Avance: Inventarios y Ejercicios</h3>
+                                <p class="card-desc">Editable por el líder/coordinador para corregir el progreso del padrino/oreja.</p>
+                                <div style="margin-top:0.75rem;">
+                                    <span style="font-size:0.7rem; font-weight:700; text-transform:uppercase; color:var(--admin-text-secondary);">Inventarios</span>
+                                    <div id="detailScripturesList" style="display:grid; grid-template-columns:1fr 1fr; gap:0.35rem; margin-top:0.4rem;"></div>
+                                </div>
+                                <div style="margin-top:0.85rem;">
+                                    <span style="font-size:0.7rem; font-weight:700; text-transform:uppercase; color:var(--admin-text-secondary);">Ejercicios</span>
+                                    <div id="detailExercisesList" style="display:grid; grid-template-columns:1fr 1fr; gap:0.35rem; margin-top:0.4rem;"></div>
+                                </div>
+                                <button class="btn btn-primary w-full mt-4" id="btnSaveProgress"><i class="fa-solid fa-floppy-disk"></i> Guardar Avance</button>
+                            </div>
+
                             <div class="card-admin">
                                 <h3 class="font-serif mb-2"><i class="fa-solid fa-file-pen text-purple"></i> Notas del coordinador</h3>
                                 <p class="card-desc">Observaciones del proceso, visibles únicamente por los coordinadores de sede.</p>
                                 
                                 <div class="notes-feed-list" id="detailNotesFeedList">
-                                    <!-- Dynamic notes -->
                                 </div>
 
                                 <div class="add-note-form mt-4">
@@ -547,7 +804,6 @@
                 </div>
             </section>
 
-            <!-- VIEW 5: NUEVO MIEMBRO (Create Member Form) -->
             <section class="admin-view" id="view-nuevo-miembro">
                 <div class="new-member-container">
                     
@@ -560,10 +816,8 @@
                         <p class="subtitle text-secondary">Solo necesitamos un alias. Lo demás es opcional. La identidad real nunca se comparte con otros miembros.</p>
                     </div>
 
-                    <!-- Split columns: Form on left, live card preview on right -->
                     <div class="new-member-split-layout">
                         
-                        <!-- Left: Registration Form -->
                         <div class="card-admin new-member-form-card">
                             <form id="newMemberForm">
                                 <h3 class="font-serif border-bottom-title mb-4">Identidad pública</h3>
@@ -577,7 +831,6 @@
 
                                 <div class="form-group-white mb-6">
                                     <label>AVATAR</label>
-                                    <!-- Color circle selection -->
                                     <div class="avatar-color-picker" id="avatarColorPicker">
                                         <button type="button" class="color-btn active" data-color="#c2410c" style="background-color: #c2410c;"></button>
                                         <button type="button" class="color-btn" data-color="#b91c1c" style="background-color: #b91c1c;"></button>
@@ -641,10 +894,8 @@
                             </form>
                         </div>
 
-                        <!-- Right: Live card Preview (Dark Cosmic Card styling) -->
                         <div class="new-member-preview-container">
                             <div class="preview-card-wrapper">
-                                <!-- Mobile dark cosmic card frame -->
                                 <div class="mobile-live-preview-card">
                                     <div class="preview-avatar" id="prevAvatarCircle" style="background-color: #c2410c;">Á</div>
                                     <div class="preview-member-info">
@@ -668,7 +919,6 @@
                                 </div>
                             </div>
                             
-                            <!-- Emergency warning banner -->
                             <div class="alert-info-white">
                                 <div class="aiw-icon"><i class="fa-solid fa-circle-info"></i></div>
                                 <div class="aiw-text">
@@ -689,7 +939,6 @@
                 
                 <div class="events-container-grid" style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-top: 1.5rem;">
                     
-                    <!-- Left: Calendars view list -->
                     <div>
                         <div class="card-admin" style="margin-bottom: 1.5rem;">
                             <div class="card-header-flex" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--admin-border); padding-bottom: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
@@ -703,7 +952,7 @@
                                     <div style="height: 15px; width: 1px; background: #ccc;"></div>
                                     <div class="view-toggle-buttons" id="adminCalendarViewToggle" style="display: flex; gap: 0.25rem;">
                                         <button type="button" class="btn btn-xs btn-outline active" data-view="LIST" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;" title="Ver Lista"><i class="fa-solid fa-list"></i></button>
-                                        <button type="button" class="btn btn-xs btn-outline" data-view="WEEK" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;" title="Ver Semanal"><i class="fa-solid fa-calendar-week"></i></button>
+                                        <button type="button" class="btn btn-xs btn-outline" data-view="CALENDAR" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;" title="Ver Calendario"><i class="fa-solid fa-calendar-days"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -721,38 +970,25 @@
                                         </tr>
                                     </thead>
                                     <tbody id="adminEventsTableBody">
-                                        <!-- Injected by JS -->
                                     </tbody>
                                 </table>
                             </div>
 
                             <div id="adminWeeklyCalendarContainer" style="display: none; margin-top: 1rem;">
-                                <div class="weekly-grid-header" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; text-align: center; font-weight: 600; font-size: 0.8rem; border-bottom: 1px solid var(--admin-border); padding-bottom: 0.5rem; margin-bottom: 0.5rem;">
-                                    <div>Lunes</div>
-                                    <div>Martes</div>
-                                    <div>Miércoles</div>
-                                    <div>Jueves</div>
-                                    <div>Viernes</div>
-                                    <div>Sábado</div>
-                                    <div>Domingo</div>
-                                </div>
-                                <div id="adminWeeklyCalendarGrid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; min-height: 250px;">
-                                    <!-- Populated by JS -->
-                                </div>
+                                <!-- Calendario mensual / anual generado por JS -->
                             </div>
                         </div>
                     </div>
 
-                    <!-- Right: Schedule new event Form (For coordinators) -->
                     <div id="adminCreateEventContainer">
                         <div class="card-admin">
                             <h3 class="font-serif border-bottom-title mb-4">Agendar Evento</h3>
                             <form id="adminCreateEventForm">
-                                <div class="form-group-white mb-3">
+                                <div class="form-group-white mb-3" id="evtTitleContainer">
                                     <label for="evtTitle">Título del Evento / Tema *</label>
                                     <input type="text" id="evtTitle" class="form-control-white w-full" placeholder="Ej. El Despertar" required>
                                 </div>
-                                <div class="form-group-white mb-3">
+                                <div class="form-group-white mb-3" id="evtCalendarContainer">
                                     <label for="evtCalendar">Calendario Destino *</label>
                                     <select id="evtCalendar" class="form-control-white w-full" required>
                                         <option value="GROUP">Grupo (Interno)</option>
@@ -763,7 +999,6 @@
                                 <div class="form-group-white mb-3" id="evtGroupSelectContainer">
                                     <label for="evtGroup">Grupo Destino *</label>
                                     <select id="evtGroup" class="form-control-white w-full">
-                                        <!-- Injected by JS -->
                                     </select>
                                 </div>
                                 <div class="form-group-white mb-3">
@@ -783,31 +1018,103 @@
                                         <option value="JUNTAS_JAV">Juntas JAV</option>
                                         <option value="PADRES_JAV">Junta de Padres JAV</option>
                                         <optgroup label="Hacienda (Solo Superadmin)" id="evtHaciendaGroup">
-                                            <option value="R1">Hacienda R1 (CDMX)</option>
-                                            <option value="R4">Hacienda R4 (Puebla)</option>
-                                            <option value="JOVENES">Hacienda Jóvenes JAV</option>
+                                            <option value="HAC_R1">Hacienda Región 1 (CDMX)</option>
+                                            <option value="HAC_R2">Hacienda Región 2 (Edo. México)</option>
+                                            <option value="HAC_R3">Hacienda Región 3 (Querétaro/Gto.)</option>
+                                            <option value="HAC_R4">Hacienda Región 4 (Puebla)</option>
+                                            <option value="HAC_R5">Hacienda Región 5 (Guerrero)</option>
+                                            <option value="HAC_R6">Hacienda Región 6 (Yucatán)</option>
+                                            <option value="HAC_R7">Hacienda Región 7 (Chicago)</option>
+                                            <option value="HAC_R8">Hacienda Región 8 (Veracruz)</option>
+                                            <option value="HAC_R9">Hacienda Región 9 (Monterrey)</option>
+                                            <option value="HAC_JAV">Hacienda JAV (Interregional)</option>
                                         </optgroup>
                                     </select>
                                 </div>
-                                <div class="form-group-white mb-3">
-                                    <label for="evtInfo" id="evtInfoLabel">Ubicación / Detalles *</label>
-                                    <input type="text" id="evtInfo" class="form-control-white w-full" placeholder="Ej. Sede Centro · Sala A" required>
-                                </div>
-                                <div class="form-group-white mb-3">
-                                    <label for="evtSpeaker">Ponente / Responsable *</label>
-                                    <input type="text" id="evtSpeaker" class="form-control-white w-full" placeholder="Ej. Padrino Juan A." required>
-                                </div>
-                                <div class="form-grid-2-col mb-3">
-                                    <div class="form-group-white">
-                                        <label for="evtDay">Día (Ej. 29)</label>
-                                        <input type="text" id="evtDay" class="form-control-white" placeholder="29" required>
+                                <!-- Modo Hacienda: solo región sede (JAV) y fechas de la experiencia -->
+                                <div id="evtHaciendaSection" style="display:none;">
+                                    <div class="form-group-white mb-3" id="evtHaciendaRegionContainer" style="display:none;">
+                                        <label for="evtHaciendaRegion">Región sede de la Hacienda JAV *</label>
+                                        <select id="evtHaciendaRegion" class="form-control-white w-full"></select>
                                     </div>
-                                    <div class="form-group-white">
-                                        <label for="evtMonth">Mes (Ej. Vie)</label>
-                                        <input type="text" id="evtMonth" class="form-control-white" placeholder="Vie" required>
+                                    <div class="form-grid-2-col mb-3">
+                                        <div class="form-group-white">
+                                            <label for="evtHaciendaStart">Inicio (Viernes / Jueves pre-avanzada) *</label>
+                                            <input type="date" id="evtHaciendaStart" class="form-control-white w-full">
+                                        </div>
+                                        <div class="form-group-white">
+                                            <label for="evtHaciendaEnd">Término (Domingo) *</label>
+                                            <input type="date" id="evtHaciendaEnd" class="form-control-white w-full">
+                                        </div>
+                                    </div>
+                                    <p class="text-xs text-secondary mb-3" style="font-size:0.78rem; color:var(--admin-text-secondary);">La experiencia dura 3 días (Vie–Dom). La pre-avanzada inicia el Jueves. Al guardar, las 9 regiones reciben aviso y se habilita su carga de POA.</p>
+                                </div>
+
+                                <!-- Ubicación Condicional -->
+                                <div id="evtLocationSection">
+                                    <div class="form-group-white mb-3" id="evtLocationTypeContainer" style="display:none;">
+                                        <label for="evtLocationType">Tipo de Ubicación *</label>
+                                        <select id="evtLocationType" class="form-control-white w-full">
+                                            <option value="GROUP">Sede de Grupo de la Región</option>
+                                            <option value="CUSTOM">Otro Lugar (Enlace Google Maps)</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group-white mb-3" id="evtLocationGroupContainer">
+                                        <label for="evtLocationGroup">Sede de Grupo *</label>
+                                        <select id="evtLocationGroup" class="form-control-white w-full">
+                                        </select>
+                                    </div>
+                                    <div class="form-group-white mb-3" id="evtLocationLinkContainer" style="display:none;">
+                                        <label for="evtLocationLink" id="lblEvtLocationLink">Enlace de Google Maps / Waze *</label>
+                                        <input type="url" id="evtLocationLink" class="form-control-white w-full" placeholder="https://maps.google.com/?q=...">
+                                    </div>
+                                    <div class="form-group-white mb-3" id="evtLocationDetailsContainer">
+                                        <label for="evtLocationDetails" id="lblEvtLocationDetails">Detalles del Salón / Espacio *</label>
+                                        <input type="text" id="evtLocationDetails" class="form-control-white w-full" placeholder="Ej. Salón de Oración, Planta Alta">
                                     </div>
                                 </div>
-                                <div class="form-grid-2-col mb-4">
+
+                                <div id="evtSpeakerSection">
+                                <div class="form-group-white mb-3">
+                                    <label for="evtSpeakerType">Tipo de Ponente *</label>
+                                    <select id="evtSpeakerType" class="form-control-white w-full" required>
+                                        <option value="MILITANCIA">Miembro de mi Grupo (Militancia)</option>
+                                        <option value="EXTERNO">Miembro Externo (Otro Grupo/Región)</option>
+                                        <option value="INVITADO">Invitado Especial (Fuera de Agua Viva)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group-white mb-3" id="evtSpeakerMemberContainer">
+                                    <label for="evtSpeakerMember">Selecciona Miembro de la Militancia *</label>
+                                    <select id="evtSpeakerMember" class="form-control-white w-full">
+                                    </select>
+                                </div>
+                                <div id="evtSpeakerExternalContainer" style="display: none;">
+                                    <div class="form-group-white mb-3">
+                                        <label for="evtSpeakerExternalName">Nombre del Ponente *</label>
+                                        <input type="text" id="evtSpeakerExternalName" class="form-control-white w-full" placeholder="Ej. Roberto M.">
+                                    </div>
+                                    <div class="form-grid-2-col mb-3">
+                                        <div class="form-group-white">
+                                            <label for="evtSpeakerExternalRegion">Región del Ponente *</label>
+                                            <select id="evtSpeakerExternalRegion" class="form-control-white w-full">
+                                            </select>
+                                        </div>
+                                        <div class="form-group-white">
+                                            <label for="evtSpeakerExternalGroup">Grupo del Ponente *</label>
+                                            <select id="evtSpeakerExternalGroup" class="form-control-white w-full">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group-white mb-3" id="evtSpeakerGuestContainer" style="display: none;">
+                                    <label for="evtSpeakerGuestName">Nombre del Invitado Especial *</label>
+                                    <input type="text" id="evtSpeakerGuestName" class="form-control-white w-full" placeholder="Ej. Dr. Armando S. (Externo)">
+                                </div>
+                                </div>                                <div class="form-group-white mb-3" id="evtDateContainer">
+                                    <label for="evtDate">Fecha del Evento *</label>
+                                    <input type="date" id="evtDate" class="form-control-white w-full" required>
+                                </div>
+                                <div class="form-grid-2-col mb-4" id="evtTimeXpContainer">
                                     <div class="form-group-white">
                                         <label for="evtTime">Hora (Ej. 19:00)</label>
                                         <input type="text" id="evtTime" class="form-control-white" placeholder="19:00" required>
@@ -817,7 +1124,7 @@
                                         <input type="number" id="evtXp" class="form-control-white" value="15" required>
                                     </div>
                                 </div>
-                                <div class="form-group-white mb-4 auth-checkbox-group" style="display:flex; align-items:center; gap:0.5rem;">
+                                <div class="form-group-white mb-4 auth-checkbox-group" id="evtJavContainer" style="display:flex; align-items:center; gap:0.5rem;">
                                     <input type="checkbox" id="evtIsJav" style="width:16px; height:16px;">
                                     <label for="evtIsJav" style="font-weight:normal; text-transform:none; cursor:pointer;">¿Es un evento exclusivo JAV?</label>
                                 </div>
@@ -844,7 +1151,6 @@
                     </div>
                 </div>
 
-                <!-- Totales Grid -->
                 <div class="grid-4-col mb-6" style="display:grid; grid-template-columns: repeat(4, 1fr); gap:1rem;">
                     <div class="card-kpi-white">
                         <h3 class="kpi-white-big-val text-purple" id="adminPoaTotalEscribientes" style="font-size:1.8rem; font-weight:700; color:#7c3aed;">5</h3>
@@ -864,10 +1170,8 @@
                     </div>
                 </div>
 
-                <!-- Two columns for Escribientes CRUD and Semaphores -->
                 <div class="events-container-grid" style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
                     
-                    <!-- Left: Escribientes List and Add Form -->
                     <div>
                         <!-- Declarar mi asistencia -->
                         <div class="card-admin mb-6" style="background:#fff; border:1px solid var(--admin-border); border-radius:12px; padding:1.5rem; margin-bottom:1.5rem;">
@@ -904,8 +1208,34 @@
                                 <i class="fa-solid fa-floppy-disk"></i> Guardar Declaración
                             </button>
                         </div>
+ 
+                        <!-- Rectificación del POA (Militancia de Hacienda) -->
+                        <div class="card-admin mb-6" style="background:#fff; border:1px solid var(--admin-border); border-radius:12px; padding:1.5rem; margin-bottom:1.5rem;">
+                            <div class="card-header-flex" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding-bottom:0.75rem; margin-bottom:1rem;">
+                                <h3 class="font-serif" style="font-size:1.15rem; font-weight:600;"><i class="fa-solid fa-list-check text-purple" style="color:#7c3aed; margin-right:0.5rem;"></i> Rectificación de Lista del Grupo</h3>
+                                <button type="button" class="btn btn-xs btn-primary" id="adminSaveRectifiedPoaBtn" style="padding:0.4rem 0.75rem; font-size:0.8rem;">
+                                    <i class="fa-solid fa-cloud-arrow-up"></i> Actualizar POA
+                                </button>
+                            </div>
+                            <p class="text-xs text-secondary mb-3" style="font-size:0.8rem; color:var(--admin-text-secondary); margin-bottom:1rem;">Esta lista unificada contiene tanto a los servidores (Apoyos, Orejas, Padrinos y JAVs) del grupo que declararon su asistencia en la encuesta móvil, como a los escribientes. Rectifica la información y presiona "Actualizar POA" para guardar y validar el Semáforo.</p>
+                            <div class="table-responsive" style="max-height:350px; overflow-y:auto;">
+                                <table class="custom-table" id="adminRectifyTable" style="width:100%; border-collapse:collapse; text-align:left;">
+                                    <thead>
+                                        <tr style="border-bottom:2px solid #eee;">
+                                            <th style="padding:0.5rem;">Persona</th>
+                                            <th style="padding:0.5rem;">Tipo / Clasif.</th>
+                                            <th style="padding:0.5rem;">Asistencia</th>
+                                            <th style="padding:0.5rem;">Turno Llegada</th>
+                                            <th style="padding:0.5rem;">Transporte</th>
+                                            <th style="padding:0.5rem; text-align:right;">Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="adminRectifyTableBody">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
 
-                        <!-- Escribientes Manager -->
                         <div class="card-admin" style="background:#fff; border:1px solid var(--admin-border); border-radius:12px; padding:1.5rem;">
                             <div class="card-header-flex" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding-bottom:0.75rem; margin-bottom:1rem;">
                                 <h3 class="font-serif" style="font-size:1.15rem; font-weight:600;">Gestión de Escribientes</h3>
@@ -924,32 +1254,29 @@
                                             <th>Nombre</th>
                                             <th>Género</th>
                                             <th>Grupo</th>
+                                            <th style="text-align: center;">Repe</th>
+                                            <th style="text-align: center;">Seguimiento</th>
                                             <th class="text-right">Acción</th>
                                         </tr>
                                     </thead>
                                     <tbody id="adminEscribientesTableBody">
-                                        <!-- Injected by JS -->
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Right: Traffic Lights and Audit Logs -->
                     <div>
                         <!-- Semáforo por grupo -->
                         <div class="card-admin mb-6" style="background:#fff; border:1px solid var(--admin-border); border-radius:12px; padding:1.5rem; margin-bottom:1.5rem;">
                             <h3 class="font-serif border-bottom-title mb-4" style="font-size:1.15rem; font-weight:600; border-bottom:1px solid #eee; padding-bottom:0.5rem; margin-bottom:1rem;">Semáforo de Carga por Grupo</h3>
                             <div class="groups-semaphore-list" id="adminGroupsSemaphoreList">
-                                <!-- Injected by JS -->
                             </div>
                         </div>
 
-                        <!-- Audit Logs -->
                         <div class="card-admin" style="background:#fff; border:1px solid var(--admin-border); border-radius:12px; padding:1.5rem;">
                             <h3 class="font-serif border-bottom-title mb-4" style="font-size:1.15rem; font-weight:600; border-bottom:1px solid #eee; padding-bottom:0.5rem; margin-bottom:1rem;"><i class="fa-solid fa-clock-rotate-left"></i> Registro de Cambios</h3>
                             <div class="changelog-list" id="adminAuditChangelogList" style="max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem;">
-                                <!-- Injected by JS -->
                             </div>
                         </div>
                     </div>
@@ -957,14 +1284,53 @@
                 </div>
             </section>
 
-            <!-- VIEW: APROBACIONES (Integrated Approvals & Admin Management) -->
+            <section class="admin-view" id="view-junta-atracciones">
+                <div class="view-header-flex" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
+                    <div>
+                        <h1 class="font-serif">Junta de Atracciones</h1>
+                        <p class="subtitle text-secondary">Calendario mensual de padrinos y pase de lista en tiempo real</p>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:0.75rem;">
+                        <button class="btn btn-primary btn-xs" id="btnExportAtracciones" style="background: var(--admin-purple); border-color: var(--admin-purple);">
+                            <i class="fa-solid fa-file-excel"></i> Exportar calendario (Excel)
+                        </button>
+                        <div style="background: rgba(124, 58, 237, 0.1); color: var(--admin-purple); padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.8rem; font-weight: bold; border: 1px solid rgba(124, 58, 237, 0.25); display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="display: inline-block; width: 8px; height: 8px; background: #10b981; border-radius: 50%; box-shadow: 0 0 8px #10b981;"></span>
+                            <span>PANEL EN VIVO</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="view-content">
+                    <div style="display: grid; grid-template-columns: 280px 1fr; gap: 1.5rem; align-items: start;">
+                        
+                        <div class="card-admin">
+                            <h3 class="font-serif border-bottom-title mb-3" style="font-size:1.1rem; font-weight:600;"><i class="fa-solid fa-list-ol"></i> Prioridad de Reparto</h3>
+                            <p class="card-desc" style="font-size:0.75rem; margin-bottom:1rem;">Lista ordenada de grupos por hora de llegada registrada.</p>
+                            
+                            <ol class="junta-priority-list" id="juntaLivePriorityList" style="padding-left: 1.2rem; font-size: 0.85rem; display: flex; flex-direction: column; gap: 0.6rem; color: var(--admin-text-main);">
+                                <li style="color: var(--admin-text-secondary); font-style: italic; list-style: none;">Nadie registrado.</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="card-admin">
+                            <h3 class="font-serif border-bottom-title mb-3" style="font-size:1.1rem; font-weight:600;"><i class="fa-regular fa-calendar-days"></i> Calendario de Atracciones - Julio 2026</h3>
+                            <p class="card-desc" style="font-size:0.75rem; margin-bottom:1rem;">Días del mes y sus padrinos asignados. Varios grupos pueden agendar el mismo día.</p>
+                            
+                            <div id="juntaLiveCalendarContainer">
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </section>
+
             <section class="admin-view" id="view-aprobaciones">
                 <div class="view-header">
                     <h1 class="font-serif">Aprobaciones y Cargos</h1>
                     <p class="subtitle">Gestión de solicitudes de clasificación, cargos y altas de coordinadores</p>
                 </div>
                 <div class="view-content">
-                    <!-- Mini KPIs -->
                     <div class="directory-kpis-grid mb-6">
                         <div class="kpi-card-white border-purple">
                             <span class="kpi-white-title">Admins Activos</span>
@@ -985,29 +1351,22 @@
 
                     <div class="poa-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
                         
-                        <!-- Col 1: Pending Requests -->
                         <div class="card-admin" style="background:#fff; border:1px solid var(--admin-border); border-radius:12px; padding:1.5rem;">
                             <h3 class="font-serif mb-2" style="font-size:1.15rem; font-weight:600; border-bottom:1px solid #eee; padding-bottom:0.5rem; margin-bottom:1rem;"><i class="fa-solid fa-user-clock text-orange"></i> Solicitudes Pendientes</h3>
                             <p class="card-desc" style="font-size:0.8rem; color:var(--admin-text-secondary); margin-bottom:1rem;">Autorizaciones de personal administrativo, servidores de apoyo y clasificaciones especiales.</p>
                             
-                            <!-- Pending Tabs -->
                             <div class="super-tabs" id="apprPendingTabs" style="display: flex; gap: 0.5rem; margin-top: 1rem; margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 0.5rem;">
                                 <button type="button" class="btn btn-xs btn-outline active" data-tab="COORDINATORS" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; background-color: var(--admin-purple); color: white;">Coordinadores</button>
                                 <button type="button" class="btn btn-xs btn-outline" data-tab="ROLES" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">Cargos / Clasificación</button>
                             </div>
                             
-                            <!-- Tab 1: Coordinators -->
                             <div class="pending-coordinators-list" id="apprPendingList" style="display: flex; flex-direction: column; gap: 0.75rem; max-height: 400px; overflow-y: auto;">
-                                <!-- Dynamic pending list -->
                             </div>
                             
-                            <!-- Tab 2: Role/Classifications Requests -->
                             <div class="pending-roles-list" id="apprPendingRolesList" style="display: none; flex-direction: column; gap: 0.75rem; max-height: 400px; overflow-y: auto;">
-                                <!-- Dynamic pending roles list -->
                             </div>
                         </div>
 
-                        <!-- Col 2: Active Coordinators list -->
                         <div class="card-admin" style="background:#fff; border:1px solid var(--admin-border); border-radius:12px; padding:1.5rem;">
                             <h3 class="font-serif mb-2" style="font-size:1.15rem; font-weight:600; border-bottom:1px solid #eee; padding-bottom:0.5rem; margin-bottom:1rem;"><i class="fa-solid fa-user-shield text-purple"></i> Administradores Registrados</h3>
                             <p class="card-desc" style="font-size:0.8rem; color:var(--admin-text-secondary); margin-bottom:1rem;">Personal con credenciales de edición, permisos y control operativo de grupos.</p>
@@ -1023,7 +1382,6 @@
                                         </tr>
                                     </thead>
                                     <tbody id="apprAdminsTableBody">
-                                        <!-- Dynamic active admins -->
                                     </tbody>
                                 </table>
                             </div>
@@ -1033,7 +1391,6 @@
                 </div>
             </section>
 
-            <!-- MODAL: Add Escribiente Admin -->
             <div class="modal-overlay" id="adminAddEscribienteModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:20000; justify-content:center; align-items:center;">
                 <div class="admin-auth-box" style="width:100%; max-width:400px; background:#fff; padding:2rem; border-radius:12px;">
                     <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #eee; padding-bottom:0.75rem; margin-bottom:1rem;">
@@ -1046,20 +1403,24 @@
                             <input type="text" id="admEscName" class="form-control-white w-full" placeholder="Ej. Carlos" required style="border: 1px solid var(--admin-border); background: #fdfdfd;">
                         </div>
                         <div class="form-group-white mb-3">
-                            <label for="admEscLastInitial">Inicial del Apellido *</label>
-                            <input type="text" id="admEscLastInitial" class="form-control-white w-full" maxlength="1" placeholder="Ej. M" required style="text-transform:uppercase; border: 1px solid var(--admin-border); background: #fdfdfd;">
-                        </div>
-                        <div class="form-group-white mb-3">
                             <label for="admEscGender">Género *</label>
                             <select id="admEscGender" class="form-control-white w-full" required style="border: 1px solid var(--admin-border); background: #fdfdfd;">
                                 <option value="MALE">Hombre</option>
                                 <option value="FEMALE">Mujer</option>
                             </select>
                         </div>
+                        <div class="form-group-white mb-3">
+                            <label for="admEscRepe">¿Es Repetidor? (Repe) *</label>
+                            <select id="admEscRepe" class="form-control-white w-full" required style="border: 1px solid var(--admin-border); background: #fdfdfd;">
+                                <option value="NO">No</option>
+                                <option value="YES">Sí</option>
+                            </select>
+                        </div>
                         <div class="form-group-white mb-4">
-                            <label for="admEscGroup">Grupo de Procedencia *</label>
-                            <select id="admEscGroup" class="form-control-white w-full" required style="border: 1px solid var(--admin-border); background: #fdfdfd;">
-                                <!-- Groups populated by JS -->
+                            <label for="admEscSeguimiento">¿Tiene Seguimiento? *</label>
+                            <select id="admEscSeguimiento" class="form-control-white w-full" required style="border: 1px solid var(--admin-border); background: #fdfdfd;">
+                                <option value="NO">No</option>
+                                <option value="YES">Sí</option>
                             </select>
                         </div>
                         <button type="submit" class="btn btn-primary w-full">Guardar Registro</button>
@@ -1070,7 +1431,102 @@
         </main>
     </div>
 
-    <!-- Floating Simulator Widget -->
+    <div class="admin-auth-overlay hidden" id="adminSendMessageModal" style="z-index: 20000; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; position: fixed; inset: 0; padding: 1.5rem;">
+        <div class="admin-auth-box" style="width: 100%; max-width: 440px; padding: 2rem; background: #fff; border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.3);">
+            <h3 class="font-serif" style="color: var(--admin-purple); font-size: 1.25rem; margin-top:0; margin-bottom: 0.5rem;"><i class="fa-regular fa-paper-plane"></i> Enviar Mensaje al Ponente</h3>
+            <p style="font-size: 0.85rem; color: #666; margin-bottom: 1.25rem;" id="lblSendMsgSpeakerName">Destinatario: </p>
+            
+            <div class="form-group-white mb-4" style="margin-bottom: 1.25rem;">
+                <label for="txtSendMsgContent" style="font-size: 0.8rem; font-weight: 700; color: #555; display: block; margin-bottom: 0.5rem;">Mensaje:</label>
+                <textarea id="txtSendMsgContent" class="form-control-white w-full" rows="4" placeholder="Escribe tu mensaje para el ponente..." style="border: 1px solid #ddd; outline: none; padding: 0.6rem; border-radius: 6px; width: 100%; background: #fafafa; font-family: inherit; resize: none;" required></textarea>
+            </div>
+            
+            <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+                <button type="button" class="btn btn-outline btn-xs" id="btnCancelSendMsg" style="padding: 0.5rem 1rem; font-size: 0.8rem; cursor: pointer; border: 1px solid #ccc; border-radius: 6px; background: #fff;">Cancelar</button>
+                <button type="button" class="btn btn-primary btn-xs" id="btnConfirmSendMsg" style="background-color: var(--admin-purple); border-color: var(--admin-purple); color: white; padding: 0.5rem 1rem; font-size: 0.8rem; cursor: pointer; border: 1px solid var(--admin-purple); border-radius: 6px;">Enviar Mensaje</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Editar miembro (solo grupo/región propios o Superadmin) -->
+    <div class="admin-auth-overlay hidden" id="memberEditModal" style="z-index: 20000; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; position: fixed; inset: 0; padding: 1.5rem;">
+        <div class="admin-auth-box" style="width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; padding: 1.75rem 2rem; background: #fff; border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.3);">
+            <h3 class="font-serif" style="color: var(--admin-purple); font-size: 1.25rem; margin: 0 0 0.25rem;"><i class="fa-solid fa-user-pen"></i> Editar Miembro</h3>
+            <p style="font-size: 0.8rem; color: #666; margin-bottom: 1rem;" id="memberEditSubtitle"></p>
+            <form id="memberEditForm">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                    <div class="form-group-white"><label class="me-label">Alias *</label><input type="text" id="meAlias" class="me-input" required></div>
+                    <div class="form-group-white"><label class="me-label">Nombre real</label><input type="text" id="meRealName" class="me-input"></div>
+                    <div class="form-group-white"><label class="me-label">Edad</label><input type="number" id="meAge" class="me-input" min="10" max="99"></div>
+                    <div class="form-group-white"><label class="me-label">Teléfono</label><input type="text" id="mePhone" class="me-input"></div>
+                    <div class="form-group-white"><label class="me-label">Contacto de emergencia</label><input type="text" id="meEmergency" class="me-input"></div>
+                    <div class="form-group-white"><label class="me-label">Email</label><input type="email" id="meEmail" class="me-input"></div>
+                    <div class="form-group-white"><label class="me-label">Región</label><select id="meRegion" class="me-input"></select></div>
+                    <div class="form-group-white"><label class="me-label">Grupo</label><select id="meGroup" class="me-input"></select></div>
+                    <div class="form-group-white"><label class="me-label">Estigma / Enfermedad</label><select id="meEstigma" class="me-input"></select></div>
+                    <div class="form-group-white"><label class="me-label">Estatus de militancia</label><select id="meMilitancia" class="me-input">
+                        <option value="CONCIENCIA">Conciencia</option><option value="MILITANCIA">Militancia</option>
+                        <option value="EN_RIESGO">En riesgo</option><option value="DE_BAJA">De baja</option></select></div>
+                    <div class="form-group-white"><label class="me-label">Experiencia (POA)</label><select id="meExperiencia" class="me-input">
+                        <option value="APOYO">Apoyo</option><option value="OREJA">Oreja</option><option value="PADRINO">Padrino</option></select></div>
+                    <div class="form-group-white"><label class="me-label">Servicio activo</label><input type="text" id="meServerRole" class="me-input" placeholder="Ninguno"></div>
+                </div>
+                <div style="display:flex; align-items:center; gap:0.5rem; margin:0.75rem 0;">
+                    <input type="checkbox" id="meIsJav" style="width:15px; height:15px;">
+                    <label for="meIsJav" style="font-size:0.8rem; color:#555; cursor:pointer;">Pertenece a JAV (Jóvenes en Agua Viva)</label>
+                </div>
+                <div id="memberEditError" style="min-height:16px; font-size:0.75rem; color:#ef4444; margin-bottom:0.5rem;"></div>
+                <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+                    <button type="button" class="btn btn-outline btn-xs" id="btnCancelMemberEdit" style="padding: 0.5rem 1rem;">Cancelar</button>
+                    <button type="submit" class="btn btn-primary btn-xs" style="background-color: var(--admin-purple); border-color: var(--admin-purple); color:#fff; padding: 0.5rem 1rem;"><i class="fa-solid fa-floppy-disk"></i> Guardar cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Confirmar eliminación de miembro -->
+    <div class="admin-auth-overlay hidden" id="memberDeleteModal" style="z-index: 20001; background: rgba(0,0,0,0.65); display: none; align-items: center; justify-content: center; position: fixed; inset: 0; padding: 1.5rem;">
+        <div class="admin-auth-box" style="width: 100%; max-width: 420px; padding: 2rem; background: #fff; border-radius: 12px; border-top: 4px solid #ef4444; box-shadow: 0 20px 50px rgba(0,0,0,0.3);">
+            <h3 class="font-serif" style="color: #ef4444; font-size: 1.2rem; margin: 0 0 0.5rem;"><i class="fa-solid fa-triangle-exclamation"></i> Eliminar miembro</h3>
+            <p style="font-size: 0.88rem; color: #333; margin-bottom: 1.25rem;" id="memberDeleteMsg"></p>
+            <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+                <button type="button" class="btn btn-outline btn-xs" id="btnCancelMemberDelete" style="padding: 0.5rem 1rem;">Cancelar</button>
+                <button type="button" class="btn btn-danger btn-xs" id="btnConfirmMemberDelete" style="background:#ef4444; border-color:#ef4444; color:#fff; padding: 0.5rem 1rem;"><i class="fa-solid fa-trash"></i> Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Asignar padrino -->
+    <div class="admin-auth-overlay hidden" id="assignPadrinoModal" style="z-index: 20000; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; position: fixed; inset: 0; padding: 1.5rem;">
+        <div class="admin-auth-box" style="width: 100%; max-width: 440px; padding: 2rem; background: #fff; border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.3);">
+            <h3 class="font-serif" style="color: var(--admin-purple); font-size: 1.2rem; margin: 0 0 0.25rem;"><i class="fa-solid fa-hands-praying"></i> Asignar padrino</h3>
+            <p style="font-size: 0.8rem; color: #666; margin-bottom: 1rem;" id="assignPadrinoSubtitle"></p>
+            <div class="form-group-white" style="margin-bottom: 1.25rem;">
+                <label class="me-label">Padrino (de la misma región)</label>
+                <select id="assignPadrinoSelect" class="me-input"></select>
+            </div>
+            <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+                <button type="button" class="btn btn-outline btn-xs" id="btnCancelAssignPadrino" style="padding: 0.5rem 1rem;">Cancelar</button>
+                <button type="button" class="btn btn-primary btn-xs" id="btnConfirmAssignPadrino" style="background-color: var(--admin-purple); border-color: var(--admin-purple); color:#fff; padding: 0.5rem 1rem;"><i class="fa-solid fa-check"></i> Asignar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Campana de notificaciones del coordinador -->
+    <div class="admin-notif-wrap" id="adminNotifWrap">
+        <button class="admin-notif-btn" id="adminNotifBtn" title="Notificaciones">
+            <i class="fa-regular fa-bell"></i>
+            <span class="admin-notif-badge" id="adminNotifBadge" style="display:none;">0</span>
+        </button>
+        <div class="admin-notif-dropdown" id="adminNotifDropdown">
+            <div class="admin-notif-head">
+                <span>Notificaciones</span>
+                <button class="btn-text" id="adminNotifClear">Limpiar</button>
+            </div>
+            <div class="admin-notif-body" id="adminNotifBody"></div>
+        </div>
+    </div>
+
     <div class="sim-widget" id="simWidget">
         <button class="sim-trigger-btn" id="simTriggerBtn" title="Panel de Simulación de Roles">
             <i class="fa-solid fa-gears"></i>
@@ -1099,7 +1555,7 @@
             
             <div class="sim-panel-section">
                 <span class="sim-panel-section-title">Navegación Rápida</span>
-                <a href="index.html" class="sim-page-link">
+                <a href="app.html" class="sim-page-link">
                     <span>📱 Aplicación Móvil</span>
                     <i class="fa-solid fa-chevron-right" style="font-size:0.6rem;"></i>
                 </a>
@@ -1115,6 +1571,10 @@
         </div>
     </div>
 
-    <script src="admin.js"></script>
+    <script src="js/av-core.js"></script>
+    <script src="js/permissions.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+    <script src="js/export.js"></script>
+    <script src="js/admin.js"></script>
 </body>
 </html>

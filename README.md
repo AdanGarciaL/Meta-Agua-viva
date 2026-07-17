@@ -1,76 +1,75 @@
-# Prototipo Interactivo Agua Viva (Asistencia y Logística)
+# Agua Viva — Plataforma de Asistencia y Logística
 
-Este directorio contiene un prototipo interactivo completo de alta fidelidad que simula las dos caras de la plataforma de la comunidad **Agua Viva**:
+Plataforma comunitaria para la comunidad **Agua Viva**: registro de asistencia por QR, gestión de miembros por regiones y grupos, logística de Haciendas (POA) y gamificación del proceso de recuperación.
 
-1. **La Aplicación Móvil (Miembro):** Con estética premium de temática cósmica oscura ("Dark Cosmic Theme").
-2. **El Portal Web Administrativo (Coordinadores):** Con estética off-white/crema limpia ("Light Cream Theme") para monitorear asistencia en vivo y gestionar miembros de la sede.
-
-Ambas interfaces están interconectadas lógicamente y comparten estados, simulando el comportamiento de un sistema real en producción.
+> **Versión de fase temprana (v0.x).** Es un prototipo funcional de alta fidelidad que corre 100 % en el navegador (sin servidor). Sirve como referencia viva del producto para construir la versión oficial (panel web + apps Android/iOS).
 
 ---
 
-## Archivos del Prototipo
+## Las tres superficies
 
-* **Vistas HTML Principales:**
-  * [index.html](file:///C:/Users/adan_/.gemini/antigravity/scratch/agua-viva-asistencia/index.html): Aplicación móvil orientada a los integrantes para registrar asistencia, ver su historial de juntas y consultar la sección de **Logros**.
-  * [admin.html](file:///C:/Users/adan_/.gemini/antigravity/scratch/agua-viva-asistencia/admin.html): Portal web administrativo de escritorio para los coordinadores, diseñado a tres columnas para el pase de lista y expedientes.
+| Superficie | Archivo | Para quién | Tema |
+|---|---|---|---|
+| 📱 **Aplicación móvil** | `app.html` | Conciencia y militancia (miembros) | Cósmico oscuro |
+| 💻 **Panel administrativo** | `admin.html` | Líderes y Atracciones (AE/AI) | Crema claro |
+| 👑 **Portal Superadmin** | `superadmin.html` | Administración central | Crema + gate de acceso |
 
-* **Estilos y Lógica Visual:**
-  * [styles.css](file:///C:/Users/adan_/.gemini/antigravity/scratch/agua-viva-asistencia/styles.css): Reglas visuales de la interfaz oscura móvil y la grilla de insignias.
-  * [app.js](file:///C:/Users/adan_/.gemini/antigravity/scratch/agua-viva-asistencia/app.js): Lógica de sumas de XP, detector de cámara QR simulado y cambio al tema JAV (cian y magenta neón).
-  * [admin.css](file:///C:/Users/adan_/.gemini/antigravity/scratch/agua-viva-asistencia/admin.css): Reglas visuales para la plataforma crema administrativa de escritorio.
-  * [admin.js](file:///C:/Users/adan_/.gemini/antigravity/scratch/agua-viva-asistencia/admin.js): Control de pases de lista manuales, cronómetros de renovación de QR, buscador en vivo, gráfico SVG semanal y portafolio de notas del coordinador.
+### Qué hace la aplicación móvil
+- **Inicio**: nivel y XP reales, racha, tiempo limpio, tags de clasificación (Padrino / Oreja / Servidor, con variantes **JAV**), próxima junta (tema, ponente, lugar y hora), próximos eventos interregionales y aviso de la **próxima Hacienda de tu región** con botón para confirmar asistencia.
+- **Haciendas y POA**: declaración completa de asistencia al retiro (turno de llegada, transporte, contacto de emergencia, alergias/medicamentos, observaciones) y semáforo de tu grupo.
+- **Asistencia por QR** (al centro): escáner con validación de **token firmado (JWT, expira en 30 s)** y **geolocalización** contra la sede; funciona **offline** con cola de sincronización.
+- **Historial "Tu Cielo"**: línea de tiempo agrupada por mes, filtros (juntas / OyP / haciendas), XP total y gráfico de constancia.
+- **Logros**: camino de luz por niveles (Chispa → Sol), 9 insignias desbloqueables calculadas de tus datos reales.
+- **Modo JAV**: si perteneces a Jóvenes en Agua Viva (13–18), la interfaz cambia a la estética cian/magenta y prioriza los eventos JAV.
+- **Mi Servicio** (solo servidores aprobados, con su propio ícono en la barra inferior): **AE** ve el semáforo del POA regional (grupos sin confirmar), registra escribientes, audita los cambios de su región y consulta la Junta de Atracciones en un calendario interactivo; **AI** agenda y gestiona las juntas de su grupo; el **Líder** tiene todas las funciones. Si tu cargo aún no tiene sección programada, la opción no aparece.
+- **Perfil en Ajustes**: edita tu alias, teléfono y contacto de emergencia, y personaliza tu avatar con color, ícono o **foto de perfil** (se recorta y comprime en el dispositivo); la foto se ve también en el directorio del panel.
 
-* **Base de Datos y Diseño Técnico:**
-  * [schema.sql](file:///C:/Users/adan_/.gemini/antigravity/scratch/agua-viva-asistencia/schema.sql): Esquema de tablas relacionales en PostgreSQL (15+).
-  * [seed_data.sql](file:///C:/Users/adan_/.gemini/antigravity/scratch/agua-viva-asistencia/seed_data.sql): Poblado inicial de las 9 regiones y sus grupos correspondientes.
-  * [database_design.md](file:///C:/Users/adan_/.gemini/antigravity/scratch/agua-viva-asistencia/database_design.md): Diseño técnico relacional y ejemplos de consultas SQL clave.
+### Qué hace el panel administrativo
+- **Tomar asistencia en vivo**: QR gigante con código manual rotativo cada 30 s (firmado), lista de llegadas en tiempo real y check-in manual.
+- **Directorios**: militancia completa, mi grupo, regional e interregional. Los coordinadores **editan y eliminan solo miembros de su propio grupo y región**; el resto es de solo lectura (con teléfonos visibles para servicio).
+- **Expediente del miembro**: información AA (estigma, militancia, POA, padrino), asistencia por 12 semanas / 6 meses / 1 año, historial, insignias, avance de inventarios y ejercicios (editable), notas privadas, asignar padrino y enviar mensajes.
+- **Calendario y eventos**: agenda con fecha real; vista mensual (grupo/regional) y **anual de 12 meses** (interregional). Las **Haciendas** solo las agenda el Superadmin: al hacerlo se notifica a las 9 regiones y se abren los semáforos POA.
+- **Haciendas y POA**: rectificación de la lista del grupo, gestión de escribientes (repe/seguimiento), semáforo automático (verde/amarillo/rojo) y bitácora de auditoría.
+- **Junta de Atracciones**: panel en vivo de solo lectura (prioridad de reparto + calendario de padrinos) con **exportación a Excel**.
+- **Exportación Excel**: un clic genera `agua_viva_reporte_<fecha>.xlsx` con 7 hojas (Militancia, Padrinos, Orejas, JAV, Servidores, Sedes y Coordinadores, Calendario de Atracciones). Sin internet cae automáticamente a CSV.
 
----
-
-## Cómo Ejecutar y Probar el Prototipo
-
-1. **Simular Asistencia por Escaneo (Móvil):**
-   * Abre [index.html](file:///C:/Users/adan_/.gemini/antigravity/scratch/agua-viva-asistencia/index.html) en tu navegador.
-   * Haz clic en el botón morado **"Escanear junta"**.
-   * Te llevará a la simulación de cámara. Tras 2 segundos, detectará el código, registrará la junta en tu historial, sumará +15 XP e **¡iniciará la celebración animada de nivel 5 ("Aurora") en pantalla!**
-   * Dirígete a la pestaña **"Logros"** para ver cómo se ha actualizado tu barra de progreso y tu camino de luz hacia el nivel 5 de forma interactiva.
-
-2. **Administrar Asistencia en Tiempo Real (Escritorio):**
-   * Abre [admin.html](file:///C:/Users/adan_/.gemini/antigravity/scratch/agua-viva-asistencia/admin.html) en tu navegador.
-   * Por defecto, se abrirá la vista **"Tomar asistencia"**.
-   * Verás el conteo regresivo de renovación del código QR cada 30 segundos, el código alfanumérico (ej. `K7-9MX`) y las estadísticas en vivo (Presentes, Esperando, Tarde, XP Otorgados).
-   * **Simular Registro Manual:** Haz clic sobre cualquier miembro en la sección *"ESPERANDO"* en la columna derecha. Verás cómo pasa de inmediato a *"Llegando en vivo"*, sumando su hora de llegada, actualizando los ratios de presentes y acumulando el XP otorgado global de la sesión.
-
-3. **Ver Expedientes de Miembros:**
-   * En el menú lateral izquierdo de [admin.html](file:///C:/Users/adan_/.gemini/antigravity/scratch/agua-viva-asistencia/admin.html), haz clic en **"Miembros"**.
-   * Se abrirá el directorio completo. Filtra usando las pestañas (*Todos*, *Activos*, *En riesgo*, *Nuevos*), escribe en el buscador o cambia el ordenamiento.
-   * **Expediente del Miembro:** Haz clic sobre cualquier fila (por ejemplo, **Ámbar**). Se cargará su panel detallado que muestra su constancia de asistencia en las últimas 12 semanas en un histograma interactivo, el listado de insignias conseguidas y las notas privadas de seguimiento.
-   * **Agregar Nota:** Escribe una nota en la caja de comentarios y haz clic en *"Guardar Nota"*. Se añadirá instantáneamente al expediente del integrante.
-
-4. **Registrar un Nuevo Miembro con Vista Previa en Vivo:**
-    * **Previsualización Móvil:** Observa cómo en la columna derecha se va renderizando en vivo y en tiempo real el diseño de la tarjeta de perfil que el miembro verá en su propia aplicación móvil, incluyendo su inicial de avatar y el color de fondo elegido.
-    * Haz clic en **"Crear Registro"** para guardar el miembro y regresar al directorio de coordinadores.
-
-5. **Portal de Aprobaciones Superadmin:**
-   * Abre [superadmin.html](file:///C:/Users/adan_/.gemini/antigravity/scratch/agua-viva-asistencia/superadmin.html) o haz clic en el pill **"Super"** en la barra lateral del panel administrativo.
-   * Este es un archivo físico independiente para evitar guardar credenciales en el código principal. Desde aquí puedes:
-     * **Aprobar Solicitudes:** Aprobar coordinadores de grupo (Líderes, Atracciones Externas - AE, o Atracciones Internas - AI).
-     * **Revocar Permisos:** Degradar coordinadores a integrantes normales (e.g. revocar permisos de Diego V.).
-     * **Redirección de Simulación:** Si cambias la simulación en las pastillas a "Admin" o "Miembro", serás redirigido automáticamente a `admin.html` por seguridad.
-
-6. **Privacidad de Contactos (Demostración):**
-   * En [admin.html](file:///C:/Users/adan_/.gemini/antigravity/scratch/agua-viva-asistencia/admin.html), cambia el rol de simulación a **"Miembro"** (el botón en la esquina inferior izquierda).
-   * Vuelve a la pestaña **"Miembros"** y abre cualquier expediente (ej. Ámbar) o mira la tabla del directorio. Verás que el número celular se muestra como `[CONFIDENCIAL]` y tiene un efecto de difuminado (`blur`).
-   * Vuelve a cambiar el rol a **"Admin"** o **"Super"** para ver de inmediato los números telefónicos en texto plano.
+### Qué hace el portal Superadmin
+- Gate con **credenciales de fábrica** (como un router): usuario `CarpDiemAguaViva`, contraseña `SuperAdmind0123456789`.
+- Aprobación de coordinadores (**los Líderes solo los aprueba el Superadmin**), revocaciones, alta/baja de regiones y sedes, y control total de la Junta de Atracciones (pase de lista regional agrupado por grupos y asignación de padrinos con búsqueda enriquecida).
+- **Eventos y Calendario**: agenda cualquier evento del ciclo — juntas, tribunas, foros, comités, Concordia, Conferencia, JSG, Inventario de Servidores, eventos JAV (juntas, preparaciones, campamentos, foros) y las **Haciendas de las 9 regiones y JAV** (con fecha de inicio y fin; al agendarlas se notifica a todas las regiones y se reabren los semáforos POA).
+- **Calendario anual tipo tablero**: los 12 meses en filas × días 1–31 en columnas, con barras de color por categoría (hacienda, JAV, institucional, JSG, regional, grupo) que abarcan eventos de varios días; clic en cualquier barra para ver el detalle o eliminar el evento.
 
 ---
 
-## Características de Negocio Avanzadas Habilitadas
+## Cómo probarlo
 
-* **Clasificación JAV Automática (13-18 años):** El trigger de base de datos (`trg_set_user_jav`) y el validador del frontend comprueban estrictamente la edad de nacimiento (debe ser de 13 a 18 años). Si cumple, el usuario recibe la clasificación `is_jav = true`, habilitando un color de insignia y una estética cósmica cyberpunk (cian y magenta neón) en el móvil, así como una etiqueta `[JAV]` en la tabla del panel administrativo.
-* **Sincronización Local (`localStorage`):** El prototipo utiliza un almacén local compartido (`agua_viva_db`). Cualquier cambio en la aplicación móvil (como la declaración de transporte, los escribientes registrados para Haciendas, o los niveles de XP de Ámbar) se reflejará instantáneamente en el panel del administrador, y viceversa.
-* **Nomenclaturas Corregidas:**
-  * **AE:** Atracciones Externas.
-  * **AI:** Atracciones Internas.
-  * **Líder:** Reemplaza el rol genérico de coordinador en la jerarquía del grupo.
+> 🌐 **GitHub Pages**: activa *Settings → Pages → Deploy from branch → main / root* y la portada (`index.html`) quedará publicada con enlaces a las tres superficies.
+
+1. Descarga o clona el repositorio.
+2. Abre `index.html` (portada) o directamente `app.html` (app móvil), `admin.html` (panel) o `superadmin.html` (portal) en tu navegador — no necesita instalación ni servidor.
+3. Cuentas de demostración (contraseña `123`):
+
+| Cuenta | Rol |
+|---|---|
+| `ambar@email.com` | Miembro (Padrino, con avance) |
+| `bruma@email.com` | Miembro JAV |
+| `mariana@email.com` | Coordinadora (Líder de Satélite, Región 1) |
+| `superadmin@email.com` | Superadmin del panel |
+
+Las dos interfaces comparten los datos en vivo (localStorage): registra asistencia en el móvil y mírala aparecer en el panel.
+
+## Limitaciones del prototipo
+
+- **Sin backend**: todo vive en `localStorage` del navegador (por eso el mismo navegador ve los cambios entre pestañas, pero otro equipo no).
+- Las credenciales y llaves de firma están en el código **solo para la demo**.
+- La exportación `.xlsx` usa un CDN; sin internet exporta CSV.
+
+## Documentación
+
+- 📘 [Guía para desarrolladores](docs/README-DEV.md) — arquitectura, módulos, permisos, pruebas y cómo contribuir.
+- 📗 [Especificación maestra](docs/ESPECIFICACION.md) — roles, matriz de permisos, todas las funciones por sección, modelo de datos y roadmap.
+- 🗄️ [Diseño de base de datos](docs/database_design.md) y [esquema SQL](docs/schema.sql) para la versión con backend.
+
+## Licencia y contribución
+
+Proyecto comunitario en fase temprana. Lee la [guía para desarrolladores](docs/README-DEV.md) antes de abrir un PR — ahí está el estado de cada módulo y lo que falta por construir.
