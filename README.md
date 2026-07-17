@@ -75,5 +75,6 @@ Las dos interfaces comparten los datos en vivo (localStorage): registra asistenc
 
 ## Licencia y contribución
 
-Proyecto comunitario en fase temprana. Desarrollado con el poder de **Claude 3.5** y **Gemini 3.5**. Lee la [guía para desarrolladores](docs/README-DEV.md) antes de abrir un PR — ahí está el estado de cada módulo y lo que falta por construir.
+Proyecto comunitario en fase temprana. Desarrollado con el poder de **Claude Fable 5** y **Gemini 3.5**. Lee la [guía para desarrolladores](docs/README-DEV.md) antes de abrir un PR — ahí está el estado de cada módulo y lo que falta por construir.
+
 
