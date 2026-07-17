@@ -2,7 +2,10 @@
 
 Plataforma comunitaria para la comunidad **Agua Viva**: registro de asistencia por QR, gestión de miembros por regiones y grupos, logística de Haciendas (POA) y gamificación del proceso de recuperación.
 
+🚀 **[Probar Demo en Vivo en GitHub Pages](https://adangarcial.github.io/Meta-Agua-viva/)**
+
 > **Versión de fase temprana (v0.x).** Es un prototipo funcional de alta fidelidad que corre 100 % en el navegador (sin servidor). Sirve como referencia viva del producto para construir la versión oficial (panel web + apps Android/iOS).
+
 
 ---
 
@@ -72,4 +75,5 @@ Las dos interfaces comparten los datos en vivo (localStorage): registra asistenc
 
 ## Licencia y contribución
 
-Proyecto comunitario en fase temprana. Lee la [guía para desarrolladores](docs/README-DEV.md) antes de abrir un PR — ahí está el estado de cada módulo y lo que falta por construir.
+Proyecto comunitario en fase temprana. Desarrollado con el poder de **Claude 3.5** y **Gemini 3.5**. Lee la [guía para desarrolladores](docs/README-DEV.md) antes de abrir un PR — ahí está el estado de cada módulo y lo que falta por construir.
+
